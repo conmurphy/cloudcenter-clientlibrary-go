@@ -1,4 +1,4 @@
-package cloudcenterclient
+package cloudcenter
 
 import "fmt"
 import "net/http"
