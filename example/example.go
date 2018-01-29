@@ -4,22 +4,42 @@ import "cloudcenterclient"
 import "fmt"
 
 func main() {
-	client := cloudcenterclient.NewClient("<Username>", "<API Key>", "<CCM URL>")
+	client := cloudcenterclient.NewClient("<Username>", "<API Key>", "<https://example_cloudcenter_host>")
 
-	users, _ := client.GetUsers()
+	users, err := client.GetUsers()
 
-	for _, user := range users {
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		for _, user := range users {
 
-		fmt.Println(user.Username)
+			fmt.Println(user.Username)
 
+		}
 	}
 
-	tenants, _ := client.GetTenants()
+	tenants, err := client.GetTenants()
 
-	for _, tenant := range tenants {
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		for _, tenant := range tenants {
 
-		fmt.Println(tenant.Name)
+			fmt.Println(tenant.Name)
 
+		}
+	}
+
+	jobs, err := client.GetJobs()
+
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		for _, job := range jobs {
+
+			fmt.Println(job.Name)
+
+		}
 	}
 
 }
