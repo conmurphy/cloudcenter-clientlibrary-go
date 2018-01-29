@@ -1,10 +1,10 @@
 package main
 
-import "cloudcenterclient"
+import "cloudcenter"
 import "fmt"
 
 func main() {
-	client := cloudcenterclient.NewClient("<Username>", "<API Key>", "<https://example_cloudcenter_host>")
+	client := cloudcenter.NewClient("<Username>", "<API Key>", "<https://example_cloudcenter_host>")
 
 	users, err := client.GetUsers()
 
