@@ -43,7 +43,7 @@ type User struct {
 
 func (s *Client) GetUsers() ([]User, error) {
 
-	url := fmt.Sprintf(s.BaseURL + "/users")
+	url := fmt.Sprintf(s.BaseURL + "/v1/users")
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err

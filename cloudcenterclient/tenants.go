@@ -49,7 +49,7 @@ type Tenant struct {
 
 func (s *Client) GetTenants() ([]Tenant, error) {
 
-	url := fmt.Sprintf(s.BaseURL + "/tenants")
+	url := fmt.Sprintf(s.BaseURL + "/v1/tenants")
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err
