@@ -3,6 +3,7 @@ package cloudcenter
 import "fmt"
 import "net/http"
 import "encoding/json"
+import "strconv"
 
 type UserAPIResponse struct {
 	Resource      string `json:"resource"`
@@ -44,6 +45,7 @@ type User struct {
 func (s *Client) GetUsers() ([]User, error) {
 
 	url := fmt.Sprintf(s.BaseURL + "/v1/users")
+
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err
@@ -61,4 +63,29 @@ func (s *Client) GetUsers() ([]User, error) {
 
 	users := data.Users
 	return users, nil
+}
+
+func (s *Client) GetUser(id int) (*User, error) {
+
+	url := fmt.Sprintf(s.BaseURL + "/v1/users/" + strconv.Itoa(id))
+
+	var data User
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+	bytes, err := s.doRequest(req)
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal(bytes, &data)
+	if err != nil {
+		return nil, err
+	}
+
+	user := &data
+
+	return user, nil
 }
