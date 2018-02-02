@@ -1,6 +1,6 @@
 package main
 
-import "github.com/cloudcenter/cloudcenter"
+import "github.com/cloudcenter-clientlibrary-go/cloudcenter"
 import "fmt"
 
 func example_get() {
