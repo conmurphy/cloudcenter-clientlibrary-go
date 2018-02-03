@@ -2,7 +2,8 @@ package main
 
 import "github.com/cloudcenter-clientlibrary-go/cloudcenter"
 import "fmt"
-import "strconv"
+
+//import "strconv"
 
 func example_add() {
 
@@ -10,7 +11,7 @@ func example_add() {
 		Define new cloudcenter client
 	*/
 
-	client := cloudcenter.NewClient("USERNAME", "API_KEY", "https://CLOUDCENTER.URL")
+	client := cloudcenter.NewClient("cliqradmin", "04DD96A9B7C0F136", "https://198.18.134.190")
 
 	/****************************************
 
@@ -22,14 +23,14 @@ func example_add() {
 			Create tenant
 
 
-		newPreferences := cloudcenter.Preference{
+		var preferences []cloudcenter.Preference
+
+		newPreference := cloudcenter.Preference{
 			Name:  "PASSWORD_MIN_LENGTH",
 			Value: "5",
 		}
 
-		preferencesArray := make([]cloudcenter.Preference, 1)
-
-		preferencesArray[0] = newPreferences
+		preferences = append(preferences, newPreference)
 
 		newTenant := cloudcenter.Tenant{
 			UserId:                          "8",
@@ -49,13 +50,12 @@ func example_add() {
 			EnableEmailNotificationsToUsers: false,
 			EnableMonthlyBilling:            false,
 			DefaultChargeType:               "Hourly",
-			Preferences:                     preferencesArray,
+			Preferences:                     preferences,
 		}
 
 		fmt.Println(client.AddTenant(&newTenant))
 
 	*/
-
 	/*
 			Create user
 
@@ -189,30 +189,30 @@ func example_add() {
 		fmt.Println("************************************************")
 		fmt.Println()
 
-		activateRegionsArray := make([]cloudcenter.ActivateRegion, 2)
+		var activateRegions []cloudcenter.ActivateRegion
 
-		newActivateRegions := cloudcenter.ActivateRegion{
+		newActivateRegion := cloudcenter.ActivateRegion{
 			RegionId: "1",
 		}
 
-		activateRegionsArray[0] = newActivateRegions
+		activateRegions = append(activateRegions, newActivateRegion)
 
-		newActivateRegions = cloudcenter.ActivateRegion{
+		newActivateRegion = cloudcenter.ActivateRegion{
 			RegionId: "2",
 		}
 
-		activateRegionsArray[1] = newActivateRegions
+		activateRegions = append(activateRegions, newActivateRegion)
 
 		newActivationProfile := cloudcenter.ActivationProfile{
 
 			TenantId:        1,
 			Name:            "Client Library activation profile",
 			Description:     "Client Library activation profile description",
-			PlanId:          "3",
+			PlanId:          "1",
 			BundleId:        "1",
 			ContractId:      "1",
 			DepEnvId:        "1",
-			ActivateRegions: activateRegionsArray,
+			ActivateRegions: activateRegions,
 		}
 
 		activationProfile, err := client.AddActivationProfile(&newActivationProfile)
@@ -222,5 +222,6 @@ func example_add() {
 		} else {
 			fmt.Println("Activation Profile Id: " + activationProfile.Id + ", Description: " + activationProfile.Description)
 		}
+
 	*/
 }

@@ -1,8 +1,9 @@
 package main
 
-import "github.com/cloudcenter-clientlibrary-go/cloudcenter"
-import "fmt"
-import "strconv"
+//import "github.com/cloudcenter-clientlibrary-go/cloudcenter"
+
+//import "fmt"
+//import "strconv"
 
 func example_update() {
 
@@ -10,7 +11,7 @@ func example_update() {
 		Define new cloudcenter client
 	*/
 
-	client := cloudcenter.NewClient("USERNAME", "API_KEY", "https://CLOUDCENTER.URL")
+	//client := cloudcenter.NewClient("USERNAME", "API_KEY", "https://CLOUDCENTER.URL")
 
 	/****************************************
 
@@ -159,13 +160,13 @@ func example_update() {
 		fmt.Println("************************************************")
 		fmt.Println()
 
-		activateRegionsArray := make([]cloudcenter.ActivateRegion, 1)
+		var activateRegions []cloudcenter.ActivateRegion
 
-		newActivateRegions := cloudcenter.ActivateRegion{
+		newActivateRegion := cloudcenter.ActivateRegion{
 			RegionId: "1",
 		}
 
-		activateRegionsArray[0] = newActivateRegions
+		activateRegions = append(activateRegions, newActivateRegion)
 
 		newActivationProfile := cloudcenter.ActivationProfile{
 
@@ -177,7 +178,7 @@ func example_update() {
 			BundleId:        "1",
 			ContractId:      "1",
 			DepEnvId:        "1",
-			ActivateRegions: activateRegionsArray,
+			ActivateRegions: activateRegions,
 		}
 
 		activationProfile, err := client.UpdateActivationProfile(&newActivationProfile)
@@ -189,5 +190,4 @@ func example_update() {
 		}
 
 	*/
-
 }
