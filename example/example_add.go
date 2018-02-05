@@ -1,7 +1,7 @@
 package main
 
-import "github.com/cloudcenter-clientlibrary-go/cloudcenter"
-import "fmt"
+//import "github.com/cloudcenter-clientlibrary-go/cloudcenter"
+//import "fmt"
 
 //import "strconv"
 
@@ -11,7 +11,7 @@ func example_add() {
 		Define new cloudcenter client
 	*/
 
-	client := cloudcenter.NewClient("cliqradmin", "04DD96A9B7C0F136", "https://198.18.134.190")
+	//client := cloudcenter.NewClient("USERNAME", "API_KEY", "https://CLOUDCENTER.URL")
 
 	/****************************************
 
