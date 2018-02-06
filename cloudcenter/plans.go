@@ -24,22 +24,22 @@ type Plan struct {
 	TenantId                 string   `json:"tenantId,omitempty"`
 	Type                     string   `json:"type,omitempty"`
 	MonthlyLimit             int      `json:"monthlyLimit,omitempty"`
-	NodeHourIncrement        float32  `json:"nodeHourIncrement,omitempty"`
+	NodeHourIncrement        float64  `json:"nodeHourIncrement,omitempty"`
 	IncludedBundleId         string   `json:"includedBundleId,omitempty"`
-	Price                    float32  `json:"price,omitempty"`
-	OnetimeFee               float32  `json:"onetimeFee,omitempty"`
-	AnnualFee                float32  `json:"annualFee,omitempty"`
-	StorageRate              float32  `json:"storageRate,omitempty"`
-	HourlyRate               float32  `json:"hourlyRate,omitempty"`
-	OverageRate              float32  `json:"overageRate,omitempty"`
-	OverageLimit             float32  `json:"overageLimit,omitempty"`
+	Price                    float64  `json:"price,omitempty"`
+	OnetimeFee               float64  `json:"onetimeFee,omitempty"`
+	AnnualFee                float64  `json:"annualFee,omitempty"`
+	StorageRate              float64  `json:"storageRate,omitempty"`
+	HourlyRate               float64  `json:"hourlyRate,omitempty"`
+	OverageRate              float64  `json:"overageRate,omitempty"`
+	OverageLimit             float64  `json:"overageLimit,omitempty"`
 	RestrictedToAppStoreOnly bool     `json:"restrictedToAppStoreOnly,omitempty"`
 	BillToVendor             bool     `json:"billToVendor,omitempty"`
 	EnableRollover           bool     `json:"enableRollover,omitempty"`
 	Disabled                 bool     `json:"disabled,omitempty"`
 	ShowOnlyToAdmin          bool     `json:"showOnlyToAdmin,omitempty"`
-	NumberOfUsers            int32    `json:"numberOfUsers,omitempty"`
-	NumberOfProjects         int32    `json:"numberOfProjects,omitempty"`
+	NumberOfUsers            int      `json:"numberOfUsers,omitempty"`
+	NumberOfProjects         int      `json:"numberOfProjects,omitempty"`
 }
 
 func (s *Client) GetPlans(tenantId int) ([]Plan, error) {

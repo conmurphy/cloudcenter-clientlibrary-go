@@ -4,9 +4,15 @@ import "fmt"
 import "net/http"
 import "strconv"
 import "encoding/json"
+import "bytes"
 
 type EnvironmentAPIResponse struct {
-	Environments []Environment `json:"deploymentEnvironments"`
+	Resource      string        `json:"resource"`
+	Size          int           `json:"size"`
+	PageNumber    int           `json:"pageNumber"`
+	TotalElements int           `json:"totalElements"`
+	TotalPages    int           `json:"totalPages"`
+	Environments  []Environment `json:"deploymentEnvironments"`
 }
 
 type Environment struct {
@@ -20,6 +26,7 @@ type Environment struct {
 	RequiresApproval bool              `json:"requiresApproval"`
 	AssociatedClouds []AssociatedCloud `json:"associatedClouds"`
 	TotalDeployments int32             `json:"totalDeployments"`
+	ExtensionId      string            `json:"extensionId"`
 	CostDetails      CostDetail        `json:"costDetails"`
 }
 
@@ -88,5 +95,39 @@ func (s *Client) GetEnvironment(id int) (*Environment, error) {
 	}
 
 	environment := &data
+	return environment, nil
+}
+
+func (s *Client) AddEnvironment(environment *Environment) (*Environment, error) {
+
+	var data Environment
+
+	url := fmt.Sprintf(s.BaseURL + "/v1/environments")
+
+	j, err := json.Marshal(environment)
+
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(j))
+	if err != nil {
+		return nil, err
+	}
+
+	bytes, err := s.doRequest(req)
+
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal(bytes, &data)
+
+	if err != nil {
+		return nil, err
+	}
+
+	environment = &data
+
 	return environment, nil
 }

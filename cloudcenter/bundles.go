@@ -5,6 +5,7 @@ import "net/http"
 import "encoding/json"
 import "strconv"
 import "bytes"
+import "errors"
 
 type BundleAPIResponse struct {
 	Resource      string   `json:"resource"`
@@ -22,15 +23,15 @@ type Bundle struct {
 	Type             string   `json:"type,omitempty"`
 	Name             string   `json:"name,omitempty"`
 	Description      string   `json:"description,omitempty"`
-	Limit            float32  `json:"limit,omitempty"`
-	Price            float32  `json:"price,omitempty"`
-	ExpirationDate   int64    `json:"expirationDate,omitempty"`
+	Limit            float64  `json:"limit,omitempty"`
+	Price            float64  `json:"price,omitempty"`
+	ExpirationDate   float64  `json:"expirationDate,omitempty"`
 	ExpirationMonths int64    `json:"expirationMonths,omitempty"`
 	Disabled         bool     `json:"disabled,omitempty"`
 	ShowOnlyToAdmin  bool     `json:"showOnlyToAdmin,omitempty"`
 	NumberOfUsers    float32  `json:"numberOfUsers,omitempty"`
 	TenantId         string   `json:"tenantId,omitempty"`
-	PublishedAppIds  []int    `json:"publishedAppIds,omitempty"`
+	PublishedAppIds  []string `json:"publishedAppIds,omitempty"`
 }
 
 func (s *Client) GetBundles(TenantId int) ([]Bundle, error) {
@@ -80,6 +81,38 @@ func (s *Client) GetBundle(TenantId int, BundleId int) (*Bundle, error) {
 	bundle := &data
 
 	return bundle, nil
+}
+
+func (s *Client) GetBundleFromName(TenantId int, BundleName string) (*Bundle, error) {
+
+	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + strconv.Itoa(TenantId) + "/bundles")
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+	bytes, err := s.doRequest(req)
+	if err != nil {
+		return nil, err
+	}
+	var data BundleAPIResponse
+
+	err = json.Unmarshal(bytes, &data)
+	if err != nil {
+		return nil, err
+	}
+
+	bundles := data.Bundles
+
+	for _, bundle := range bundles {
+		if bundle.Name == BundleName {
+
+			return &bundle, nil
+		}
+	}
+
+	return nil, errors.New("BUNDLE NOT FOUND")
+
 }
 
 func (s *Client) AddBundle(bundle *Bundle) (*Bundle, error) {

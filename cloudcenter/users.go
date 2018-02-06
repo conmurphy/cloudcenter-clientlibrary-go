@@ -8,12 +8,12 @@ import "bytes"
 import "errors"
 
 type UserAPIResponse struct {
-	Resource      string `json:"resource"`
-	Size          int    `json:"size"`
-	PageNumber    int    `json:"pageNumber"`
-	TotalElements int    `json:"totalElements"`
-	TotalPages    int    `json:"totalPages"`
-	Users         []User `json:"users"`
+	Resource      string `json:"resource,omitempty"`
+	Size          int    `json:"size,omitempty"`
+	PageNumber    int    `json:"pageNumber,omitempty"`
+	TotalElements int    `json:"totalElements,omitempty"`
+	TotalPages    int    `json:"totalPages,omitempty"`
+	Users         []User `json:"users,omitempty"`
 }
 
 type User struct {
@@ -116,28 +116,7 @@ func (s *Client) GetUserFromEmail(email string) (*User, error) {
 
 	for _, user := range users {
 		if user.EmailAddr == email {
-
-			url := fmt.Sprintf(s.BaseURL + "/v1/users/" + user.Id)
-
-			var data User
-
-			req, err := http.NewRequest("GET", url, nil)
-			if err != nil {
-				return nil, err
-			}
-			bytes, err := s.doRequest(req)
-			if err != nil {
-				return nil, err
-			}
-
-			err = json.Unmarshal(bytes, &data)
-			if err != nil {
-				return nil, err
-			}
-
-			user := &data
-
-			return user, nil
+			return &user, nil
 		}
 	}
 

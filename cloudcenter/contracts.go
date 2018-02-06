@@ -24,10 +24,10 @@ type Contract struct {
 	TenantId        string   `json:"tenantId,omitempty"`
 	Length          int      `json:"length,omitempty"`
 	Terms           string   `json:"terms,omitempty"`
-	DiscountRate    float32  `json:"discountRate,omitempty"`
+	DiscountRate    float64  `json:"discountRate,omitempty"`
 	Disabled        bool     `json:"disabled,omitempty"`
 	ShowOnlyToAdmin bool     `json:"showOnlyToAdmin,omitempty"`
-	NumberOfUsers   int32    `json:"numberOfUsers,omitempty"`
+	NumberOfUsers   int      `json:"numberOfUsers,omitempty"`
 }
 
 func (s *Client) GetContracts(tenantId int) ([]Contract, error) {

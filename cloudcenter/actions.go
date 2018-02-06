@@ -5,6 +5,8 @@ import "net/http"
 import "strconv"
 import "encoding/json"
 
+//import "bytes"
+
 type ActionAPIResponse struct {
 	Resource      string   `json:"resource"`
 	Size          int      `json:"size"`
@@ -157,3 +159,39 @@ func (s *Client) GetAction(id int) (*Action, error) {
 	action := &data
 	return action, nil
 }
+
+/*
+func (s *Client) AddAction(action *Action) (*Action, error) {
+
+	var data Action
+
+	url := fmt.Sprintf(s.BaseURL + "/v1/actions")
+
+	j, err := json.Marshal(action)
+
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(j))
+	if err != nil {
+		return nil, err
+	}
+
+	bytes, err := s.doRequest(req)
+
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal(bytes, &data)
+
+	if err != nil {
+		return nil, err
+	}
+
+	action = &data
+
+	return action, nil
+}
+*/
