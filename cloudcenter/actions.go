@@ -4,113 +4,114 @@ import "fmt"
 import "net/http"
 import "strconv"
 import "encoding/json"
+import "bytes"
 
 //import "bytes"
 
 type ActionAPIResponse struct {
-	Resource      string   `json:"resource"`
-	Size          int      `json:"size"`
-	PageNumber    int      `json:"pageNumber"`
-	TotalElements int      `json:"totalElements"`
+	Resource      string   `json:"resource,omitempty"`
+	Size          int      `json:"size,omitempty"`
+	PageNumber    int      `json:"pageNumber,omitempty"`
+	TotalElements int      `json:"totalElements,omitempty"`
 	TotalPages    int      `json:"totalPages"`
-	ActionJaxbs   []Action `json:"actionJaxbs"`
+	ActionJaxbs   []Action `json:"actionJaxbs,omitempty"`
 }
 
 type Action struct {
-	Id                     string                  `json:"id"`
-	Resource               string                  `json:"resource"`
-	Perms                  []string                `json:"perms"`
-	Name                   string                  `json:"name"`
-	Description            string                  `json:"description"`
-	ActionType             string                  `json:"actionType"`
-	LastUpdatedTime        string                  `json:"lastUpdatedTime"`
-	TimeOut                float32                 `json:"timeOut"`
-	Enabled                bool                    `json:"enabled"`
-	Encrypted              bool                    `json:"encrypted	"`
-	Deleted                bool                    `json:"deleted"`
-	SystemDefined          bool                    `json:"systemDefined"`
-	BulkOperationSupported bool                    `json:"bulkOperationSupported"`
-	IsAvailableToUser      bool                    `json:"isAvailableToUser"`
-	Owner                  int                     `json:"owner"`
-	ActionParameters       []ActionParameter       `json:"actionParameters"`
-	ActionResourceMappings []ActionResourceMapping `json:"actionResourceMappings"`
-	ActionCustomParamSpecs []ActionCustomParamSpec `json:"actionCustomParamSpecs"`
+	Id                     string                  `json:"id,omitempty"`
+	Resource               string                  `json:"resource,omitempty"`
+	Perms                  []string                `json:"perms,omitempty"`
+	Name                   string                  `json:"name,omitempty"`
+	Description            string                  `json:"description,omitempty"`
+	ActionType             string                  `json:"actionType,omitempty"`
+	LastUpdatedTime        string                  `json:"lastUpdatedTime,omitempty"`
+	TimeOut                float32                 `json:"timeOut,omitempty"`
+	Enabled                bool                    `json:"enabled,omitempty"`
+	Encrypted              bool                    `json:"encrypted,omitempty"`
+	Deleted                bool                    `json:"deleted,omitempty"`
+	SystemDefined          bool                    `json:"systemDefined,omitempty"`
+	BulkOperationSupported bool                    `json:"bulkOperationSupported,omitempty"`
+	IsAvailableToUser      bool                    `json:"isAvailableToUser,omitempty"`
+	Owner                  int                     `json:"owner,omitempty"`
+	ActionParameters       []ActionParameter       `json:"actionParameters,omitempty"`
+	ActionResourceMappings []ActionResourceMapping `json:"actionResourceMappings,omitempty"`
+	ActionCustomParamSpecs []ActionCustomParamSpec `json:"actionCustomParamSpecs,omitempty"`
 }
 
 type ActionParameter struct {
-	ParamName   string `json:"paramName"`
-	ParamValue  string `json:"paramValue"`
-	CustomParam bool   `json:"customParam"`
-	Required    bool   `json:"required"`
-	Preference  string `json:"preference"`
+	ParamName   string `json:"paramName,omitempty"`
+	ParamValue  string `json:"paramValue,omitempty"`
+	CustomParam bool   `json:"customParam,omitempty"`
+	Required    bool   `json:"required,omitempty"`
+	Preference  string `json:"preference,omitempty"`
 }
 
 type ActionResourceMapping struct {
-	Type                  string                 `json:"type"`
-	ActionResourceFilters []ActionResourceFilter `json:"actionResourceFilters"`
+	Type                  string                 `json:"type,omitempty"`
+	ActionResourceFilters []ActionResourceFilter `json:"actionResourceFilters,omitempty"`
 }
 
 type ActionResourceFilter struct {
-	DeploymentResource string     `json:"deploymentResource"`
-	VmResource         VmResource `json:"vmResource"`
-	IsEditable         bool       `json:"isEditable"`
+	DeploymentResource string     `json:"deploymentResource,omitempty"`
+	VmResource         VmResource `json:"vmResource,omitempty"`
+	IsEditable         bool       `json:"isEditable,omitempty"`
 }
 
 type VmResource struct {
-	Type                  string   `json:"type"`
-	AppProfiles           []string `json:"appProfile"`
-	CloudRegions          []string `json:"cloudRegions"`
-	CloudAccounts         []string `json:"cloudAccounts"`
-	Services              []string `json:"services"`
-	OsTypes               []string `json:"osTypes"`
-	CloudFamilyNames      []string `json:"cloudFamilyNames"`
-	NodeStates            []string `json:"nodesStates"`
-	CloudResourceMappings []string `json:"cloudResourceMappings"`
+	Type                  string   `json:"type,omitempty"`
+	AppProfiles           []string `json:"appProfiles,omitempty"`
+	CloudRegions          []string `json:"cloudRegions,omitempty"`
+	CloudAccounts         []string `json:"cloudAccounts,omitempty"`
+	Services              []string `json:"services,omitempty"`
+	OsTypes               []string `json:"osTypes,omitempty"`
+	CloudFamilyNames      []string `json:"cloudFamilyNames,omitempty"`
+	NodeStates            []string `json:"nodesStates,omitempty"`
+	CloudResourceMappings []string `json:"cloudResourceMappings,omitempty"`
 }
 
 type ActionCustomParamSpec struct {
-	ParamName            string              `json:"paramName"`
-	DisplayName          string              `json:"displayName"`
-	HelpText             string              `json:"helpText"`
-	Type                 string              `json:"type"`
-	ValueList            string              `json:"valueList"`
-	DefaultValue         string              `json:"defaultValue"`
-	ConfirmValue         string              `json:"confirmValue"`
-	PathSuffixValue      string              `json:"pathSuffixValue"`
-	UserVisible          bool                `json:"userVisible"`
-	UserEditable         bool                `json:"userEditable"`
-	SystemParam          bool                `json:"systemParam"`
-	ExampleValue         string              `json:"exampleValue"`
-	DataUnit             string              `json:"dataUnit"`
-	Optional             bool                `json:"optional"`
-	MultiselectSupported bool                `json:"multiselectSupported"`
-	ValueConstraint      ValueConstraint     `json:"valueConstraint"`
-	Scope                string              `json:"scope"`
-	WebserviceListParams WebserviceListParam `json:"webserviceListParams"`
-	Preference           string              `json:"preference"`
+	ParamName            string              `json:"paramName,omitempty"`
+	DisplayName          string              `json:"displayName,omitempty"`
+	HelpText             string              `json:"helpText,omitempty"`
+	Type                 string              `json:"type,omitempty"`
+	ValueList            string              `json:"valueList,omitempty"`
+	DefaultValue         string              `json:"defaultValue,omitempty"`
+	ConfirmValue         string              `json:"confirmValue,omitempty"`
+	PathSuffixValue      string              `json:"pathSuffixValue,omitempty"`
+	UserVisible          bool                `json:"userVisible,omitempty"`
+	UserEditable         bool                `json:"userEditable,omitempty"`
+	SystemParam          bool                `json:"systemParam,omitempty"`
+	ExampleValue         string              `json:"exampleValue,omitempty"`
+	DataUnit             string              `json:"dataUnit,omitempty"`
+	Optional             bool                `json:"optional,omitempty"`
+	MultiselectSupported bool                `json:"multiselectSupported,omitempty"`
+	ValueConstraint      ValueConstraint     `json:"valueConstraint,omitempty"`
+	Scope                string              `json:"scope,omitempty"`
+	WebserviceListParams WebserviceListParam `json:"webserviceListParams,omitempty"`
+	Preference           string              `json:"preference,omitempty"`
 }
 
 type ValueConstraint struct {
-	MinValue            int    `json:"minValue"`
-	MaxValue            int    `json:"maxValue"`
-	MaxLength           int    `json:"maxLength"`
-	Regex               string `json:"regex"`
-	AllowSpaces         bool   `json:"allowSpaces"`
-	SizeValue           int    `json:"sizeValue"`
-	Step                int    `json:"step"`
-	CalloutWorkflowName string `json:"calloutWorkflowName"`
+	MinValue            int    `json:"minValue,omitempty"`
+	MaxValue            int    `json:"maxValue,omitempty"`
+	MaxLength           int    `json:"maxLength,omitempty"`
+	Regex               string `json:"regex,omitempty"`
+	AllowSpaces         bool   `json:"allowSpaces,omitempty"`
+	SizeValue           int    `json:"sizeValue,omitempty"`
+	Step                int    `json:"step,omitempty"`
+	CalloutWorkflowName string `json:"calloutWorkflowName,omitempty"`
 }
 
 type WebserviceListParam struct {
-	Url           string `json:"url"`
-	Protocol      string `json:"protocol"`
-	Username      string `json:"username"`
-	Password      string `json:"password"`
-	RequestType   string `json:"requestType"`
-	ContentType   string `json:"contentType"`
-	CommandParams string `json:"commandParams"`
-	RequestBody   string `json:"requestBody"`
-	ResultString  string `json:"resultString"`
+	Url           string `json:"url,omitempty"`
+	Protocol      string `json:"protocol,omitempty"`
+	Username      string `json:"username,omitempty"`
+	Password      string `json:"password,omitempty"`
+	RequestType   string `json:"requestType,omitempty"`
+	ContentType   string `json:"contentType,omitempty"`
+	CommandParams string `json:"commandParams,omitempty"`
+	RequestBody   string `json:"requestBody,omitempty"`
+	ResultString  string `json:"resultString,omitempty"`
 }
 
 func (s *Client) GetActions() ([]Action, error) {
@@ -160,7 +161,6 @@ func (s *Client) GetAction(id int) (*Action, error) {
 	return action, nil
 }
 
-/*
 func (s *Client) AddAction(action *Action) (*Action, error) {
 
 	var data Action
@@ -194,4 +194,53 @@ func (s *Client) AddAction(action *Action) (*Action, error) {
 
 	return action, nil
 }
-*/
+
+func (s *Client) UpdateAction(action *Action) (*Action, error) {
+
+	var data Action
+
+	url := fmt.Sprintf(s.BaseURL + "/v1/actions/" + action.Id)
+
+	j, err := json.Marshal(action)
+
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("PUT", url, bytes.NewBuffer(j))
+	if err != nil {
+		return nil, err
+	}
+
+	bytes, err := s.doRequest(req)
+
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal(bytes, &data)
+
+	if err != nil {
+		return nil, err
+	}
+
+	action = &data
+
+	return action, nil
+}
+
+func (s *Client) DeleteAction(actionId int) error {
+
+	url := fmt.Sprintf(s.BaseURL + "/v1/actions/" + strconv.Itoa(actionId))
+
+	req, err := http.NewRequest("DELETE", url, nil)
+	if err != nil {
+		return err
+	}
+	_, err = s.doRequest(req)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
