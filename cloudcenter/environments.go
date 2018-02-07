@@ -42,6 +42,7 @@ type AssociatedCloud struct {
 	RegionDisplayName        string                    `json:"regionDisplayName"`
 	CloudFamily              string                    `json:"cloudFamily"`
 	CloudId                  string                    `json:"cloudId"`
+	CloudAccountId           string                    `json:"cloudAccountId"`
 	CloudName                string                    `json:"cloudName"`
 	CloudAccountName         string                    `json:"cloudAccountName"`
 	CloudAssociationDefaults []CloudAssociationDefault `json:"cloudAssociationDefaults"`
@@ -130,4 +131,54 @@ func (s *Client) AddEnvironment(environment *Environment) (*Environment, error) 
 	environment = &data
 
 	return environment, nil
+}
+
+func (s *Client) UpdateEnvironment(environment *Environment) (*Environment, error) {
+
+	var data Environment
+
+	url := fmt.Sprintf(s.BaseURL + "/v1/environments/" + environment.Id)
+
+	j, err := json.Marshal(environment)
+
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("PUT", url, bytes.NewBuffer(j))
+	if err != nil {
+		return nil, err
+	}
+
+	bytes, err := s.doRequest(req)
+
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal(bytes, &data)
+
+	if err != nil {
+		return nil, err
+	}
+
+	environment = &data
+
+	return environment, nil
+}
+
+func (s *Client) DeleteEnvironment(environmentId int) error {
+
+	url := fmt.Sprintf(s.BaseURL + "/v1/environments/" + strconv.Itoa(environmentId))
+
+	req, err := http.NewRequest("DELETE", url, nil)
+	if err != nil {
+		return err
+	}
+	_, err = s.doRequest(req)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
