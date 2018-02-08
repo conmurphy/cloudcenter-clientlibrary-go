@@ -7,6 +7,7 @@ import "strconv"
 import "bytes"
 import "errors"
 
+//UserAPIResponse
 type UserAPIResponse struct {
 	Resource      string `json:"resource,omitempty"`
 	Size          int    `json:"size,omitempty"`

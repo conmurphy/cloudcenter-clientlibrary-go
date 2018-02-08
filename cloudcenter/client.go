@@ -1,3 +1,36 @@
+//
+// This client library provides Create, Read, Update, and Delete operations for Cisco Cloud Center.
+//
+// A Basic Example
+//
+//  package main
+//
+//  import "github.com/cloudcenter-clientlibrary-go/cloudcenter”
+//
+//  // Define new cloudcenter client
+//
+//  client := cloudcenter.NewClient("cliqradmin", ”myAPIKey", "https://ccm.dcloud.cisco.com")
+//
+//  // Create user
+//
+//  newUser := cloudcenter.User{
+//	  TenantId:    "1",
+//	  FirstName:   "client",
+//	  LastName:    "library",
+//	  Password:    "myPassword",
+//	  EmailAddr:   "clientlibrary@cloudcenter.com",
+//	  CompanyName: "Company",
+//	  PhoneNumber: "12345",
+//	  ExternalId:  "23456",
+//  }
+//
+//  user, err := client.AddUser(&newUser)
+//
+//  if err != nil {
+//	  fmt.Println(err)
+//  } else {
+//	  fmt.Println(”New user created. \n UserId: " + user.Id + ", Username: " + user.LastName)
+//  }
 package cloudcenter
 
 import "fmt"
