@@ -4,52 +4,34 @@ import "fmt"
 import "net/http"
 import "encoding/json"
 import "strconv"
+import "bytes"
 
 type CloudAPIResponse struct {
-	Resource      string  `json:"resource"`
-	Size          int     `json:"size"`
-	PageNumber    int     `json:"pageNumber"`
-	TotalElements int     `json:"totalElements"`
-	TotalPages    int     `json:"totalPages"`
-	Clouds        []Cloud `json:"clouds"`
+	Resource      string  `json:"resource,omitempty"`
+	Size          int     `json:"size,omitempty"`
+	PageNumber    int     `json:"pageNumber,omitempty"`
+	TotalElements int     `json:"totalElements,omitempty"`
+	TotalPages    int     `json:"totalPages,omitempty"`
+	Clouds        []Cloud `json:"clouds,omitempty"`
 }
 
 type Cloud struct {
-	Id          string   `json:"id"`
-	Resource    string   `json:"resource"`
-	Perms       []string `json:"perms"`
-	Name        string   `json:"name"`
-	Description string   `json:"description"`
-	CloudFamily string   `json:"cloudFamily"`
-	PublicCloud bool     `json:"publicCloud"`
-	TenantId    string   `json:"tenantId"`
+	Id          string   `json:"id,omitempty"`
+	Resource    string   `json:"resource,omitempty"`
+	Perms       []string `json:"perms,omitempty"`
+	Name        string   `json:"name,omitempty"`
+	Description string   `json:"description,omitempty"`
+	CloudFamily string   `json:"cloudFamily,omitempty"`
+	PublicCloud bool     `json:"publicCloud,omitempty"`
+	TenantId    string   `json:"tenantId,omitempty"`
+	Detail      *Detail  `json:"detail,omitempty"`
 }
 
-type Property struct {
-	Name  string `json:"name"`
-	Value string `json:"value"`
-}
-
-type CloudInstanceType struct {
-	Id                       string  `json:"id"`
-	Resource                 string  `json:"resource"`
-	InstanceType             string  `json:"instanceType"`
-	Name                     string  `json:"name"`
-	Description              string  `json:"description"`
-	CostPerHour              float32 `json:"costPerHour"`
-	MemorySize               int     `json:"memorySize"`
-	NumOfCPUs                int     `json:"numOfCPUs"`
-	NumOfNICs                int     `json:"numOfNICs"`
-	LocalStorageCount        int     `json:"localStorageCount"`
-	LocalStorageSize         int     `json:"localStorageSize"`
-	CudaSupport              bool    `json:"cudaSupport"`
-	SsdSupport               bool    `json:"ssdSupport"`
-	Support32Bit             bool    `json:"support32Bit"`
-	Support64Bit             bool    `json:"support64Bit"`
-	Dummy                    bool    `json:"dummy"`
-	Deleted                  bool    `json:"deleted"`
-	Mutability               string  `json:"mutability"`
-	SupportHardwareProvision bool    `json:"supportHardwareProvision"`
+type Detail struct {
+	CloudAccounts []CloudAccount `json:"cloudAccounts"`
+	CloudRegions  []CloudRegion  `json:"cloudRegions,omitempty"`
+	Status        string         `json:"status,omitempty"`
+	StatusDetail  string         `json:"statusDetail,omitempty"`
 }
 
 func (s *Client) GetClouds(tenantId int) ([]Cloud, error) {
@@ -97,4 +79,88 @@ func (s *Client) GetCloud(tenantId int, cloudId int) (*Cloud, error) {
 	cloud := &data
 
 	return cloud, nil
+}
+
+func (s *Client) AddCloud(cloud *Cloud) (*Cloud, error) {
+
+	var data Cloud
+
+	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + cloud.TenantId + "/clouds")
+
+	j, err := json.Marshal(cloud)
+
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(j))
+	if err != nil {
+		return nil, err
+	}
+
+	bytes, err := s.doRequest(req)
+
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal(bytes, &data)
+
+	if err != nil {
+		return nil, err
+	}
+
+	cloud = &data
+
+	return cloud, nil
+}
+
+func (s *Client) UpdateCloud(cloud *Cloud) (*Cloud, error) {
+
+	var data Cloud
+
+	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + cloud.TenantId + "/clouds/" + cloud.Id)
+
+	j, err := json.Marshal(cloud)
+
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("PUT", url, bytes.NewBuffer(j))
+	if err != nil {
+		return nil, err
+	}
+
+	bytes, err := s.doRequest(req)
+
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal(bytes, &data)
+
+	if err != nil {
+		return nil, err
+	}
+
+	cloud = &data
+
+	return cloud, nil
+}
+
+func (s *Client) DeleteCloud(tenantId int, cloudId int) error {
+
+	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + strconv.Itoa(tenantId) + "/clouds/" + strconv.Itoa(cloudId))
+
+	req, err := http.NewRequest("DELETE", url, nil)
+	if err != nil {
+		return err
+	}
+	_, err = s.doRequest(req)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
