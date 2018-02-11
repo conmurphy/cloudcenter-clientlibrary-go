@@ -9,9 +9,12 @@ import "encoding/json"
 //import "bytes"
 
 type OperationStatus struct {
-	Id       string `json:"id,omitempty"`
-	Status   string `json:"status,omitempty"`
-	Resource string `json:"resource,omitempty"`
+	OperationId string `json:"operationId,omitempty"`
+	Id          string `json:"id,omitempty"`
+	Status      string `json:"status,omitempty"`
+	Resource    string `json:"resource,omitempty"`
+	Msg         string `json:"msg,omitempty"`
+	Progress    int64  `json:"progress,omitempty"`
 }
 
 func (s *Client) GetOperationStatus(operationId string) (*OperationStatus, error) {

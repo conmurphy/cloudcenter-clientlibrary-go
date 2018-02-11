@@ -153,7 +153,7 @@ func (s *Client) UpdateTenant(tenant *Tenant) (*Tenant, error) {
 	return tenant, nil
 }
 
-func (s *Client) DeleteTenant(tenantId int) error {
+func (s *Client) DeleteTenantSync(tenantId int) error {
 
 	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + strconv.Itoa(tenantId))
 
@@ -183,4 +183,30 @@ func (s *Client) DeleteTenant(tenantId int) error {
 	}
 
 	return nil
+}
+
+func (s *Client) DeleteTenantAsync(tenantId int) (*OperationStatus, error) {
+
+	var data OperationStatus
+
+	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + strconv.Itoa(tenantId))
+
+	req, err := http.NewRequest("DELETE", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := s.doRequest(req)
+
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal(body, &data)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &data, nil
 }

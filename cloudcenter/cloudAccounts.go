@@ -2,9 +2,11 @@ package cloudcenter
 
 import "fmt"
 import "net/http"
+
 import "encoding/json"
 import "strconv"
 import "bytes"
+import "errors"
 
 type CloudAccountAPIResponse struct {
 	Resource      string         `json:"resource,omitempty"`
@@ -86,9 +88,97 @@ func (s *Client) GetCloudAccount(tenantId int, cloudId int, accountId int) (*Clo
 	return cloudAccount, nil
 }
 
-func (s *Client) AddCloudAccount(cloudAccount *CloudAccount) (*CloudAccount, error) {
+func (s *Client) GetCloudAccountByName(tenantId int, cloudId int, displayName string) ([]CloudAccount, error) {
 
-	var data CloudAccount
+	var data CloudAccountAPIResponse
+
+	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + strconv.Itoa(tenantId) + "/clouds/" + strconv.Itoa(cloudId) + "/accounts?displayName=" + displayName)
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+	bytes, err := s.doRequest(req)
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal(bytes, &data)
+
+	if err != nil {
+		return nil, err
+	}
+
+	cloudAccounts := data.CloudAccounts
+	return cloudAccounts, nil
+}
+
+func (s *Client) AddCloudAccountSync(cloudAccount *CloudAccount) (*CloudAccount, error) {
+
+	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + cloudAccount.TenantId + "/clouds/" + cloudAccount.CloudId + "/accounts")
+
+	j, err := json.Marshal(cloudAccount)
+
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(j))
+	if err != nil {
+		return nil, err
+	}
+
+	bytes, err := s.doRequest(req)
+
+	if err != nil {
+		return nil, err
+	} else {
+
+		var status map[string]interface{}
+
+		json.Unmarshal(bytes, &status)
+
+		for status["status"] == "RUNNING" {
+
+			url := fmt.Sprintf(status["resourceUrl"].(string))
+			req, err := http.NewRequest("GET", url, nil)
+			if err != nil {
+				return nil, err
+			}
+			bytes, err = s.doRequest(req)
+			if err != nil {
+				return nil, err
+			}
+
+			json.Unmarshal(bytes, &status)
+
+		}
+
+		if status["status"] == "SUCCESS" {
+			cloudAccounts, err := s.GetCloudAccountByName(1, 1, cloudAccount.DisplayName)
+
+			if err != nil {
+				return nil, err
+			} else {
+
+				for _, cloudAccount := range cloudAccounts {
+
+					return &cloudAccount, nil
+				}
+			}
+		} else {
+
+			return nil, errors.New("Cloud Account creation failed")
+
+		}
+	}
+
+	return nil, errors.New("Cloud Account creation failed")
+
+}
+
+func (s *Client) AddCloudAccountAsync(cloudAccount *CloudAccount) (*OperationStatus, error) {
+
+	var data OperationStatus
 
 	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + cloudAccount.TenantId + "/clouds/" + cloudAccount.CloudId + "/accounts")
 
@@ -115,14 +205,77 @@ func (s *Client) AddCloudAccount(cloudAccount *CloudAccount) (*CloudAccount, err
 		return nil, err
 	}
 
-	cloudAccount = &data
+	return &data, nil
 
-	return cloudAccount, nil
 }
 
-func (s *Client) UpdateCloudAccount(cloudAccount *CloudAccount) (*CloudAccount, error) {
+func (s *Client) UpdateCloudAccountSync(cloudAccount *CloudAccount) (*CloudAccount, error) {
 
-	var data CloudAccount
+	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + cloudAccount.TenantId + "/clouds/" + cloudAccount.CloudId + "/accounts/" + cloudAccount.Id)
+
+	j, err := json.Marshal(cloudAccount)
+
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("PUT", url, bytes.NewBuffer(j))
+	if err != nil {
+		return nil, err
+	}
+
+	bytes, err := s.doRequest(req)
+
+	if err != nil {
+		return nil, err
+	} else {
+
+		var status map[string]interface{}
+
+		json.Unmarshal(bytes, &status)
+
+		for status["status"] == "RUNNING" {
+
+			url := fmt.Sprintf(status["resourceUrl"].(string))
+			req, err := http.NewRequest("GET", url, nil)
+			if err != nil {
+				return nil, err
+			}
+			bytes, err = s.doRequest(req)
+			if err != nil {
+				return nil, err
+			}
+
+			json.Unmarshal(bytes, &status)
+
+		}
+
+		if status["status"] == "SUCCESS" {
+			cloudAccounts, err := s.GetCloudAccountByName(1, 1, cloudAccount.DisplayName)
+
+			if err != nil {
+				return nil, err
+			} else {
+
+				for _, cloudAccount := range cloudAccounts {
+
+					return &cloudAccount, nil
+				}
+			}
+		} else {
+
+			return nil, errors.New("Cloud Account creation failed")
+
+		}
+	}
+
+	return nil, errors.New("Cloud Account creation failed")
+
+}
+
+func (s *Client) UpdateCloudAccountAsync(cloudAccount *CloudAccount) (*OperationStatus, error) {
+
+	var data OperationStatus
 
 	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + cloudAccount.TenantId + "/clouds/" + cloudAccount.CloudId + "/accounts/" + cloudAccount.Id)
 
@@ -149,9 +302,7 @@ func (s *Client) UpdateCloudAccount(cloudAccount *CloudAccount) (*CloudAccount, 
 		return nil, err
 	}
 
-	cloudAccount = &data
-
-	return cloudAccount, nil
+	return &data, nil
 }
 
 func (s *Client) DeleteCloudAccount(tenantId int, cloudId int, accountId int) error {

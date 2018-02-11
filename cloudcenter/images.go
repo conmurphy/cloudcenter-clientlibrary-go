@@ -18,8 +18,7 @@ type ImageAPIResponse struct {
 
 type Image struct {
 	Id                string   `json:"id,omitempty"`
-	ImageId           string   `json:"imageId,omitempty"`
-	TenantId          int32    `json:"tenantId,omitempty"`
+	TenantId          int      `json:"tenantId,omitempty"`
 	Resource          string   `json:"resource,omitempty"`
 	Perms             []string `json:"perms,omitempty"`
 	Name              string   `json:"name,omitempty"`
@@ -31,8 +30,8 @@ type Image struct {
 	Tags              []string `json:"tags,omitempty"`
 	Enabled           bool     `json:"enabled,omitempty"`
 	SystemImage       bool     `json:"systemImage,omitempty"`
-	NumOfNICs         int32    `json:"numOfNics,omitempty"`
-	Count             int32    `json:"count,omitempty"`
+	NumOfNICs         int      `json:"numOfNics,omitempty"`
+	AttachCount       int      `json:"count,omitempty"`
 }
 
 func (s *Client) GetImages(tenantId int) ([]Image, error) {

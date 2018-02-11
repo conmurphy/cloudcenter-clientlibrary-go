@@ -38,6 +38,8 @@ import "net/http"
 import "io/ioutil"
 import "crypto/tls"
 
+//import "encoding/json"
+
 type Client struct {
 	Username string
 	Password string
@@ -53,6 +55,7 @@ func NewClient(username, password, baseURL string) *Client {
 }
 
 func (s *Client) doRequest(req *http.Request) ([]byte, error) {
+
 	req.Header.Add("Content-Type", "application/json")
 	req.SetBasicAuth(s.Username, s.Password)
 	tr := &http.Transport{
@@ -68,7 +71,8 @@ func (s *Client) doRequest(req *http.Request) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if 200 != resp.StatusCode && 201 != resp.StatusCode && 204 != resp.StatusCode {
+
+	if 200 != resp.StatusCode && 201 != resp.StatusCode && 202 != resp.StatusCode && 204 != resp.StatusCode {
 		return nil, fmt.Errorf("%s", body)
 	}
 

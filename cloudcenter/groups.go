@@ -28,8 +28,8 @@ type Group struct {
 	TenantId     string   `json:"tenantId,omitempty"`    //required
 	Users        []User   `json:"users,omitempty"`
 	Roles        []Role   `json:"roles,omitempty"`
-	Created      int64    `json:"created,omitempty"`
-	LastUpdated  int64    `json:"lastUpdated,omitempty"`
+	Created      int      `json:"created,omitempty"`
+	LastUpdated  int      `json:"lastUpdated,omitempty"`
 	CreatedBySso bool     `json:"createdBySso,omitempty"`
 }
 

@@ -31,7 +31,7 @@ type Role struct {
 	Groups      []Group      `json:"groups,omitempty"`
 	OobRole     bool         `json:"oobRole,omitempty"`
 	LastUpdated int64        `json:"lastUpdated,omitempty"`
-	CreatedB    int64        `json:"created,omitempty"`
+	Created     int64        `json:"created,omitempty"`
 }
 
 type ObjectPerm struct {
