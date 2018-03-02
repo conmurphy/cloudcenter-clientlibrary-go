@@ -8,30 +8,30 @@ import "bytes"
 import "errors"
 
 type BundleAPIResponse struct {
-	Resource      string   `json:"resource"`
-	Size          int      `json:"size"`
-	PageNumber    int      `json:"pageNumber"`
-	TotalElements int      `json:"totalElements"`
-	TotalPages    int      `json:"totalPages"`
+	Resource      *string  `json:"resource"`
+	Size          *int64   `json:"size"`
+	PageNumber    *int64   `json:"pageNumber"`
+	TotalElements *int64   `json:"totalElements"`
+	TotalPages    *int64   `json:"totalPages"`
 	Bundles       []Bundle `json:"bundles"`
 }
 
 type Bundle struct {
-	Id               string   `json:"id,omitempty"`
-	Resource         string   `json:"resource,omitempty"`
-	Perms            []string `json:"perms,omitempty"`
-	Type             string   `json:"type,omitempty"`
-	Name             string   `json:"name,omitempty"`
-	Description      string   `json:"description,omitempty"`
-	Limit            float64  `json:"limit,omitempty"`
-	Price            float64  `json:"price,omitempty"`
-	ExpirationDate   float64  `json:"expirationDate,omitempty"`
-	ExpirationMonths int64    `json:"expirationMonths,omitempty"`
-	Disabled         bool     `json:"disabled,omitempty"`
-	ShowOnlyToAdmin  bool     `json:"showOnlyToAdmin,omitempty"`
-	NumberOfUsers    float32  `json:"numberOfUsers,omitempty"`
-	TenantId         string   `json:"tenantId,omitempty"`
-	PublishedAppIds  []string `json:"publishedAppIds,omitempty"`
+	Id               *string   `json:"id,omitempty"`
+	Resource         *string   `json:"resource,omitempty"`
+	Perms            *[]string `json:"perms,omitempty"`
+	Type             *string   `json:"type,omitempty"`
+	Name             *string   `json:"name,omitempty"`
+	Description      *string   `json:"description,omitempty"`
+	Limit            *float64  `json:"limit,omitempty"`
+	Price            *float64  `json:"price,omitempty"`
+	ExpirationDate   *float64  `json:"expirationDate,omitempty"`
+	ExpirationMonths *int64    `json:"expirationMonths,omitempty"`
+	Disabled         *bool     `json:"disabled,omitempty"`
+	ShowOnlyToAdmin  *bool     `json:"showOnlyToAdmin,omitempty"`
+	NumberOfUsers    *float64  `json:"numberOfUsers,omitempty"`
+	TenantId         *string   `json:"tenantId,omitempty"`
+	PublishedAppIds  []string  `json:"publishedAppIds,omitempty"`
 }
 
 func (s *Client) GetBundles(TenantId int) ([]Bundle, error) {
@@ -83,7 +83,7 @@ func (s *Client) GetBundle(TenantId int, BundleId int) (*Bundle, error) {
 	return bundle, nil
 }
 
-func (s *Client) GetBundleFromName(TenantId int, BundleName string) (*Bundle, error) {
+func (s *Client) GetBundleFromName(TenantId int, BundleNameSearchString string) (*Bundle, error) {
 
 	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + strconv.Itoa(TenantId) + "/bundles")
 
@@ -105,7 +105,8 @@ func (s *Client) GetBundleFromName(TenantId int, BundleName string) (*Bundle, er
 	bundles := data.Bundles
 
 	for _, bundle := range bundles {
-		if bundle.Name == BundleName {
+		bundleName := *bundle.Name
+		if bundleName == BundleNameSearchString {
 
 			return &bundle, nil
 		}
@@ -119,7 +120,8 @@ func (s *Client) AddBundle(bundle *Bundle) (*Bundle, error) {
 
 	var data Bundle
 
-	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + bundle.TenantId + "/bundles")
+	bundleTenantId := *bundle.TenantId
+	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + bundleTenantId + "/bundles")
 
 	j, err := json.Marshal(bundle)
 
@@ -153,7 +155,10 @@ func (s *Client) UpdateBundle(bundle *Bundle) (*Bundle, error) {
 
 	var data Bundle
 
-	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + bundle.TenantId + "/bundles/" + bundle.Id)
+	bundleTenantId := *bundle.TenantId
+	bundleId := *bundle.Id
+
+	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + bundleTenantId + "/bundles/" + bundleId)
 
 	j, err := json.Marshal(bundle)
 
