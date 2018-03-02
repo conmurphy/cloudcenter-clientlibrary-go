@@ -91,17 +91,6 @@ type ActionCustomParamSpec struct {
 	Preference           string              `json:"preference,omitempty"`
 }
 
-type ValueConstraint struct {
-	MinValue            int32  `json:"minValue,omitempty"`
-	MaxValue            int32  `json:"maxValue,omitempty"`
-	MaxLength           int32  `json:"maxLength,omitempty"`
-	Regex               string `json:"regex,omitempty"`
-	AllowSpaces         bool   `json:"allowSpaces,omitempty"`
-	SizeValue           int32  `json:"sizeValue,omitempty"`
-	Step                int32  `json:"step,omitempty"`
-	CalloutWorkflowName string `json:"calloutWorkflowName,omitempty"`
-}
-
 type WebserviceListParam struct {
 	URL           string `json:"url,omitempty"`
 	Protocol      string `json:"protocol,omitempty"`

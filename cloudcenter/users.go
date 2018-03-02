@@ -18,32 +18,32 @@ type UserAPIResponse struct {
 }
 
 type User struct {
-	Id                      string `json:"id,omitempty"`
-	Resource                string `json:"resource,omitempty"`
-	Username                string `json:"username,omitempty"`
-	Password                string `json:"password,omitempty"` //required
-	Enabled                 bool   `json:"enabled,omitempty"`
-	Type                    string `json:"type,omitempty"`
-	FirstName               string `json:"firstName,omitempty"`
-	LastName                string `json:"lastName,omitempty"`
-	CompanyName             string `json:"companyName,omitempty"`
-	EmailAddr               string `json:"emailAddr,omitempty"` //required
-	EmailVerified           bool   `json:"emailVerified,omitempty"`
-	PhoneNumber             string `json:"phoneNumber,omitempty"`
-	ExternalId              string `json:"externalId,omitempty"`
-	AccessKeys              string `json:"accessKeys,omitempty"`
-	DisableReason           string `json:"disableReason,omitempty"`
-	AccountSource           string `json:"accountSource,omitempty"`
-	Status                  string `json:"status,omitempty"`
-	Detail                  string `json:"detail,omitempty"`
-	ActivationData          string `json:"activationData,omitempty"`
-	Created                 int64  `json:"created,omitempty"`
-	LastUpdated             int64  `json:"lastUpdated,omitempty"`
-	CoAdmin                 bool   `json:"coAdmin,omitempty"`
-	TenantAdmin             bool   `json:"tenantAdmin,omitempty"`
-	ActivationProfileId     string `json:"activationProfileId,omitempty"`
-	HasSubscriptionPlanType bool   `json:"hasSubscriptionPlanType,omitempty"`
-	TenantId                string `json:"tenantId,omitempty"` //required
+	Id                      *string `json:"id,omitempty"`
+	Resource                *string `json:"resource,omitempty"`
+	Username                *string `json:"username,omitempty"`
+	Password                *string `json:"password,omitempty"` //required
+	Enabled                 *bool   `json:"enabled,omitempty"`
+	Type                    *string `json:"type,omitempty"`
+	FirstName               *string `json:"firstName,omitempty"`
+	LastName                *string `json:"lastName,omitempty"`
+	CompanyName             *string `json:"companyName,omitempty"`
+	EmailAddr               *string `json:"emailAddr,omitempty"` //required
+	EmailVerified           *bool   `json:"emailVerified,omitempty"`
+	PhoneNumber             *string `json:"phoneNumber,omitempty"`
+	ExternalId              *string `json:"externalId,omitempty"`
+	AccessKeys              *string `json:"accessKeys,omitempty"`
+	DisableReason           *string `json:"disableReason,omitempty"`
+	AccountSource           *string `json:"accountSource,omitempty"`
+	Status                  *string `json:"status,omitempty"`
+	Detail                  *string `json:"detail,omitempty"`
+	ActivationData          *string `json:"activationData,omitempty"`
+	Created                 *int64  `json:"created,omitempty"`
+	LastUpdated             *int64  `json:"lastUpdated,omitempty"`
+	CoAdmin                 *bool   `json:"coAdmin,omitempty"`
+	TenantAdmin             *bool   `json:"tenantAdmin,omitempty"`
+	ActivationProfileId     *string `json:"activationProfileId,omitempty"`
+	HasSubscriptionPlanType *bool   `json:"hasSubscriptionPlanType,omitempty"`
+	TenantId                *string `json:"tenantId,omitempty"` //required
 }
 
 func (s *Client) GetUsers() ([]User, error) {
@@ -94,7 +94,7 @@ func (s *Client) GetUser(id int) (*User, error) {
 	return user, nil
 }
 
-func (s *Client) GetUserFromEmail(email string) (*User, error) {
+func (s *Client) GetUserFromEmail(emailToSearch string) (*User, error) {
 
 	url := fmt.Sprintf(s.BaseURL + "/v1/users")
 
@@ -116,7 +116,10 @@ func (s *Client) GetUserFromEmail(email string) (*User, error) {
 	users := data.Users
 
 	for _, user := range users {
-		if user.EmailAddr == email {
+
+		email := *user.EmailAddr
+
+		if emailToSearch == email {
 			return &user, nil
 		}
 	}
@@ -162,7 +165,9 @@ func (s *Client) UpdateUser(user *User) (*User, error) {
 
 	var data User
 
-	url := fmt.Sprintf(s.BaseURL + "/v1/users/" + user.Id)
+	userId := *user.Id
+
+	url := fmt.Sprintf(s.BaseURL + "/v1/users/" + userId)
 
 	j, err := json.Marshal(user)
 
@@ -208,7 +213,7 @@ func (s *Client) DeleteUser(userId int) error {
 	return nil
 }
 
-func (s *Client) DeleteUserByEmail(email string) error {
+func (s *Client) DeleteUserByEmail(emailToSearch string) error {
 
 	url := fmt.Sprintf(s.BaseURL + "/v1/users")
 
@@ -230,9 +235,13 @@ func (s *Client) DeleteUserByEmail(email string) error {
 	users := data.Users
 
 	for _, user := range users {
-		if user.EmailAddr == email {
 
-			url := fmt.Sprintf(s.BaseURL + "/v1/users/" + user.Id)
+		email := *user.EmailAddr
+		if email == emailToSearch {
+
+			userId := *user.Id
+
+			url := fmt.Sprintf(s.BaseURL + "/v1/users/" + userId)
 
 			req, err := http.NewRequest("DELETE", url, nil)
 			if err != nil {

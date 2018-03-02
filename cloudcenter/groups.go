@@ -11,26 +11,26 @@ import "bytes"
 
 //GroupAPIResponse
 type GroupAPIResponse struct {
-	Resource      string  `json:"resource,omitempty"`
-	Size          int     `json:"size,omitempty"`
-	PageNumber    int     `json:"pageNumber,omitempty"`
-	TotalElements int     `json:"totalElements,omitempty"`
-	TotalPages    int     `json:"totalPages,omitempty"`
+	Resource      *string `json:"resource,omitempty"`
+	Size          *int    `json:"size,omitempty"`
+	PageNumber    *int    `json:"pageNumber,omitempty"`
+	TotalElements *int    `json:"totalElements,omitempty"`
+	TotalPages    *int    `json:"totalPages,omitempty"`
 	Groups        []Group `json:"groups,omitempty"`
 }
 
 type Group struct {
-	Id           string   `json:"id,omitempty"`
-	Resource     string   `json:"resource,omitempty"`
-	Perms        []string `json:"perms,omitempty"`
-	Name         string   `json:"name,omitempty"`
-	Description  string   `json:"description,omitempty"` //required
-	TenantId     string   `json:"tenantId,omitempty"`    //required
-	Users        []User   `json:"users,omitempty"`
-	Roles        []Role   `json:"roles,omitempty"`
-	Created      int      `json:"created,omitempty"`
-	LastUpdated  int      `json:"lastUpdated,omitempty"`
-	CreatedBySso bool     `json:"createdBySso,omitempty"`
+	Id           *string   `json:"id,omitempty"`
+	Resource     *string   `json:"resource,omitempty"`
+	Perms        *[]string `json:"perms,omitempty"`
+	Name         *string   `json:"name,omitempty"`
+	Description  *string   `json:"description,omitempty"`
+	TenantId     *string   `json:"tenantId,omitempty"`
+	Users        []User    `json:"users,omitempty"`
+	Roles        []Role    `json:"roles,omitempty"`
+	Created      *int      `json:"created,omitempty"`
+	LastUpdated  *int      `json:"lastUpdated,omitempty"`
+	CreatedBySso *bool     `json:"createdBySso,omitempty"`
 }
 
 func (s *Client) GetGroups(tenantId int) ([]Group, error) {
@@ -85,7 +85,8 @@ func (s *Client) AddGroup(group *Group) (*Group, error) {
 
 	var data Group
 
-	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + group.TenantId + "/groups")
+	groupTenantId := *group.TenantId
+	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + groupTenantId + "/groups")
 
 	j, err := json.Marshal(group)
 
@@ -119,7 +120,9 @@ func (s *Client) UpdateGroup(group *Group) (*Group, error) {
 
 	var data Group
 
-	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + group.TenantId + "/groups/" + group.Id)
+	groupTenantId := *group.TenantId
+	groupId := *group.Id
+	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + groupTenantId + "/groups/" + groupId)
 
 	j, err := json.Marshal(group)
 

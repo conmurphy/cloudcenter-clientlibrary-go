@@ -8,52 +8,52 @@ import "bytes"
 import "errors"
 
 type TenantAPIResponse struct {
-	Resource      string   `json:"resource"`
-	Size          int      `json:"size"`
-	PageNumber    int      `json:"pageNumber"`
-	TotalElements int      `json:"totalElements"`
-	TotalPages    int      `json:"totalPages"`
+	Resource      *string  `json:"resource"`
+	Size          *int     `json:"size"`
+	PageNumber    *int     `json:"pageNumber"`
+	TotalElements *int     `json:"totalElements"`
+	TotalPages    *int     `json:"totalPages"`
 	Tenants       []Tenant `json:"tenants"`
 }
 
 type Tenant struct {
-	Id                              string  `json:"id"`
-	Resource                        string  `json:"resource,omitempty"`
-	Name                            string  `json:"name,omitempty"`
-	Url                             string  `json:"url,omitempty"`
-	About                           string  `json:"about,omitempty"`
-	ContactEmail                    string  `json:"contactEmail,omitempty"`
-	Phone                           string  `json:"phone,omitempty"`
-	UserId                          string  `json:"userId,omitempty"`
-	TermsOfService                  string  `json:"termsOfService,omitempty"`
-	PrivacyPolicy                   string  `json:"privacyPolicy,omitempty"`
-	RevShareRate                    float32 `json:"revShareRate,omitempty"`
-	CcTransactionFeeRate            float32 `json:"ccTransactionFeeRate,omitempty"`
-	MinAppFeeRate                   float32 `json:"minAppFeeRate,omitempty"`
-	EnableConsolidatedBilling       bool    `json:"enableConsolidatedBilling,omitempty"`
-	ShortName                       string  `json:"shortName,omitempty"`
-	EnablePurchaseOrder             bool    `json:"enablePurchaseOrder,omitempty"`
-	EnableEmailNotificationsToUsers bool    `json:"enableEmailNotificationsToUsers,omitempty"`
-	ParentTenantId                  int     `json:"parentTenantId,omitempty"`
-	ExternalId                      string  `json:"externalId,omitempty"`
-	DefaultActivationProfileId      string  `json:"defaultActivationProfileId,omitempty"`
-	EnableMonthlyBilling            bool    `json:"enableMonthlyBilling,omitempty"`
-	DefaultChargeType               string  `json:"defaultChargeType,omitempty"`
-	LoginLogo                       string  `json:"loginLogo,omitempty"`
-	HomePageLogo                    string  `json:"homePageLogo,omitempty"`
-	DomainName                      string  `json:"domainName,omitempty"`
+	Id                              *string  `json:"id"`
+	Resource                        *string  `json:"resource,omitempty"`
+	Name                            *string  `json:"name,omitempty"`
+	Url                             *string  `json:"url,omitempty"`
+	About                           *string  `json:"about,omitempty"`
+	ContactEmail                    *string  `json:"contactEmail,omitempty"`
+	Phone                           *string  `json:"phone,omitempty"`
+	UserId                          *string  `json:"userId,omitempty"`
+	TermsOfService                  *string  `json:"termsOfService,omitempty"`
+	PrivacyPolicy                   *string  `json:"privacyPolicy,omitempty"`
+	RevShareRate                    *float32 `json:"revShareRate,omitempty"`
+	CcTransactionFeeRate            *float32 `json:"ccTransactionFeeRate,omitempty"`
+	MinAppFeeRate                   *float32 `json:"minAppFeeRate,omitempty"`
+	EnableConsolidatedBilling       *bool    `json:"enableConsolidatedBilling,omitempty"`
+	ShortName                       *string  `json:"shortName,omitempty"`
+	EnablePurchaseOrder             *bool    `json:"enablePurchaseOrder,omitempty"`
+	EnableEmailNotificationsToUsers *bool    `json:"enableEmailNotificationsToUsers,omitempty"`
+	ParentTenantId                  *int     `json:"parentTenantId,omitempty"`
+	ExternalId                      *string  `json:"externalId,omitempty"`
+	DefaultActivationProfileId      *string  `json:"defaultActivationProfileId,omitempty"`
+	EnableMonthlyBilling            *bool    `json:"enableMonthlyBilling,omitempty"`
+	DefaultChargeType               *string  `json:"defaultChargeType,omitempty"`
+	LoginLogo                       *string  `json:"loginLogo,omitempty"`
+	HomePageLogo                    *string  `json:"homePageLogo,omitempty"`
+	DomainName                      *string  `json:"domainName,omitempty"`
 	//ActivationCodes                 string `json:"activationCodes"`
 	//FirewallProfiles                string `json:"firewallProfiles"`
-	SkipDefaultUserSecurityGroup bool         `json:"skipDefaultUserSecurityGroup,omitempty"`
-	DisableAllEmailNotification  bool         `json:"disableAllEmailNotification,omitempty"`
-	TrademarkURL                 string       `json:"trademarkURL,omitempty"`
-	Deleted                      bool         `json:"deleted,omitempty"`
+	SkipDefaultUserSecurityGroup *bool        `json:"skipDefaultUserSecurityGroup,omitempty"`
+	DisableAllEmailNotification  *bool        `json:"disableAllEmailNotification,omitempty"`
+	TrademarkURL                 *string      `json:"trademarkURL,omitempty"`
+	Deleted                      *bool        `json:"deleted,omitempty"`
 	Preferences                  []Preference `json:"preferences,omitempty"`
 }
 
 type Preference struct {
-	Name  string `json:"name"`
-	Value string `json:"value"`
+	Name  *string `json:"name"`
+	Value *string `json:"value"`
 }
 
 func (s *Client) GetTenants() ([]Tenant, error) {
@@ -123,7 +123,8 @@ func (s *Client) UpdateTenant(tenant *Tenant) (*Tenant, error) {
 
 	var data Tenant
 
-	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + tenant.Id)
+	tenantId := *tenant.Id
+	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + tenantId)
 
 	j, err := json.Marshal(tenant)
 

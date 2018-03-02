@@ -9,12 +9,18 @@ import "encoding/json"
 //import "bytes"
 
 type OperationStatus struct {
-	OperationId string `json:"operationId,omitempty"`
-	Id          string `json:"id,omitempty"`
-	Status      string `json:"status,omitempty"`
-	Resource    string `json:"resource,omitempty"`
-	Msg         string `json:"msg,omitempty"`
-	Progress    int64  `json:"progress,omitempty"`
+	OperationId          string                `json:"operationId,omitempty"`
+	Id                   string                `json:"id,omitempty"`
+	Status               string                `json:"status,omitempty"`
+	Resource             string                `json:"resource,omitempty"`
+	Msg                  string                `json:"msg,omitempty"`
+	Progress             int64                 `json:"progress,omitempty"`
+	AdditionalParameters []AdditionalParameter `json:"additionalParameters,omitempty"`
+}
+
+type AdditionalParameter struct {
+	Name  string `json:"name,omitempty"`
+	Value string `json:"value,omitempty"`
 }
 
 func (s *Client) GetOperationStatus(operationId string) (*OperationStatus, error) {
