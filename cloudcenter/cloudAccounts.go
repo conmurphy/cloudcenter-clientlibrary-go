@@ -18,22 +18,22 @@ type CloudAccountAPIResponse struct {
 }
 
 type CloudAccount struct {
-	Id                 *string           `json:"id,omitempty"`
-	Resource           *string           `json:"resource,omitempty"`
-	Perms              *[]string         `json:"perms,omitempty"`
-	DisplayName        *string           `json:"displayName,omitempty"`
-	CloudId            *string           `json:"cloudId,omitempty"`
-	UserId             *string           `json:"userId,omitempty"`
-	AccountId          *string           `json:"accountId,omitempty"`
-	AccountName        *string           `json:"accountName,omitempty"`
-	AccountPassword    *string           `json:"accountPassword,omitempty"`
-	AccountDescription *string           `json:"accountDescription,omitempty"`
-	ManageCost         *bool             `json:"manageCost,omitempty"`
-	PublicVisible      *bool             `json:"publicVisible,omitempty"`
-	AllowedUsers       *[]int64          `json:"allowedUsers,omitempty"`
-	AccessPermission   *string           `json:"accessPermission,omitempty"`
-	AccountProperties  []AccountProperty `json:"accountProperties,omitempty"`
-	TenantId           *string           `json:"tenantId,omitempty"`
+	Id                 *string            `json:"id,omitempty"`
+	Resource           *string            `json:"resource,omitempty"`
+	Perms              *[]string          `json:"perms,omitempty"`
+	DisplayName        *string            `json:"displayName,omitempty"`
+	CloudId            *string            `json:"cloudId,omitempty"`
+	UserId             *string            `json:"userId,omitempty"`
+	AccountId          *string            `json:"accountId,omitempty"`
+	AccountName        *string            `json:"accountName,omitempty"`
+	AccountPassword    *string            `json:"accountPassword,omitempty"`
+	AccountDescription *string            `json:"accountDescription,omitempty"`
+	ManageCost         *bool              `json:"manageCost,omitempty"`
+	PublicVisible      *bool              `json:"publicVisible,omitempty"`
+	AllowedUsers       *[]int64           `json:"allowedUsers,omitempty"`
+	AccessPermission   *string            `json:"accessPermission,omitempty"`
+	AccountProperties  *[]AccountProperty `json:"accountProperties,omitempty"`
+	TenantId           *string            `json:"tenantId,omitempty"`
 }
 
 type AccountProperty struct {

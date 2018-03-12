@@ -36,22 +36,22 @@ type Image struct {
 }
 
 type Details struct {
-	Count       *int64       `json:"count,omitempty"`
-	CloudImages []CloudImage `json:"cloudImages,omitempty"`
+	Count       *int64        `json:"count,omitempty"`
+	CloudImages *[]CloudImage `json:"cloudImages,omitempty"`
 }
 
 type CloudImage struct {
-	Id                   *string    `json:"id,omitempty"`
-	Resource             *string    `json:"resource,omitempty"`
-	Perms                *[]string  `json:"perms,omitempty"`
-	RegionId             *string    `json:"regionId,omitempty"`
-	CloudProviderImageId *string    `json:"cloudProviderImageId,omitempty"`
-	LaunchUserName       *string    `json:"launchUserName,omitempty"`
-	ImageId              *string    `json:"imageId,omitempty"`
-	GrantAndRevoke       *bool      `json:"grantAndRevoke,omitempty"`
-	ImageCloudAccountId  *int64     `json:"imageCloudAccountId,omitempty"`
-	Resources            []Resource `json:"resources,omitempty"`
-	Mappings             []Mapping  `json:"mappings,omitempty"`
+	Id                   *string     `json:"id,omitempty"`
+	Resource             *string     `json:"resource,omitempty"`
+	Perms                *[]string   `json:"perms,omitempty"`
+	RegionId             *string     `json:"regionId,omitempty"`
+	CloudProviderImageId *string     `json:"cloudProviderImageId,omitempty"`
+	LaunchUserName       *string     `json:"launchUserName,omitempty"`
+	ImageId              *string     `json:"imageId,omitempty"`
+	GrantAndRevoke       *bool       `json:"grantAndRevoke,omitempty"`
+	ImageCloudAccountId  *int64      `json:"imageCloudAccountId,omitempty"`
+	Resources            *[]Resource `json:"resources,omitempty"`
+	Mappings             *[]Mapping  `json:"mappings,omitempty"`
 }
 
 func (s *Client) GetImages(tenantId int) ([]Image, error) {

@@ -7,34 +7,35 @@ import "strconv"
 import "bytes"
 
 type CloudInstanceTypeAPIResponse struct {
-	Resource           string              `json:"resource,omitempty"`
-	Size               int                 `json:"size,omitempty"`
-	PageNumber         int                 `json:"pageNumber,omitempty"`
-	TotalElements      int                 `json:"totalElements,omitempty"`
-	TotalPages         int                 `json:"totalPages,omitempty"`
+	Resource           *string             `json:"resource,omitempty"`
+	Size               *int64              `json:"size,omitempty"`
+	PageNumber         *int64              `json:"pageNumber,omitempty"`
+	TotalElements      *int64              `json:"totalElements,omitempty"`
+	TotalPages         *int64              `json:"totalPages,omitempty"`
 	CloudInstanceTypes []CloudInstanceType `json:"cloudInstanceTypes,omitempty"`
 }
 
 type CloudInstanceType struct {
-	Id                        string   `json:"id,omitempty"`
-	Resource                  string   `json:"resource,omitempty"`
-	Perms                     []string `json:"perms,omitempty"`
-	Name                      string   `json:"name,omitempty"`
-	Description               string   `json:"description,omitempty"`
-	Type                      string   `json:"type,omitempty"`
-	TenantId                  string   `json:"tenantId,omitempty"`
-	CloudId                   string   `json:"cloudId,omitempty"`
-	RegionId                  string   `json:"regionId,omitempty"`
-	CostPerHour               float64  `json:"costPerHour,omitempty"`
-	MemorySize                int32    `json:"memorySize,omitempty"`
-	NumOfCPUs                 int32    `json:"numOfCpus,omitempty"`
-	NumOfNICs                 int32    `json:"numOfNics,omitempty"`
-	LocalStorageSize          int32    `json:"localStorageSize,omitempty"`
-	SupportsSSD               bool     `json:"supportsSSD,omitempty"`
-	Supports32Bit             bool     `json:"supports32Bit,omitempty"`
-	Supports64Bit             bool     `json:"supports64Bit,omitempty"`
-	LocalStorageCount         float64  `json:"localStorageCount,omitempty"`
-	SupportsHardwareProvision bool     `json:"supportsHardwareProvision,omitempty"`
+	Id                        *string   `json:"id,omitempty"`
+	Resource                  *string   `json:"resource,omitempty"`
+	Perms                     *[]string `json:"perms,omitempty"`
+	Name                      *string   `json:"name,omitempty"`
+	Description               *string   `json:"description,omitempty"`
+	Type                      *string   `json:"type,omitempty"`
+	TenantId                  *string   `json:"tenantId,omitempty"`
+	CloudId                   *string   `json:"cloudId,omitempty"`
+	RegionId                  *string   `json:"regionId,omitempty"`
+	CostPerHour               *float64  `json:"costPerHour,omitempty"`
+	MemorySize                *int64    `json:"memorySize,omitempty"`
+	NumOfCPUs                 *int64    `json:"numOfCpus,omitempty"`
+	NumOfNICs                 *int64    `json:"numOfNics,omitempty"`
+	LocalStorageSize          *int64    `json:"localStorageSize,omitempty"`
+	SupportsSSD               *bool     `json:"supportsSsd,omitempty"`
+	SupportsCUDA              *bool     `json:"supportsCuda,omitempty"`
+	Supports32Bit             *bool     `json:"supports32Bit,omitempty"`
+	Supports64Bit             *bool     `json:"supports64Bit,omitempty"`
+	LocalStorageCount         *float64  `json:"localStorageCount,omitempty"`
+	SupportsHardwareProvision *bool     `json:"supportsHardwareProvision,omitempty"`
 }
 
 func (s *Client) GetCloudInstanceTypes(tenantId int, cloudId int, regionId int) ([]CloudInstanceType, error) {
@@ -88,7 +89,10 @@ func (s *Client) AddCloudInstanceType(cloudInstanceType *CloudInstanceType) (*Cl
 
 	var data CloudInstanceType
 
-	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + cloudInstanceType.TenantId + "/clouds/" + cloudInstanceType.CloudId + "/regions/" + cloudInstanceType.RegionId + "/instanceTypes/")
+	cloudInstanceTypeTenantId := *cloudInstanceType.TenantId
+	cloudInstanceTypeCloudId := *cloudInstanceType.CloudId
+	cloudInstanceTypeRegionId := *cloudInstanceType.RegionId
+	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + cloudInstanceTypeTenantId + "/clouds/" + cloudInstanceTypeCloudId + "/regions/" + cloudInstanceTypeRegionId + "/instanceTypes/")
 
 	j, err := json.Marshal(cloudInstanceType)
 
@@ -122,7 +126,11 @@ func (s *Client) UpdateCloudInstanceType(cloudInstanceType *CloudInstanceType) (
 
 	var data CloudInstanceType
 
-	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + cloudInstanceType.TenantId + "/clouds/" + cloudInstanceType.CloudId + "/regions/" + cloudInstanceType.RegionId + "/instanceTypes/" + cloudInstanceType.Id)
+	cloudInstanceTypeTenantId := *cloudInstanceType.TenantId
+	cloudInstanceTypeCloudId := *cloudInstanceType.CloudId
+	cloudInstanceTypeRegionId := *cloudInstanceType.RegionId
+	cloudInstanceTypeId := *cloudInstanceType.Id
+	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + cloudInstanceTypeTenantId + "/clouds/" + cloudInstanceTypeCloudId + "/regions/" + cloudInstanceTypeRegionId + "/instanceTypes/" + cloudInstanceTypeId)
 
 	j, err := json.Marshal(cloudInstanceType)
 

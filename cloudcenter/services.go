@@ -9,42 +9,42 @@ import "bytes"
 
 type ServiceAPIResponse struct {
 	Resource      *string   `json:"resource,omitempty"`
-	Size          *int      `json:"size,omitempty"`
-	PageNumber    *int      `json:"pageNumber,omitempty"`
-	TotalElements *int      `json:"totalElements,omitempty"`
-	TotalPages    *int      `json:"totalPages,omitempty"`
+	Size          *int64    `json:"size,omitempty"`
+	PageNumber    *int64    `json:"pageNumber,omitempty"`
+	TotalElements *int64    `json:"totalElements,omitempty"`
+	TotalPages    *int64    `json:"totalPages,omitempty"`
 	Services      []Service `json:"services,omitempty"`
 }
 
 type Service struct {
-	Id                     *string             `json:"id,omitempty"`
-	OwnerUserId            *string             `json:"ownerUserId,omitempty"`
-	TenantId               *string             `json:"tenantId,omitempty"`
-	ParentService          *bool               `json:"parentService,omitempty"`
-	ParentServiceId        *string             `json:"parentServiceId,omitempty"`
-	Resource               *string             `json:"resource,omitempty"`
-	Perms                  *[]string           `json:"perms,omitempty"`
-	Name                   *string             `json:"name,omitempty"`
-	DisplayName            *string             `json:"displayName,omitempty"`
-	LogoPath               *string             `json:"logoPath,omitempty"`
-	Description            *string             `json:"description,omitempty"`
-	DefaultImageId         *int64              `json:"defaultImageId,omitempty"`
-	ServiceType            *string             `json:"serviceType,omitempty"`
-	SystemService          *bool               `json:"systemService,omitempty"`
-	ExternalService        *bool               `json:"externalService,omitempty"`
-	Visible                *bool               `json:"visible,omitempty"`
-	ExternalBundleLocation *string             `json:"externalBundleLocation,omitempty"`
-	BundleLocation         *string             `json:"bundleLocation,omitempty"`
-	CostPerHour            *float64            `json:"costPerHour,omitempty"`
-	OwnerId                *string             `json:"ownerId,omitempty"`
-	ServiceActions         []ServiceAction     `json:"serviceActions,omitempty"`
-	ServicePorts           []ServicePort       `json:"servicePorts,omitempty"`
-	ServiceParamSpecs      []ServiceParamSpec  `json:"serviceParamSpecs,omitempty"`
-	EgressRestrictions     []EgressRestriction `json:"egressRestrictions,omitempty"`
-	Images                 []Image             `json:"images,omitempty"`
-	Repositories           []Repository        `json:"repositories,omitempty"`
-	ChildServices          []Service           `json:"childServices,omitempty"`
-	ExternalActions        []ExternalAction    `json:"externalActions,omitempty"`
+	Id                     *string              `json:"id,omitempty"`
+	OwnerUserId            *string              `json:"ownerUserId,omitempty"`
+	TenantId               *string              `json:"tenantId,omitempty"`
+	ParentService          *bool                `json:"parentService,omitempty"`
+	ParentServiceId        *string              `json:"parentServiceId,omitempty"`
+	Resource               *string              `json:"resource,omitempty"`
+	Perms                  *[]string            `json:"perms,omitempty"`
+	Name                   *string              `json:"name,omitempty"`
+	DisplayName            *string              `json:"displayName,omitempty"`
+	LogoPath               *string              `json:"logoPath,omitempty"`
+	Description            *string              `json:"description,omitempty"`
+	DefaultImageId         *int64               `json:"defaultImageId,omitempty"`
+	ServiceType            *string              `json:"serviceType,omitempty"`
+	SystemService          *bool                `json:"systemService,omitempty"`
+	ExternalService        *bool                `json:"externalService,omitempty"`
+	Visible                *bool                `json:"visible,omitempty"`
+	ExternalBundleLocation *string              `json:"externalBundleLocation,omitempty"`
+	BundleLocation         *string              `json:"bundleLocation,omitempty"`
+	CostPerHour            *float64             `json:"costPerHour,omitempty"`
+	OwnerId                *string              `json:"ownerId,omitempty"`
+	ServiceActions         *[]ServiceAction     `json:"serviceActions,omitempty"`
+	ServicePorts           *[]ServicePort       `json:"servicePorts,omitempty"`
+	ServiceParamSpecs      *[]ServiceParamSpec  `json:"serviceParamSpecs,omitempty"`
+	EgressRestrictions     *[]EgressRestriction `json:"egressRestrictions,omitempty"`
+	Images                 *[]Image             `json:"images,omitempty"`
+	Repositories           *[]Repository        `json:"repositories,omitempty"`
+	ChildServices          *[]Service           `json:"childServices,omitempty"`
+	ExternalActions        *[]ExternalAction    `json:"externalActions,omitempty"`
 }
 
 type ServiceAction struct {
@@ -61,19 +61,19 @@ type ServicePort struct {
 }
 
 type ServiceParamSpec struct {
-	ParamName            *string               `json:"paramName,omitempty"`
-	DisplayName          *string               `json:"displayName,omitempty"`
-	HelpText             *string               `json:"helpText,omitempty"`
-	Type                 *string               `json:"type,omitempty"`
-	ValueList            *string               `json:"valueList,omitempty"`
-	WebserviceListParams []WebserviceListParam `json:"webserviceListParams,omitempty"`
-	DefaultValue         *string               `json:"defaultValue,omitempty"`
-	UserVisible          *bool                 `json:"userVisible,omitempty"`
-	UserEditable         *bool                 `json:"userEditable,omitempty"`
-	SystemParam          *bool                 `json:"systemParam,omitempty"`
-	ExampleValue         *string               `json:"exampleValue,omitempty"`
-	Optional             *bool                 `json:"optional,omitempty"`
-	ValueConstraint      ValueConstraint       `json:"valueConstraint,omitempty"`
+	ParamName            *string                `json:"paramName,omitempty"`
+	DisplayName          *string                `json:"displayName,omitempty"`
+	HelpText             *string                `json:"helpText,omitempty"`
+	Type                 *string                `json:"type,omitempty"`
+	ValueList            *string                `json:"valueList,omitempty"`
+	WebserviceListParams *[]WebserviceListParam `json:"webserviceListParams,omitempty"`
+	DefaultValue         *string                `json:"defaultValue,omitempty"`
+	UserVisible          *bool                  `json:"userVisible,omitempty"`
+	UserEditable         *bool                  `json:"userEditable,omitempty"`
+	SystemParam          *bool                  `json:"systemParam,omitempty"`
+	ExampleValue         *string                `json:"exampleValue,omitempty"`
+	Optional             *bool                  `json:"optional,omitempty"`
+	ValueConstraint      *ValueConstraint       `json:"valueConstraint,omitempty"`
 }
 
 type EgressRestriction struct {

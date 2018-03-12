@@ -12,31 +12,31 @@ import "bytes"
 //RoleAPIResponse
 type RoleAPIResponse struct {
 	Resource      *string `json:"resource,omitempty"`
-	Size          *int    `json:"size,omitempty"`
-	PageNumber    *int    `json:"pageNumber,omitempty"`
-	TotalElements *int    `json:"totalElements,omitempty"`
-	TotalPages    *int    `json:"totalPages,omitempty"`
+	Size          *int64  `json:"size,omitempty"`
+	PageNumber    *int64  `json:"pageNumber,omitempty"`
+	TotalElements *int64  `json:"totalElements,omitempty"`
+	TotalPages    *int64  `json:"totalPages,omitempty"`
 	Roles         []Role  `json:"roles,omitempty"`
 }
 
 type Role struct {
-	Id          *string      `json:"id,omitempty"`
-	Resource    *string      `json:"resource,omitempty"`
-	Perms       *[]string    `json:"perms,omitempty"`
-	Name        *string      `json:"name,omitempty"`
-	Description *string      `json:"description,omitempty"`
-	TenantId    *string      `json:"tenantId,omitempty"` //required
-	ObjectPerms []ObjectPerm `json:"objectPerms,omitempty"`
-	Users       []User       `json:"users,omitempty"`
-	Groups      []Group      `json:"groups,omitempty"`
-	OobRole     *bool        `json:"oobRole,omitempty"`
-	LastUpdated *int64       `json:"lastUpdated,omitempty"`
-	Created     *int64       `json:"created,omitempty"`
+	Id          *string       `json:"id,omitempty"`
+	Resource    *string       `json:"resource,omitempty"`
+	Perms       *[]string     `json:"perms,omitempty"`
+	Name        *string       `json:"name,omitempty"`
+	Description *string       `json:"description,omitempty"`
+	TenantId    *string       `json:"tenantId,omitempty"` //required
+	ObjectPerms *[]ObjectPerm `json:"objectPerms,omitempty"`
+	Users       *[]User       `json:"users,omitempty"`
+	Groups      *[]Group      `json:"groups,omitempty"`
+	OobRole     *bool         `json:"oobRole,omitempty"`
+	LastUpdated *int64        `json:"lastUpdated,omitempty"`
+	Created     *int64        `json:"created,omitempty"`
 }
 
 type ObjectPerm struct {
-	ObjectType string   `json:"objectType,omitempty"`
-	Perms      []string `json:"perms,omitempty"`
+	ObjectType *string   `json:"objectType,omitempty"`
+	Perms      *[]string `json:"perms,omitempty"`
 }
 
 func (s *Client) GetRoles(tenantId int) ([]Role, error) {

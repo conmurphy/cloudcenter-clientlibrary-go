@@ -16,19 +16,19 @@ type ActivationProfileAPIResponse struct {
 }
 
 type ActivationProfile struct {
-	Id                  *string          `json:"id,omitempty"`
-	Name                *string          `json:"name,omitempty"`
-	Description         *string          `json:"description,omitempty"`
-	Resource            *string          `json:"resource"`
-	TenantId            *int64           `json:"tenantId,omitempty"`
-	PlanId              *string          `json:"planId,omitempty"`
-	BundleId            *string          `json:"bundleId,omitempty"`
-	ContractId          *string          `json:"contractId,omitempty"`
-	DepEnvId            *string          `json:"depEnvId,omitempty"`
-	ActivateRegions     []ActivateRegion `json:"activateRegions,omitempty"`
-	ImportApps          *[]string        `json:"importApps,omitempty"`
-	AgreeToContract     *bool            `json:"agreeToContract,omitempty"`
-	SendActivationEmail *bool            `json:"sendActivationEmail,omitempty"`
+	Id                  *string           `json:"id,omitempty"`
+	Name                *string           `json:"name,omitempty"`
+	Description         *string           `json:"description,omitempty"`
+	Resource            *string           `json:"resource"`
+	TenantId            *int64            `json:"tenantId,omitempty"`
+	PlanId              *string           `json:"planId,omitempty"`
+	BundleId            *string           `json:"bundleId,omitempty"`
+	ContractId          *string           `json:"contractId,omitempty"`
+	DepEnvId            *string           `json:"depEnvId,omitempty"`
+	ActivateRegions     *[]ActivateRegion `json:"activateRegions,omitempty"`
+	ImportApps          *[]string         `json:"importApps,omitempty"`
+	AgreeToContract     *bool             `json:"agreeToContract,omitempty"`
+	SendActivationEmail *bool             `json:"sendActivationEmail,omitempty"`
 }
 
 type ActivateRegion struct {

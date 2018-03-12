@@ -7,42 +7,42 @@ import "strconv"
 import "bytes"
 
 type CloudImageMappingAPIResponse struct {
-	Resource           string              `json:"resource,omitempty"`
-	Size               int                 `json:"size,omitempty"`
-	PageNumber         int                 `json:"pageNumber,omitempty"`
-	TotalElements      int                 `json:"totalElements,omitempty"`
-	TotalPages         int                 `json:"totalPages,omitempty"`
+	Resource           *string             `json:"resource,omitempty"`
+	Size               *int64              `json:"size,omitempty"`
+	PageNumber         *int64              `json:"pageNumber,omitempty"`
+	TotalElements      *int64              `json:"totalElements,omitempty"`
+	TotalPages         *int64              `json:"totalPages,omitempty"`
 	CloudImageMappings []CloudImageMapping `json:"cloudImages,omitempty"`
 }
 
 type CloudImageMapping struct {
-	Id                   string     `json:"id,omitempty"`
-	Resource             string     `json:"resource,omitempty"`
-	Perms                []string   `json:"perms,omitempty"`
-	TenantId             string     `json:"tenantId,omitempty"`
-	CloudId              string     `json:"cloudId,omitempty"`
-	CloudRegionId        string     `json:"cloudRegionId,omitempty"`
-	RegionId             string     `json:"regionId,omitempty"`
-	CloudImageId         string     `json:"cloudImageId,omitempty"`
-	CloudProviderImageId string     `json:"cloudProviderImageId,omitempty"`
-	LaunchUserName       string     `json:"launchUserName,omitempty"`
-	ImageId              string     `json:"imageId,omitempty"`
-	GrantAndRevoke       bool       `json:"grantAndRevoke,omitempty"`
-	ImageCloudAccountId  int        `json:"imageCloudAccountId,omitempty"`
-	Resources            []Resource `json:"resources,omitempty"`
-	Mappings             []Mapping  `json:"mappings,omitempty"`
+	Id                   *string     `json:"id,omitempty"`
+	Resource             *string     `json:"resource,omitempty"`
+	Perms                *[]string   `json:"perms,omitempty"`
+	TenantId             *string     `json:"tenantId,omitempty"`
+	CloudId              *string     `json:"cloudId,omitempty"`
+	CloudRegionId        *string     `json:"cloudRegionId,omitempty"`
+	RegionId             *string     `json:"regionId,omitempty"`
+	CloudImageId         *string     `json:"cloudImageId,omitempty"`
+	CloudProviderImageId *string     `json:"cloudProviderImageId,omitempty"`
+	LaunchUserName       *string     `json:"launchUserName,omitempty"`
+	ImageId              *string     `json:"imageId,omitempty"`
+	GrantAndRevoke       *bool       `json:"grantAndRevoke,omitempty"`
+	ImageCloudAccountId  *int64      `json:"imageCloudAccountId,omitempty"`
+	Resources            *[]Resource `json:"resources,omitempty"`
+	Mappings             *[]Mapping  `json:"mappings,omitempty"`
 }
 
 type Resource struct {
-	Name  string `json:"name,omitempty"`
-	Value string `json:"value,omitempty"`
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
 }
 
 type Mapping struct {
-	Id                           string            `json:"id,omitempty"`
-	CloudInstanceType            CloudInstanceType `json:"cloudInstanceType,omitempty"`
-	CostOverride                 float64           `json:"costOverride,omitempty"`
-	CloudProviderImageIdOverride string            `json:"CloudProviderImageIdOverride,omitempty"`
+	Id                           *string            `json:"id,omitempty"`
+	CloudInstanceType            *CloudInstanceType `json:"cloudInstanceType,omitempty"`
+	CostOverride                 *float64           `json:"costOverride,omitempty"`
+	CloudProviderImageIdOverride *string            `json:"CloudProviderImageIdOverride,omitempty"`
 }
 
 func (s *Client) GetCloudImageMappings(tenantId int, cloudId int, regionId int) ([]CloudImageMapping, error) {
@@ -96,7 +96,10 @@ func (s *Client) AddCloudImageMapping(cloudImage *CloudImageMapping) (*CloudImag
 
 	var data CloudImageMapping
 
-	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + cloudImage.TenantId + "/clouds/" + cloudImage.CloudId + "/regions/" + cloudImage.RegionId + "/images/")
+	cloudImageTenantId := *cloudImage.TenantId
+	cloudImageCloudId := *cloudImage.CloudId
+	cloudImageRegionId := *cloudImage.RegionId
+	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + cloudImageTenantId + "/clouds/" + cloudImageCloudId + "/regions/" + cloudImageRegionId + "/images/")
 
 	j, err := json.Marshal(cloudImage)
 
@@ -130,7 +133,11 @@ func (s *Client) UpdateCloudImageMapping(cloudImage *CloudImageMapping) (*CloudI
 
 	var data CloudImageMapping
 
-	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + cloudImage.TenantId + "/clouds/" + cloudImage.CloudId + "/regions/" + cloudImage.RegionId + "/images/" + cloudImage.Id)
+	cloudImageTenantId := *cloudImage.TenantId
+	cloudImageCloudId := *cloudImage.CloudId
+	cloudImageRegionId := *cloudImage.RegionId
+	cloudImageId := *cloudImage.Id
+	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + cloudImageTenantId + "/clouds/" + cloudImageCloudId + "/regions/" + cloudImageRegionId + "/images/" + cloudImageId)
 
 	j, err := json.Marshal(cloudImage)
 

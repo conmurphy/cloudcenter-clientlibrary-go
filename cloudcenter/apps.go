@@ -13,33 +13,33 @@ type AppAPIResponse struct {
 }
 
 type App struct {
-	Id              *string          `json:"id,omitempty"`
-	Resource        *string          `json:"resource,omitempty"`
-	Perms           *[]string        `json:"perms,omitempty"`
-	Name            *string          `json:"name,omitempty"`
-	Description     *string          `json:"description,omitempty"`
-	ServiceTierId   *string          `json:"serviceTierId,omitempty"`
-	Versions        *[]string        `json:"versions,omitempty"`
-	Version         *string          `json:"version,omitempty"`
-	Executor        *string          `json:"executor,omitempty"`
-	Category        *string          `json:"category,omitempty"`
-	ServiceTiers    []App            `json:"serviceTiers,omitempty"`
-	ProfileCategory *string          `json:"profileCategory,omitempty"`
-	Service         Service          `json:"service,omitempty"`
-	Clusterable     *bool            `json:"clusterable,omitempty"`
-	HWProfile       HWProfile        `json:"hwprofile,omitempty"`
-	ParameterSpecs  ParameterSpecs   `json:"parameterSpecs,omitempty"`
-	Parameters      Parameters       `json:"parameters,omitempty"`
-	RevisionId      *int64           `json:"revisionId,omitempty"`
-	Metadatas       []Metadata       `json:"metadatas,omitempty"`
-	AppCategories   []AppCategory    `json:"appCategories,omitempty"`
-	LogoPath        *string          `json:"logoPath,omitempty"`
-	SupportedClouds []SupportedCloud `json:"supportedClouds,omitempty"`
+	Id              *string           `json:"id,omitempty"`
+	Resource        *string           `json:"resource,omitempty"`
+	Perms           *[]string         `json:"perms,omitempty"`
+	Name            *string           `json:"name,omitempty"`
+	Description     *string           `json:"description,omitempty"`
+	ServiceTierId   *string           `json:"serviceTierId,omitempty"`
+	Versions        *[]string         `json:"versions,omitempty"`
+	Version         *string           `json:"version,omitempty"`
+	Executor        *string           `json:"executor,omitempty"`
+	Category        *string           `json:"category,omitempty"`
+	ServiceTiers    *[]App            `json:"serviceTiers,omitempty"`
+	ProfileCategory *string           `json:"profileCategory,omitempty"`
+	Service         *Service          `json:"service,omitempty"`
+	Clusterable     *bool             `json:"clusterable,omitempty"`
+	HWProfile       *HWProfile        `json:"hwprofile,omitempty"`
+	ParameterSpecs  *ParameterSpecs   `json:"parameterSpecs,omitempty"`
+	Parameters      *Parameters       `json:"parameters,omitempty"`
+	RevisionId      *int64            `json:"revisionId,omitempty"`
+	Metadatas       *[]Metadata       `json:"metadatas,omitempty"`
+	AppCategories   *[]AppCategory    `json:"appCategories,omitempty"`
+	LogoPath        *string           `json:"logoPath,omitempty"`
+	SupportedClouds *[]SupportedCloud `json:"supportedClouds,omitempty"`
 }
 
 type Parameters struct {
-	AppParams []AppParam `json:"appParams,omitempty"`
-	EnvParams []EnvParam `json:"envParams,omitempty"`
+	AppParams *[]AppParam `json:"appParams,omitempty"`
+	EnvParams *[]EnvParam `json:"envParams,omitempty"`
 }
 
 type AppCategory struct {
@@ -68,46 +68,46 @@ type HWProfile struct {
 }
 
 type ParameterSpecs struct {
-	SystemParams SystemParams `json:"SystemParams,omitempty"`
-	CustomParams CustomParams `json:"customParams,omitempty"`
-	EnvVars      EnvVar       `json:"envVars,omitempty"`
+	SystemParams *SystemParams `json:"SystemParams,omitempty"`
+	CustomParams *CustomParams `json:"customParams,omitempty"`
+	EnvVars      *EnvVar       `json:"envVars,omitempty"`
 }
 
 type EnvVar struct {
-	EnvVars []EnvVar `json:"envVars,omitempty"`
-	Size    *int64   `json:"size,omitempty"`
+	EnvVars *[]EnvVar `json:"envVars,omitempty"`
+	Size    *int64    `json:"size,omitempty"`
 }
 
 type SystemParams struct {
-	Params []Param `json:"params,omitempty"`
-	Size   *int64  `json:"size,omitempty"`
+	Params *[]Param `json:"params,omitempty"`
+	Size   *int64   `json:"size,omitempty"`
 }
 
 type CustomParams struct {
-	Params []Param `json:"params,omitempty"`
-	Size   *int64  `json:"size,omitempty"`
+	Params *[]Param `json:"params,omitempty"`
+	Size   *int64   `json:"size,omitempty"`
 }
 
 type Param struct {
-	ParamName            *string          `json:"paramName,omitempty"`
-	DisplayName          *string          `json:"displayName,omitempty"`
-	HelpText             *string          `json:"helpText,omitempty"`
-	Type                 *string          `json:"type,omitempty"`
-	ValueList            *string          `json:"valueList,omitempty"`
-	DefaultValue         *string          `json:"defaultValue,omitempty"`
-	ConfirmValue         *string          `json:"confirmValue,omitempty"`
-	PathSuffixValue      *string          `json:"pathSuffixValue,omitempty"`
-	UserVisible          *bool            `json:"userVisible,omitempty"`
-	UserEditable         *bool            `json:"userEditable,omitempty"`
-	SystemParam          *bool            `json:"systemParam,omitempty"`
-	ExampleValue         *string          `json:"exampleValue,omitempty"`
-	DataUnit             *string          `json:"dataUnit,omitempty"`
-	Optional             *bool            `json:"optional,omitempty"`
-	MultiselectSupported *bool            `json:"multiselectSupported,omitempty"`
-	ValueConstraint      ValueConstraint  `json:"valueConstraint,omitempty"`
-	Scope                *string          `json:"scope,omitempty"`
-	WebserviceListParams *string          `json:"webserviceListParams,omitempty"`
-	CollectionList       []CollectionList `json:"collectionList,omitempty"`
+	ParamName            *string           `json:"paramName,omitempty"`
+	DisplayName          *string           `json:"displayName,omitempty"`
+	HelpText             *string           `json:"helpText,omitempty"`
+	Type                 *string           `json:"type,omitempty"`
+	ValueList            *string           `json:"valueList,omitempty"`
+	DefaultValue         *string           `json:"defaultValue,omitempty"`
+	ConfirmValue         *string           `json:"confirmValue,omitempty"`
+	PathSuffixValue      *string           `json:"pathSuffixValue,omitempty"`
+	UserVisible          *bool             `json:"userVisible,omitempty"`
+	UserEditable         *bool             `json:"userEditable,omitempty"`
+	SystemParam          *bool             `json:"systemParam,omitempty"`
+	ExampleValue         *string           `json:"exampleValue,omitempty"`
+	DataUnit             *string           `json:"dataUnit,omitempty"`
+	Optional             *bool             `json:"optional,omitempty"`
+	MultiselectSupported *bool             `json:"multiselectSupported,omitempty"`
+	ValueConstraint      *ValueConstraint  `json:"valueConstraint,omitempty"`
+	Scope                *string           `json:"scope,omitempty"`
+	WebserviceListParams *string           `json:"webserviceListParams,omitempty"`
+	CollectionList       *[]CollectionList `json:"collectionList,omitempty"`
 }
 
 type ValueConstraint struct {

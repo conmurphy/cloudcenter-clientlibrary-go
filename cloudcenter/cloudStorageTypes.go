@@ -8,30 +8,30 @@ import "strconv"
 import "bytes"
 
 type CloudStorageTypeAPIResponse struct {
-	Resource          string             `json:"resource,omitempty"`
-	Size              int                `json:"size,omitempty"`
-	PageNumber        int                `json:"pageNumber,omitempty"`
-	TotalElements     int                `json:"totalElements,omitempty"`
-	TotalPages        int                `json:"totalPages,omitempty"`
+	Resource          *string            `json:"resource,omitempty"`
+	Size              *int64             `json:"size,omitempty"`
+	PageNumber        *int64             `json:"pageNumber,omitempty"`
+	TotalElements     *int64             `json:"totalElements,omitempty"`
+	TotalPages        *int64             `json:"totalPages,omitempty"`
 	CloudStorageTypes []CloudStorageType `json:"cloudStorageTypes,omitempty"`
 }
 
 type CloudStorageType struct {
-	Id               string  `json:"id,omitempty"`
-	CloudId          string  `json:"cloudId,omitempty"`
-	TenantId         string  `json:"tenantId,omitempty"`
-	RegionId         string  `json:"regionId,omitempty"`
-	Resource         string  `json:"resource,omitempty"`
-	Name             string  `json:"name,omitempty"`
-	Description      string  `json:"description,omitempty"`
-	Type             string  `json:"type,omitempty"`
-	CostPerMonth     float64 `json:"costPerMonth,omitempty"`
-	MinVolumeSize    int32   `json:"minVolumeSize,omitempty"`
-	MaxVolumeSize    int32   `json:"maxVolumeSize,omitempty"`
-	MaxIOPS          int32   `json:"maxIOPS,omitempty"`
-	MaxThroughput    int32   `json:"maxThroughput,omitempty"`
-	ProvisionedIOPS  bool    `json:"provisionedIOPS,omitempty"`
-	IOPSCostPerMonth float64 `json:"iopsCostPerMonth,omitempty"`
+	Id               *string  `json:"id,omitempty"`
+	CloudId          *string  `json:"cloudId,omitempty"`
+	TenantId         *string  `json:"tenantId,omitempty"`
+	RegionId         *string  `json:"regionId,omitempty"`
+	Resource         *string  `json:"resource,omitempty"`
+	Name             *string  `json:"name,omitempty"`
+	Description      *string  `json:"description,omitempty"`
+	Type             *string  `json:"type,omitempty"`
+	CostPerMonth     *float64 `json:"costPerMonth,omitempty"`
+	MinVolumeSize    *int64   `json:"minVolumeSize,omitempty"`
+	MaxVolumeSize    *int64   `json:"maxVolumeSize,omitempty"`
+	MaxIOPS          *int64   `json:"maxIOPS,omitempty"`
+	MaxThroughput    *int64   `json:"maxThroughput,omitempty"`
+	ProvisionedIOPS  *bool    `json:"provisionedIOPS,omitempty"`
+	IOPSCostPerMonth *float64 `json:"iopsCostPerMonth,omitempty"`
 }
 
 func (s *Client) GetCloudStorageTypes(tenantId int, cloudId int, regionId int) ([]CloudStorageType, error) {
@@ -85,7 +85,10 @@ func (s *Client) AddCloudStorageType(cloudStorageType *CloudStorageType) (*Cloud
 
 	var data CloudStorageType
 
-	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + cloudStorageType.TenantId + "/clouds/" + cloudStorageType.CloudId + "/regions/" + cloudStorageType.RegionId + "/storageTypes")
+	cloudStorageTypeTenantId := *cloudStorageType.TenantId
+	cloudStorageTypeCloudId := *cloudStorageType.CloudId
+	cloudStorageTypeRegionId := *cloudStorageType.RegionId
+	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + cloudStorageTypeTenantId + "/clouds/" + cloudStorageTypeCloudId + "/regions/" + cloudStorageTypeRegionId + "/storageTypes")
 
 	j, err := json.Marshal(cloudStorageType)
 
@@ -120,7 +123,11 @@ func (s *Client) UpdateCloudStorageType(cloudStorageType *CloudStorageType) (*Cl
 
 	var data CloudStorageType
 
-	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + cloudStorageType.TenantId + "/clouds/" + cloudStorageType.CloudId + "/regions/" + cloudStorageType.RegionId + "/storageTypes/" + cloudStorageType.Id)
+	cloudStorageTypeTenantId := *cloudStorageType.TenantId
+	cloudStorageTypeCloudId := *cloudStorageType.CloudId
+	cloudStorageTypeId := *cloudStorageType.Id
+	cloudStorageTypeRegionId := *cloudStorageType.RegionId
+	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + cloudStorageTypeTenantId + "/clouds/" + cloudStorageTypeCloudId + "/regions/" + cloudStorageTypeRegionId + "/storageTypes/" + cloudStorageTypeId)
 
 	j, err := json.Marshal(cloudStorageType)
 

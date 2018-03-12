@@ -26,8 +26,8 @@ type Group struct {
 	Name         *string   `json:"name,omitempty"`
 	Description  *string   `json:"description,omitempty"`
 	TenantId     *string   `json:"tenantId,omitempty"`
-	Users        []User    `json:"users,omitempty"`
-	Roles        []Role    `json:"roles,omitempty"`
+	Users        *[]User   `json:"users,omitempty"`
+	Roles        *[]Role   `json:"roles,omitempty"`
 	Created      *int      `json:"created,omitempty"`
 	LastUpdated  *int      `json:"lastUpdated,omitempty"`
 	CreatedBySso *bool     `json:"createdBySso,omitempty"`

@@ -18,24 +18,24 @@ type ActionAPIResponse struct {
 }
 
 type Action struct {
-	Id                     *string                 `json:"id,omitempty"`
-	Resource               *string                 `json:"resource,omitempty"`
-	Perms                  *[]string               `json:"perms,omitempty"`
-	Name                   *string                 `json:"name,omitempty"`
-	Description            *string                 `json:"description,omitempty"`
-	ActionType             *string                 `json:"actionType,omitempty"`
-	LastUpdatedTime        *string                 `json:"lastUpdatedTime,omitempty"`
-	TimeOut                *float64                `json:"timeOut,omitempty"`
-	Enabled                *bool                   `json:"enabled,omitempty"`
-	Encrypted              *bool                   `json:"encrypted,omitempty"`
-	Deleted                *bool                   `json:"deleted,omitempty"`
-	SystemDefined          *bool                   `json:"systemDefined,omitempty"`
-	BulkOperationSupported *bool                   `json:"bulkOperationSupported,omitempty"`
-	IsAvailableToUser      *bool                   `json:"isAvailableToUser,omitempty"`
-	Owner                  *int64                  `json:"owner,omitempty"`
-	ActionParameters       []ActionParameter       `json:"actionParameters,omitempty"`
-	ActionResourceMappings []ActionResourceMapping `json:"actionResourceMappings,omitempty"`
-	ActionCustomParamSpecs []ActionCustomParamSpec `json:"actionCustomParamSpecs,omitempty"`
+	Id                     *string                  `json:"id,omitempty"`
+	Resource               *string                  `json:"resource,omitempty"`
+	Perms                  *[]string                `json:"perms,omitempty"`
+	Name                   *string                  `json:"name,omitempty"`
+	Description            *string                  `json:"description,omitempty"`
+	ActionType             *string                  `json:"actionType,omitempty"`
+	LastUpdatedTime        *string                  `json:"lastUpdatedTime,omitempty"`
+	TimeOut                *float64                 `json:"timeOut,omitempty"`
+	Enabled                *bool                    `json:"enabled,omitempty"`
+	Encrypted              *bool                    `json:"encrypted,omitempty"`
+	Deleted                *bool                    `json:"deleted,omitempty"`
+	SystemDefined          *bool                    `json:"systemDefined,omitempty"`
+	BulkOperationSupported *bool                    `json:"bulkOperationSupported,omitempty"`
+	IsAvailableToUser      *bool                    `json:"isAvailableToUser,omitempty"`
+	Owner                  *int64                   `json:"owner,omitempty"`
+	ActionParameters       *[]ActionParameter       `json:"actionParameters,omitempty"`
+	ActionResourceMappings *[]ActionResourceMapping `json:"actionResourceMappings,omitempty"`
+	ActionCustomParamSpecs *[]ActionCustomParamSpec `json:"actionCustomParamSpecs,omitempty"`
 }
 
 type ActionParameter struct {
@@ -47,26 +47,26 @@ type ActionParameter struct {
 }
 
 type ActionResourceMapping struct {
-	Type                  *string                `json:"type,omitempty"`
-	ActionResourceFilters []ActionResourceFilter `json:"actionResourceFilters,omitempty"`
+	Type                  *string                 `json:"type,omitempty"`
+	ActionResourceFilters *[]ActionResourceFilter `json:"actionResourceFilters,omitempty"`
 }
 
 type ActionResourceFilter struct {
-	DeploymentResource *string    `json:"deploymentResource,omitempty"`
-	VmResource         VmResource `json:"vmResource,omitempty"`
-	IsEditable         *bool      `json:"isEditable,omitempty"`
+	DeploymentResource *string     `json:"deploymentResource,omitempty"`
+	VmResource         *VmResource `json:"vmResource,omitempty"`
+	IsEditable         *bool       `json:"isEditable,omitempty"`
 }
 
 type VmResource struct {
-	Type                  *string                `json:"type,omitempty"`
-	AppProfiles           *[]string              `json:"appProfiles,omitempty"`
-	CloudRegions          *[]string              `json:"cloudRegions,omitempty"`
-	CloudAccounts         *[]string              `json:"cloudAccounts,omitempty"`
-	Services              *[]string              `json:"services,omitempty"`
-	OsTypes               *[]string              `json:"osTypes,omitempty"`
-	CloudFamilyNames      *[]string              `json:"cloudFamilyNames,omitempty"`
-	NodeStates            *[]string              `json:"nodesStates,omitempty"`
-	CloudResourceMappings []CloudResourceMapping `json:"cloudResourceMappings,omitempty"`
+	Type                  *string                 `json:"type,omitempty"`
+	AppProfiles           *[]string               `json:"appProfiles,omitempty"`
+	CloudRegions          *[]string               `json:"cloudRegions,omitempty"`
+	CloudAccounts         *[]string               `json:"cloudAccounts,omitempty"`
+	Services              *[]string               `json:"services,omitempty"`
+	OsTypes               *[]string               `json:"osTypes,omitempty"`
+	CloudFamilyNames      *[]string               `json:"cloudFamilyNames,omitempty"`
+	NodeStates            *[]string               `json:"nodesStates,omitempty"`
+	CloudResourceMappings *[]CloudResourceMapping `json:"cloudResourceMappings,omitempty"`
 }
 
 type CloudResourceMapping struct {
@@ -75,25 +75,25 @@ type CloudResourceMapping struct {
 }
 
 type ActionCustomParamSpec struct {
-	ParamName            *string             `json:"paramName,omitempty"`
-	DisplayName          *string             `json:"displayName,omitempty"`
-	HelpText             *string             `json:"helpText,omitempty"`
-	Type                 *string             `json:"type,omitempty"`
-	ValueList            *string             `json:"valueList,omitempty"`
-	DefaultValue         *string             `json:"defaultValue,omitempty"`
-	ConfirmValue         *string             `json:"confirmValue,omitempty"`
-	PathSuffixValue      *string             `json:"pathSuffixValue,omitempty"`
-	UserVisible          *bool               `json:"userVisible,omitempty"`
-	UserEditable         *bool               `json:"userEditable,omitempty"`
-	SystemParam          *bool               `json:"systemParam,omitempty"`
-	ExampleValue         *string             `json:"exampleValue,omitempty"`
-	DataUnit             *string             `json:"dataUnit,omitempty"`
-	Optional             *bool               `json:"optional,omitempty"`
-	MultiselectSupported *bool               `json:"multiselectSupported,omitempty"`
-	ValueConstraint      ValueConstraint     `json:"valueConstraint,omitempty"`
-	Scope                *string             `json:"scope,omitempty"`
-	WebserviceListParams WebserviceListParam `json:"webserviceListParams,omitempty"`
-	Preference           *string             `json:"preference,omitempty"`
+	ParamName            *string              `json:"paramName,omitempty"`
+	DisplayName          *string              `json:"displayName,omitempty"`
+	HelpText             *string              `json:"helpText,omitempty"`
+	Type                 *string              `json:"type,omitempty"`
+	ValueList            *string              `json:"valueList,omitempty"`
+	DefaultValue         *string              `json:"defaultValue,omitempty"`
+	ConfirmValue         *string              `json:"confirmValue,omitempty"`
+	PathSuffixValue      *string              `json:"pathSuffixValue,omitempty"`
+	UserVisible          *bool                `json:"userVisible,omitempty"`
+	UserEditable         *bool                `json:"userEditable,omitempty"`
+	SystemParam          *bool                `json:"systemParam,omitempty"`
+	ExampleValue         *string              `json:"exampleValue,omitempty"`
+	DataUnit             *string              `json:"dataUnit,omitempty"`
+	Optional             *bool                `json:"optional,omitempty"`
+	MultiselectSupported *bool                `json:"multiselectSupported,omitempty"`
+	ValueConstraint      *ValueConstraint     `json:"valueConstraint,omitempty"`
+	Scope                *string              `json:"scope,omitempty"`
+	WebserviceListParams *WebserviceListParam `json:"webserviceListParams,omitempty"`
+	Preference           *string              `json:"preference,omitempty"`
 }
 
 type WebserviceListParam struct {
