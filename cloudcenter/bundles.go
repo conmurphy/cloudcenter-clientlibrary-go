@@ -31,7 +31,7 @@ type Bundle struct {
 	ShowOnlyToAdmin  *bool     `json:"showOnlyToAdmin,omitempty"`
 	NumberOfUsers    *float64  `json:"numberOfUsers,omitempty"`
 	TenantId         *string   `json:"tenantId,omitempty"`
-	PublishedAppIds  []string  `json:"publishedAppIds,omitempty"`
+	PublishedAppIds  *[]string `json:"publishedAppIds,omitempty"`
 }
 
 func (s *Client) GetBundles(TenantId int) ([]Bundle, error) {

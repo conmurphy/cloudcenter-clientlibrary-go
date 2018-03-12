@@ -8,35 +8,55 @@ import "strconv"
 import "bytes"
 
 type ImageAPIResponse struct {
-	Resource      string  `json:"resource,omitempty"`
-	Size          int     `json:"size,omitempty"`
-	PageNumber    int     `json:"pageNumber,omitempty"`
-	TotalElements int     `json:"totalElements,omitempty"`
-	TotalPages    int     `json:"totalPages,omitempty"`
+	Resource      *string `json:"resource,omitempty"`
+	Size          *int64  `json:"size,omitempty"`
+	PageNumber    *int64  `json:"pageNumber,omitempty"`
+	TotalElements *int64  `json:"totalElements,omitempty"`
+	TotalPages    *int64  `json:"totalPages,omitempty"`
 	Images        []Image `json:"images,omitempty"`
 }
 
 type Image struct {
-	Id                string   `json:"id,omitempty"`
-	TenantId          int      `json:"tenantId,omitempty"`
-	Resource          string   `json:"resource,omitempty"`
-	Perms             []string `json:"perms,omitempty"`
-	Name              string   `json:"name,omitempty"`
-	InternalImageName string   `json:"internalImageName,omitempty"`
-	Description       string   `json:"description,omitempty"`
-	Visibility        string   `json:"visibility,omitempty"`
-	ImageType         string   `json:"imageType,omitempty"`
-	OSName            string   `json:"osName,omitempty"`
-	Tags              []string `json:"tags,omitempty"`
-	Enabled           bool     `json:"enabled,omitempty"`
-	SystemImage       bool     `json:"systemImage,omitempty"`
-	NumOfNICs         int      `json:"numOfNics,omitempty"`
-	AttachCount       int      `json:"count,omitempty"`
+	Id                *string   `json:"id,omitempty"`
+	TenantId          *int64    `json:"tenantId,omitempty"`
+	Resource          *string   `json:"resource,omitempty"`
+	Perms             *[]string `json:"perms,omitempty"`
+	Name              *string   `json:"name,omitempty"`
+	InternalImageName *string   `json:"internalImageName,omitempty"`
+	Description       *string   `json:"description,omitempty"`
+	Visibility        *string   `json:"visibility,omitempty"`
+	ImageType         *string   `json:"imageType,omitempty"`
+	OSName            *string   `json:"osName,omitempty"`
+	Tags              *[]string `json:"tags,omitempty"`
+	Enabled           *bool     `json:"enabled,omitempty"`
+	SystemImage       *bool     `json:"systemImage,omitempty"`
+	NumOfNICs         *int64    `json:"numOfNics,omitempty"`
+	AttachCount       *int64    `json:"count,omitempty"`
+	Details           *Details  `json:"detail,omitempty"`
+}
+
+type Details struct {
+	Count       *int64       `json:"count,omitempty"`
+	CloudImages []CloudImage `json:"cloudImages,omitempty"`
+}
+
+type CloudImage struct {
+	Id                   *string    `json:"id,omitempty"`
+	Resource             *string    `json:"resource,omitempty"`
+	Perms                *[]string  `json:"perms,omitempty"`
+	RegionId             *string    `json:"regionId,omitempty"`
+	CloudProviderImageId *string    `json:"cloudProviderImageId,omitempty"`
+	LaunchUserName       *string    `json:"launchUserName,omitempty"`
+	ImageId              *string    `json:"imageId,omitempty"`
+	GrantAndRevoke       *bool      `json:"grantAndRevoke,omitempty"`
+	ImageCloudAccountId  *int64     `json:"imageCloudAccountId,omitempty"`
+	Resources            []Resource `json:"resources,omitempty"`
+	Mappings             []Mapping  `json:"mappings,omitempty"`
 }
 
 func (s *Client) GetImages(tenantId int) ([]Image, error) {
 
-	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + strconv.Itoa(tenantId) + "/images")
+	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + strconv.Itoa(tenantId) + "/images?detail=true")
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err
@@ -58,7 +78,7 @@ func (s *Client) GetImages(tenantId int) ([]Image, error) {
 
 func (s *Client) GetImage(tenantId int, imageId int) (*Image, error) {
 
-	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + strconv.Itoa(tenantId) + "/images/" + strconv.Itoa(imageId))
+	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + strconv.Itoa(tenantId) + "/images/" + strconv.Itoa(imageId) + "?detail=true")
 
 	var data Image
 
@@ -85,7 +105,9 @@ func (s *Client) AddImage(image *Image) (*Image, error) {
 
 	var data Image
 
-	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + strconv.Itoa(int(image.TenantId)) + "/images/" + image.Id)
+	imageTenantId := int(*image.TenantId)
+	imageId := *image.Id
+	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + strconv.Itoa(imageTenantId) + "/images/" + imageId)
 
 	j, err := json.Marshal(image)
 
@@ -120,7 +142,9 @@ func (s *Client) UpdateImage(image *Image) (*Image, error) {
 
 	var data Image
 
-	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + strconv.Itoa(int(image.TenantId)) + "/images/" + image.Id)
+	imageTenantId := int(*image.TenantId)
+	imageId := *image.Id
+	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + strconv.Itoa(imageTenantId) + "/images/" + imageId)
 
 	j, err := json.Marshal(image)
 

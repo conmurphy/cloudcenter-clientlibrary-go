@@ -8,74 +8,74 @@ import "encoding/json"
 import "bytes"
 
 type CloudRegionAPIResponse struct {
-	Resource      string        `json:"resource,omitempty"`
-	Size          int           `json:"size,omitempty"`
-	PageNumber    int           `json:"pageNumber,omitempty"`
-	TotalElements int           `json:"totalElements,omitempty"`
-	TotalPages    int           `json:"totalPages,omitempty"`
+	Resource      *string       `json:"resource,omitempty"`
+	Size          *int64        `json:"size,omitempty"`
+	PageNumber    *int64        `json:"pageNumber,omitempty"`
+	TotalElements *int64        `json:"totalElements,omitempty"`
+	TotalPages    *int64        `json:"totalPages,omitempty"`
 	CloudRegions  []CloudRegion `json:"cloudRegions,omitempty"`
 }
 
 type CloudRegion struct {
-	Id                     string           `json:"id,omitempty"`
-	TenantId               string           `json:"tenantId,omitempty"`
-	CloudId                string           `json:"cloudId,omitempty"`
-	CloudRegionId          string           `json:"cloudRegionId,omitempty"`
-	ImportRegion           ImportRegion     `json:"importRegion,omitempty"`
-	Resource               string           `json:"resource,omitempty"`
-	Perms                  []string         `json:"perms,omitempty"`
-	DisplayName            string           `json:"displayName,omitempty"`
-	RegionName             string           `json:"regionName,omitempty"`
-	Description            string           `json:"description,omitempty"`
-	Gateway                *Gateway         `json:"gateway,omitempty"`
-	Storage                Storage          `json:"storage,omitempty"`
-	Enabled                bool             `json:"enabled,omitempty"`
-	Activated              bool             `json:"activated,omitempty"`
-	PublicCloud            bool             `json:"publicCloud,omitempty"`
-	NumUsers               int32            `json:"numUsers,omitempty"`
-	Status                 string           `json:"status,omitempty"`
-	StatusDetail           string           `json:"statusDetail,omitempty"`
-	RegionProperties       []RegionProperty `json:"regionProperties,omitempty"`
-	ExternalBundleLocation string           `json:"externalBundleLocation,omitempty"`
-	ExternalActions        []ExternalAction `json:"externalActions,omitempty"`
+	Id                     *string           `json:"id,omitempty"`
+	TenantId               *string           `json:"tenantId,omitempty"`
+	CloudId                *string           `json:"cloudId,omitempty"`
+	CloudRegionId          *string           `json:"cloudRegionId,omitempty"`
+	ImportRegion           *ImportRegion     `json:"importRegion,omitempty"`
+	Resource               *string           `json:"resource,omitempty"`
+	Perms                  *[]string         `json:"perms,omitempty"`
+	DisplayName            *string           `json:"displayName,omitempty"`
+	RegionName             *string           `json:"regionName,omitempty"`
+	Description            *string           `json:"description,omitempty"`
+	Gateway                *Gateway          `json:"gateway,omitempty"`
+	Storage                *Storage          `json:"storage,omitempty"`
+	Enabled                *bool             `json:"enabled,omitempty"`
+	Activated              *bool             `json:"activated,omitempty"`
+	PublicCloud            *bool             `json:"publicCloud,omitempty"`
+	NumUsers               *int32            `json:"numUsers,omitempty"`
+	Status                 *string           `json:"status,omitempty"`
+	StatusDetail           *string           `json:"statusDetail,omitempty"`
+	RegionProperties       *[]RegionProperty `json:"regionProperties,omitempty"`
+	ExternalBundleLocation *string           `json:"externalBundleLocation,omitempty"`
+	ExternalActions        *[]ExternalAction `json:"externalActions,omitempty"`
 }
 
 type ImportRegion struct {
-	Name        string `json:"name,omitempty"`
-	DisplayName string `json:"displayName,omitempty"`
+	Name        *string `json:"name,omitempty"`
+	DisplayName *string `json:"displayName,omitempty"`
 }
 
 type Gateway struct {
-	Address        string `json:"address,omitempty"`
-	DNSName        string `json:"dnsName,omitempty"`
-	Status         string `json:"status,omitempty"`
-	CloudId        string `json:"cloudId,omitempty"`
-	CloudAccountId string `json:"cloudAccountId,omitempty"`
+	Address        *string `json:"address,omitempty"`
+	DNSName        *string `json:"dnsName,omitempty"`
+	Status         *string `json:"status,omitempty"`
+	CloudId        *string `json:"cloudId,omitempty"`
+	CloudAccountId *string `json:"cloudAccountId,omitempty"`
 }
 
 type Storage struct {
-	RegionId              string                 `json:"regionId,omitempty"`
-	CloudAccountId        string                 `json:"cloudAccountId,omitempty"`
-	Size                  int                    `json:"size,omitempty"`
-	NumNodes              int                    `json:"numNodes,omitempty"`
-	CloudSpecificSettings []CloudSpecificSetting `json:"cloudSpecificSettings,omitempty"`
-	Address               string                 `json:"address,omitempty"`
+	RegionId              *string                 `json:"regionId,omitempty"`
+	CloudAccountId        *string                 `json:"cloudAccountId,omitempty"`
+	Size                  *int64                  `json:"size,omitempty"`
+	NumNodes              *int64                  `json:"numNodes,omitempty"`
+	CloudSpecificSettings *[]CloudSpecificSetting `json:"cloudSpecificSettings,omitempty"`
+	Address               *string                 `json:"address,omitempty"`
 }
 
 type CloudSpecificSetting struct {
-	Name  string `json:"name,omitempty"`
-	Value string `json:"value,omitempty"`
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
 }
 
 type RegionProperty struct {
-	Name  string `json:"name,omitempty"`
-	Value string `json:"value,omitempty"`
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
 }
 
 type ExternalAction struct {
-	ActionName  string `json:"actionName,omitempty"`
-	ActionType  string `json:"actionType,omitempty"`
-	ActionValue string `json:"actionValue,omitempty"`
+	ActionName  *string `json:"actionName,omitempty"`
+	ActionType  *string `json:"actionType,omitempty"`
+	ActionValue *string `json:"actionValue,omitempty"`
 }
 
 func (s *Client) GetCloudRegions(tenantId int, cloudId int) ([]CloudRegion, error) {
@@ -127,7 +127,9 @@ func (s *Client) AddCloudRegion(cloudRegion *CloudRegion) (*CloudRegion, error) 
 
 	var data CloudRegion
 
-	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + cloudRegion.TenantId + "/clouds/" + cloudRegion.CloudId + "/regions")
+	cloudRegionTenantId := *cloudRegion.TenantId
+	cloudRegionCloudId := *cloudRegion.CloudId
+	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + cloudRegionTenantId + "/clouds/" + cloudRegionCloudId + "/regions")
 
 	j, err := json.Marshal(cloudRegion)
 
@@ -161,7 +163,10 @@ func (s *Client) UpdateCloudRegion(cloudRegion *CloudRegion) (*CloudRegion, erro
 
 	var data CloudRegion
 
-	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + cloudRegion.TenantId + "/clouds/" + cloudRegion.CloudId + "/regions/" + cloudRegion.Id)
+	cloudRegionTenantId := *cloudRegion.TenantId
+	cloudRegionCloudId := *cloudRegion.CloudId
+	cloudRegionId := *cloudRegion.Id
+	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + cloudRegionTenantId + "/clouds/" + cloudRegionCloudId + "/regions/" + cloudRegionId)
 
 	fmt.Printf("%v", cloudRegion.Gateway)
 	j, err := json.Marshal(cloudRegion)

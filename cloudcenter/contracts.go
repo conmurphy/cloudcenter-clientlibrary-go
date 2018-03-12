@@ -7,27 +7,27 @@ import "encoding/json"
 import "bytes"
 
 type ContractAPIResponse struct {
-	Resource      string     `json:"resource"`
-	Size          int        `json:"size"`
-	PageNumber    int        `json:"pageNumber"`
-	TotalElements int        `json:"totalElements"`
-	TotalPages    int        `json:"totalPages"`
+	Resource      *string    `json:"resource"`
+	Size          *int64     `json:"size"`
+	PageNumber    *int64     `json:"pageNumber"`
+	TotalElements *int64     `json:"totalElements"`
+	TotalPages    *int64     `json:"totalPages"`
 	Contracts     []Contract `json:"contracts"`
 }
 
 type Contract struct {
-	Id              string   `json:"id,omitempty"`
-	Resource        string   `json:"resource,omitempty"`
-	Name            string   `json:"name,omitempty"`
-	Description     string   `json:"description,omitempty"`
-	Perms           []string `json:"perms"`
-	TenantId        string   `json:"tenantId,omitempty"`
-	Length          int      `json:"length,omitempty"`
-	Terms           string   `json:"terms,omitempty"`
-	DiscountRate    float64  `json:"discountRate,omitempty"`
-	Disabled        bool     `json:"disabled,omitempty"`
-	ShowOnlyToAdmin bool     `json:"showOnlyToAdmin,omitempty"`
-	NumberOfUsers   int      `json:"numberOfUsers,omitempty"`
+	Id              *string   `json:"id,omitempty"`
+	Resource        *string   `json:"resource,omitempty"`
+	Name            *string   `json:"name,omitempty"`
+	Description     *string   `json:"description,omitempty"`
+	Perms           *[]string `json:"perms"`
+	TenantId        *string   `json:"tenantId,omitempty"`
+	Length          *int64    `json:"length,omitempty"`
+	Terms           *string   `json:"terms,omitempty"`
+	DiscountRate    *float64  `json:"discountRate,omitempty"`
+	Disabled        *bool     `json:"disabled,omitempty"`
+	ShowOnlyToAdmin *bool     `json:"showOnlyToAdmin,omitempty"`
+	NumberOfUsers   *int64    `json:"numberOfUsers,omitempty"`
 }
 
 func (s *Client) GetContracts(tenantId int) ([]Contract, error) {
@@ -81,7 +81,8 @@ func (s *Client) AddContract(contract *Contract) (*Contract, error) {
 
 	var data Contract
 
-	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + contract.TenantId + "/contracts")
+	contractTenantId := *contract.TenantId
+	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + contractTenantId + "/contracts")
 
 	j, err := json.Marshal(contract)
 
@@ -115,7 +116,9 @@ func (s *Client) UpdateContract(contract *Contract) (*Contract, error) {
 
 	var data Contract
 
-	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + contract.TenantId + "/contracts/" + contract.Id)
+	contractTenantId := *contract.TenantId
+	contractId := *contract.Id
+	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + contractTenantId + "/contracts/" + contractId)
 
 	j, err := json.Marshal(contract)
 

@@ -7,27 +7,28 @@ import "encoding/json"
 import "bytes"
 
 type ActivationProfileAPIResponse struct {
-	Resource           string              `json:"resource"`
-	Size               int                 `json:"size"`
-	PageNumber         int                 `json:"pageNumber"`
-	TotalElements      int                 `json:"totalElements"`
-	TotalPages         int                 `json:"totalPages"`
+	Resource           *string             `json:"resource"`
+	Size               *int64              `json:"size"`
+	PageNumber         *int64              `json:"pageNumber"`
+	TotalElements      *int64              `json:"totalElements"`
+	TotalPages         *int64              `json:"totalPages"`
 	ActivationProfiles []ActivationProfile `json:"activationProfiles"`
 }
 
 type ActivationProfile struct {
-	Id                  string           `json:"id,omitempty"`
-	Name                string           `json:"name,omitempty"`
-	Description         string           `json:"description,omitempty"`
-	TenantId            int              `json:"tenantId,omitempty"`
-	PlanId              string           `json:"planId,omitempty"`
-	BundleId            string           `json:"bundleId,omitempty"`
-	ContractId          string           `json:"contractId,omitempty"`
-	DepEnvId            string           `json:"depEnvId,omitempty"`
+	Id                  *string          `json:"id,omitempty"`
+	Name                *string          `json:"name,omitempty"`
+	Description         *string          `json:"description,omitempty"`
+	Resource            *string          `json:"resource"`
+	TenantId            *int64           `json:"tenantId,omitempty"`
+	PlanId              *string          `json:"planId,omitempty"`
+	BundleId            *string          `json:"bundleId,omitempty"`
+	ContractId          *string          `json:"contractId,omitempty"`
+	DepEnvId            *string          `json:"depEnvId,omitempty"`
 	ActivateRegions     []ActivateRegion `json:"activateRegions,omitempty"`
-	ImportApps          []string         `json:"importApps,omitempty"`
-	AgreeToContract     bool             `json:"agreeToContract,omitempty"`
-	SendActivationEmail bool             `json:"sendActivationEmail,omitempty"`
+	ImportApps          *[]string        `json:"importApps,omitempty"`
+	AgreeToContract     *bool            `json:"agreeToContract,omitempty"`
+	SendActivationEmail *bool            `json:"sendActivationEmail,omitempty"`
 }
 
 type ActivateRegion struct {
@@ -85,7 +86,9 @@ func (s *Client) AddActivationProfile(activationProfile *ActivationProfile) (*Ac
 
 	var data ActivationProfile
 
-	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + strconv.Itoa(activationProfile.TenantId) + "/activationProfiles")
+	activationProfileTenantId := int(*activationProfile.TenantId)
+
+	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + strconv.Itoa(activationProfileTenantId) + "/activationProfiles")
 
 	j, err := json.Marshal(activationProfile)
 
@@ -119,7 +122,10 @@ func (s *Client) UpdateActivationProfile(activationProfile *ActivationProfile) (
 
 	var data ActivationProfile
 
-	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + strconv.Itoa(activationProfile.TenantId) + "/activationProfiles/" + activationProfile.Id)
+	activationProfileTenantId := int(*activationProfile.TenantId)
+	activationProfileId := *activationProfile.Id
+
+	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + strconv.Itoa(activationProfileTenantId) + "/activationProfiles/" + activationProfileId)
 
 	j, err := json.Marshal(activationProfile)
 

@@ -563,7 +563,7 @@ func (s *Client) DeleteJobSync(jobId int) error {
 
 	status := &operationStatus
 
-	operationId := status.Id
+	operationId := *status.Id
 
 	if err != nil {
 
@@ -572,13 +572,15 @@ func (s *Client) DeleteJobSync(jobId int) error {
 
 		status, err = s.GetOperationStatus(operationId)
 
-		for status.Status == "RUNNING" {
+		currentStatus := *status.Status
+		for currentStatus == "RUNNING" {
 
 			status, err = s.GetOperationStatus(operationId)
+			currentStatus = *status.Status
 
 		}
 
-		if status.Status == "SUCCESS" {
+		if currentStatus == "SUCCESS" {
 			return nil
 		} else {
 			return errors.New("Job deletion failed")

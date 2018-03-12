@@ -7,51 +7,62 @@ import "encoding/json"
 import "bytes"
 
 type EnvironmentAPIResponse struct {
-	Resource      string        `json:"resource"`
-	Size          int           `json:"size"`
-	PageNumber    int           `json:"pageNumber"`
-	TotalElements int           `json:"totalElements"`
-	TotalPages    int           `json:"totalPages"`
-	Environments  []Environment `json:"deploymentEnvironments"`
+	Resource      *string       `json:"resource,omitempty"`
+	Size          *int64        `json:"size,omitempty"`
+	PageNumber    *int64        `json:"pageNumber,omitempty"`
+	TotalElements *int64        `json:"totalElements,omitempty"`
+	TotalPages    *int64        `json:"totalPages,omitempty"`
+	Environments  []Environment `json:"deploymentEnvironments,omitempty"`
 }
 
 type Environment struct {
-	Id               string            `json:"id"`
-	Resource         string            `json:"resource"`
-	Name             string            `json:"name"`
-	Perms            []string          `json:"perms"`
-	Description      string            `json:"description"`
-	AllowedClouds    string            `json:"allowedClouds"`
-	DefaultSettings  string            `json:"defaultSettings"`
-	RequiresApproval bool              `json:"requiresApproval"`
-	AssociatedClouds []AssociatedCloud `json:"associatedClouds"`
-	TotalDeployments int32             `json:"totalDeployments"`
-	ExtensionId      string            `json:"extensionId"`
-	CostDetails      CostDetail        `json:"costDetails"`
+	Id                 *string            `json:"id,omitempty"`
+	Resource           *string            `json:"resource,omitempty"`
+	Name               *string            `json:"name,omitempty"`
+	Perms              *[]string          `json:"perms,omitempty"`
+	Description        *string            `json:"description,omitempty"`
+	AllowedClouds      *string            `json:"allowedClouds,omitempty"`
+	DefaultSettings    *string            `json:"defaultSettings,omitempty"`
+	RequiresApproval   *bool              `json:"requiresApproval,omitempty"`
+	AssociatedClouds   *[]AssociatedCloud `json:"associatedClouds,omitempty"`
+	TotalDeployments   *int64             `json:"totalDeployments,omitempty"`
+	ExtensionId        *string            `json:"extensionId,omitempty"`
+	CostDetails        *CostDetail        `json:"costDetails,omitempty"`
+	NetworkTypes       *[]NetworkType     `json:"networkTypes,omitempty"`
+	NetworkTypeEnabled *bool              `json:"networkTypeEnabled,omitempty"`
+	RestrictedUser     *bool              `json:"restrictedUser,omitempty"`
+	DefaultRegionId    *string            `json:"defaultRegionId,omitempty"`
+	Owner              *int64             `json:"owner,omitempty"`
 }
 
 type CostDetail struct {
-	TotalCloudCost float32 `json:"totalCloudCost"`
-	TotalAppCost   float32 `json:"totalAppCost"`
-	TotalJobsCost  float32 `json:"totalJobsCost"`
+	TotalCloudCost *float64 `json:"totalCloudCost,omitempty"`
+	TotalAppCost   *float64 `json:"totalAppCost,omitempty"`
+	TotalJobsCost  *float64 `json:"totalJobsCost,omitempty"`
+}
+
+type NetworkType struct {
+	Name                  *string  `json:"name,omitempty"`
+	Description           *string  `json:"description,omitempty"`
+	NumberOfNetworkMapped *float64 `json:"numberOfNetworkMapped,omitempty"`
 }
 
 type AssociatedCloud struct {
-	RegionId                 string                    `json:"regionId"`
-	RegionName               string                    `json:"regionName"`
-	RegionDisplayName        string                    `json:"regionDisplayName"`
-	CloudFamily              string                    `json:"cloudFamily"`
-	CloudId                  string                    `json:"cloudId"`
-	CloudAccountId           string                    `json:"cloudAccountId"`
-	CloudName                string                    `json:"cloudName"`
-	CloudAccountName         string                    `json:"cloudAccountName"`
-	CloudAssociationDefaults []CloudAssociationDefault `json:"cloudAssociationDefaults"`
-	Default                  bool                      `json:"default"`
+	RegionId                 *string                    `json:"regionId,omitempty"`
+	RegionName               *string                    `json:"regionName,omitempty"`
+	RegionDisplayName        *string                    `json:"regionDisplayName,omitempty"`
+	CloudFamily              *string                    `json:"cloudFamily,omitempty"`
+	CloudId                  *string                    `json:"cloudId,omitempty"`
+	CloudAccountId           *string                    `json:"cloudAccountId,omitempty"`
+	CloudName                *string                    `json:"cloudName,omitempty"`
+	CloudAccountName         *string                    `json:"cloudAccountName,omitempty"`
+	CloudAssociationDefaults *[]CloudAssociationDefault `json:"cloudAssociationDefaults,omitempty"`
+	Default                  *bool                      `json:"default,omitempty"`
 }
 
 type CloudAssociationDefault struct {
-	Name  string `json:"name"`
-	Value string `json:"value"`
+	Name  *string `json:"name"`
+	Value *string `json:"value"`
 }
 
 func (s *Client) GetEnvironments() ([]Environment, error) {
@@ -137,7 +148,8 @@ func (s *Client) UpdateEnvironment(environment *Environment) (*Environment, erro
 
 	var data Environment
 
-	url := fmt.Sprintf(s.BaseURL + "/v1/environments/" + environment.Id)
+	environmentId := *environment.Id
+	url := fmt.Sprintf(s.BaseURL + "/v1/environments/" + environmentId)
 
 	j, err := json.Marshal(environment)
 

@@ -9,36 +9,36 @@ import "bytes"
 import "errors"
 
 type CloudAccountAPIResponse struct {
-	Resource      string         `json:"resource,omitempty"`
-	Size          int            `json:"size,omitempty"`
-	PageNumber    int            `json:"pageNumber,omitempty"`
-	TotalElements int            `json:"totalElements,omitempty"`
-	TotalPages    int            `json:"totalPages,omitempty"`
+	Resource      *string        `json:"resource,omitempty"`
+	Size          *int64         `json:"size,omitempty"`
+	PageNumber    *int64         `json:"pageNumber,omitempty"`
+	TotalElements *int64         `json:"totalElements,omitempty"`
+	TotalPages    *int64         `json:"totalPages,omitempty"`
 	CloudAccounts []CloudAccount `json:"cloudAccounts,omitempty"`
 }
 
 type CloudAccount struct {
-	Id                 string            `json:"id,omitempty"`
-	Resource           string            `json:"resource,omitempty"`
-	Perms              []string          `json:"perms,omitempty"`
-	DisplayName        string            `json:"displayName,omitempty"`
-	CloudId            string            `json:"cloudId,omitempty"`
-	UserId             string            `json:"userId,omitempty"`
-	AccountId          string            `json:"accountId,omitempty"`
-	AccountName        string            `json:"accountName,omitempty"`
-	AccountPassword    string            `json:"accountPassword,omitempty"`
-	AccountDescription string            `json:"accountDescription,omitempty"`
-	ManageCost         bool              `json:"manageCost,omitempty"`
-	PublicVisible      bool              `json:"publicVisible,omitempty"`
-	AllowedUsers       []int             `json:"allowedUsers,omitempty"`
-	AccessPermission   string            `json:"accessPermission,omitempty"`
+	Id                 *string           `json:"id,omitempty"`
+	Resource           *string           `json:"resource,omitempty"`
+	Perms              *[]string         `json:"perms,omitempty"`
+	DisplayName        *string           `json:"displayName,omitempty"`
+	CloudId            *string           `json:"cloudId,omitempty"`
+	UserId             *string           `json:"userId,omitempty"`
+	AccountId          *string           `json:"accountId,omitempty"`
+	AccountName        *string           `json:"accountName,omitempty"`
+	AccountPassword    *string           `json:"accountPassword,omitempty"`
+	AccountDescription *string           `json:"accountDescription,omitempty"`
+	ManageCost         *bool             `json:"manageCost,omitempty"`
+	PublicVisible      *bool             `json:"publicVisible,omitempty"`
+	AllowedUsers       *[]int64          `json:"allowedUsers,omitempty"`
+	AccessPermission   *string           `json:"accessPermission,omitempty"`
 	AccountProperties  []AccountProperty `json:"accountProperties,omitempty"`
-	TenantId           string            `json:"tenantId,omitempty"`
+	TenantId           *string           `json:"tenantId,omitempty"`
 }
 
 type AccountProperty struct {
-	Name  string `json:"name,omitempty"`
-	Value string `json:"value,omitempty"`
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
 }
 
 func (s *Client) GetCloudAccounts(tenantId int, cloudId int) ([]CloudAccount, error) {
@@ -114,7 +114,9 @@ func (s *Client) GetCloudAccountByName(tenantId int, cloudId int, displayName st
 
 func (s *Client) AddCloudAccountSync(cloudAccount *CloudAccount) (*CloudAccount, error) {
 
-	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + cloudAccount.TenantId + "/clouds/" + cloudAccount.CloudId + "/accounts")
+	cloudAccountTenantId := *cloudAccount.TenantId
+	cloudAccountCloudId := *cloudAccount.CloudId
+	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + cloudAccountTenantId + "/clouds/" + cloudAccountCloudId + "/accounts")
 
 	j, err := json.Marshal(cloudAccount)
 
@@ -154,7 +156,8 @@ func (s *Client) AddCloudAccountSync(cloudAccount *CloudAccount) (*CloudAccount,
 		}
 
 		if status["status"] == "SUCCESS" {
-			cloudAccounts, err := s.GetCloudAccountByName(1, 1, cloudAccount.DisplayName)
+			cloudAccountDisplayName := *cloudAccount.DisplayName
+			cloudAccounts, err := s.GetCloudAccountByName(1, 1, cloudAccountDisplayName)
 
 			if err != nil {
 				return nil, err
@@ -180,7 +183,9 @@ func (s *Client) AddCloudAccountAsync(cloudAccount *CloudAccount) (*OperationSta
 
 	var data OperationStatus
 
-	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + cloudAccount.TenantId + "/clouds/" + cloudAccount.CloudId + "/accounts")
+	cloudAccountTenantId := *cloudAccount.TenantId
+	cloudAccountCloudId := *cloudAccount.CloudId
+	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + cloudAccountTenantId + "/clouds/" + cloudAccountCloudId + "/accounts")
 
 	j, err := json.Marshal(cloudAccount)
 
@@ -211,7 +216,10 @@ func (s *Client) AddCloudAccountAsync(cloudAccount *CloudAccount) (*OperationSta
 
 func (s *Client) UpdateCloudAccountSync(cloudAccount *CloudAccount) (*CloudAccount, error) {
 
-	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + cloudAccount.TenantId + "/clouds/" + cloudAccount.CloudId + "/accounts/" + cloudAccount.Id)
+	cloudAccountTenantId := *cloudAccount.TenantId
+	cloudAccountCloudId := *cloudAccount.CloudId
+	cloudAccountId := *cloudAccount.Id
+	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + cloudAccountTenantId + "/clouds/" + cloudAccountCloudId + "/accounts/" + cloudAccountId)
 
 	j, err := json.Marshal(cloudAccount)
 
@@ -251,7 +259,8 @@ func (s *Client) UpdateCloudAccountSync(cloudAccount *CloudAccount) (*CloudAccou
 		}
 
 		if status["status"] == "SUCCESS" {
-			cloudAccounts, err := s.GetCloudAccountByName(1, 1, cloudAccount.DisplayName)
+			cloudAccountDisplayName := *cloudAccount.DisplayName
+			cloudAccounts, err := s.GetCloudAccountByName(1, 1, cloudAccountDisplayName)
 
 			if err != nil {
 				return nil, err
@@ -277,7 +286,10 @@ func (s *Client) UpdateCloudAccountAsync(cloudAccount *CloudAccount) (*Operation
 
 	var data OperationStatus
 
-	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + cloudAccount.TenantId + "/clouds/" + cloudAccount.CloudId + "/accounts/" + cloudAccount.Id)
+	cloudAccountTenantId := *cloudAccount.TenantId
+	cloudAccountCloudId := *cloudAccount.CloudId
+	cloudAccountId := *cloudAccount.Id
+	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + cloudAccountTenantId + "/clouds/" + cloudAccountCloudId + "/accounts/" + cloudAccountId)
 
 	j, err := json.Marshal(cloudAccount)
 
