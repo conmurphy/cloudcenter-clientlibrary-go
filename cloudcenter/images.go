@@ -17,25 +17,25 @@ type ImageAPIResponse struct {
 }
 
 type Image struct {
-	Id                *string   `json:"id,omitempty"`
-	TenantId          *int64    `json:"tenantId,omitempty"`
-	Resource          *string   `json:"resource,omitempty"`
-	Perms             *[]string `json:"perms,omitempty"`
-	Name              *string   `json:"name,omitempty"`
-	InternalImageName *string   `json:"internalImageName,omitempty"`
-	Description       *string   `json:"description,omitempty"`
-	Visibility        *string   `json:"visibility,omitempty"`
-	ImageType         *string   `json:"imageType,omitempty"`
-	OSName            *string   `json:"osName,omitempty"`
-	Tags              *[]string `json:"tags,omitempty"`
-	Enabled           *bool     `json:"enabled,omitempty"`
-	SystemImage       *bool     `json:"systemImage,omitempty"`
-	NumOfNICs         *int64    `json:"numOfNics,omitempty"`
-	AttachCount       *int64    `json:"count,omitempty"`
-	Details           *Details  `json:"detail,omitempty"`
+	Id                *string       `json:"id,omitempty"`
+	TenantId          *int64        `json:"tenantId,omitempty"`
+	Resource          *string       `json:"resource,omitempty"`
+	Perms             *[]string     `json:"perms,omitempty"`
+	Name              *string       `json:"name,omitempty"`
+	InternalImageName *string       `json:"internalImageName,omitempty"`
+	Description       *string       `json:"description,omitempty"`
+	Visibility        *string       `json:"visibility,omitempty"`
+	ImageType         *string       `json:"imageType,omitempty"`
+	OSName            *string       `json:"osName,omitempty"`
+	Tags              *[]string     `json:"tags,omitempty"`
+	Enabled           *bool         `json:"enabled,omitempty"`
+	SystemImage       *bool         `json:"systemImage,omitempty"`
+	NumOfNICs         *int64        `json:"numOfNics,omitempty"`
+	AttachCount       *int64        `json:"count,omitempty"`
+	Details           *ImageDetails `json:"detail,omitempty"`
 }
 
-type Details struct {
+type ImageDetails struct {
 	Count       *int64        `json:"count,omitempty"`
 	CloudImages *[]CloudImage `json:"cloudImages,omitempty"`
 }

@@ -62,16 +62,11 @@ type Job struct {
 	WindowsJob             *bool                  `json:"windowsJob,omitempty"`
 	AccessLink             *string                `json:"accessLink,omitempty"`
 	ParentJob              *ParentJob             `json:"parentJob,omitempty"`
-	VirtualMachines        *[]VirtualMachine      `json:"virtualMachines,omitempty"`
+	VirtualMachines        *[]VirtualMachines     `json:"virtualMachines,omitempty"`
 	SecurityProfiles       *[]SecurityProfile     `json:"securityProfiles,omitempty"`
 	BareMetalMachines      *[]BareMetalMachine    `json:"bareMetalMachines,omitempty"`
 	TotalCost              *float64               `json:"totalCost,omitempty"`
 	NodeHours              *float64               `json:"nodeHours,omitempty"`
-}
-
-type DeploymentEnvironment struct {
-	Id       *string `json:"id,omitempty"`
-	Resource *string `json:"resource,omitempty"`
 }
 
 type Application struct {
@@ -188,7 +183,7 @@ type Tag struct {
 	Resource *string `json:"resource,omitempty"`
 }
 
-type VirtualMachine struct {
+type VirtualMachines struct {
 	Id                    *string                `json:"id,omitempty"`
 	VirtualMachineId      *string                `json:"virtualMachineId,omitempty"`
 	PublicIpAddr          *string                `json:"publicIpAddr,omitempty"`
