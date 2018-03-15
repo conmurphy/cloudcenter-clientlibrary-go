@@ -41,3 +41,68 @@ if err != nil {
 	fmt.Println(”New user created. \n UserId: " + user.Id + ", User last name: " + user.LastName)
 }
 ```
+
+## Helper Functions
+
+As per the following link, using the Marshal function from the encoding/json library treats false booleans as if they were nil values, and thus it omits them from the JSON response. To make a distinction between a non-existent boolean and false boolean we need to use a ```*bool``` in the struct. 
+
+```golang
+type User struct {
+	Id                      *string `json:"id,omitempty"`
+	FirstName               *string `json:"firstName,omitempty"`
+	LastName                *string `json:"lastName,omitempty"`
+	Password                *string `json:"password,omitempty"` 
+	EmailAddr               *string `json:"emailAddr,omitempty"`
+	Enabled                 *bool   `json:"enabled,omitempty"`
+	TenantAdmin             *bool   `json:"tenantAdmin,omitempty"`
+}
+```
+https://github.com/golang/go/issues/13284
+
+Therefore in order to have a consistent experience all struct fields within this client library use pointers. This provides a way to differentiate between unset values, nil, and an intentional zero value, such as "", false, or 0. 
+
+Helper functions have been created to simplify the creation of pointer types.
+
+### Without 
+
+```golang
+firstName 	:= "client"
+lastName 	:= "library"
+password	:= "myPassword"
+emailAddr	:= "clientlibrary@cloudcenter-address.com"
+companyName	:= "company"
+phoneNumber	:= "12345"
+externalId	:= "23456"
+tenantId	:= "1"
+
+
+newUser := cloudcenter.User {
+	FirstName:   &firstName,
+	LastName:    &lastName,
+	Password:    &password,
+	EmailAddr:  &emailAddr,
+	CompanyName: &companyName,
+	PhoneNumber: &phoneNumber,
+	ExternalId: &externalId,
+	TenantId:    &tenantId,
+}
+```
+### With
+
+```golang
+newUser := cloudcenter.User {
+	FirstName:   cloudcenter.String("client"),
+	LastName:    cloudcenter.String("library"),
+	Password:    cloudcenter.String("myPassword"),
+	EmailAddr:   cloudcenter.String("clientlibrary@cloudcenter-address.com"),
+	CompanyName: cloudcenter.String("company"),
+	PhoneNumber: cloudcenter.String("12345"),
+	ExternalId:  cloudcenter.String("23456"),
+	TenantId:    cloudcenter.String("1"),
+}
+```
+
+Reference: https://willnorris.com/2014/05/go-rest-apis-and-pointers
+
+
+
