@@ -104,5 +104,11 @@ newUser := cloudcenter.User {
 
 Reference: https://willnorris.com/2014/05/go-rest-apis-and-pointers
 
+### Available Helper Functions
 
-
+* cloudcenter.Bool()
+* cloudcenter.Int()
+* cloudcenter.Int64()
+* cloudcenter.String()
+* cloudcenter.Float32()
+* cloudcenter.Float64()
