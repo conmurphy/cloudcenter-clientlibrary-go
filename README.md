@@ -16,21 +16,21 @@ import "github.com/cloudcenter-clientlibrary-go/cloudcenter”
 	Define new cloudcenter client
 */
 
-client := cloudcenter.NewClient("cliqradmin", ”myAPIKey", "https://ccm.dcloud.cisco.com")
+client := cloudcenter.NewClient("cliqradmin", ”myAPIKey", "https://ccm.cloudcenter-address.com")
 
 /*
 	Create user
 */
 
-newUser := cloudcenter.User{
-	TenantId:    "1",
-	FirstName:   "client",
-	LastName:    "library",
-	Password:    "myPassword",
-	EmailAddr:   "clientlibrary@cloudcenter.com",
-	CompanyName: "Company",
-	PhoneNumber: "12345",
-	ExternalId:  "23456",
+newUser := cloudcenter.User {
+	FirstName:   cloudcenter.String("client"),
+	LastName:    cloudcenter.String("library"),
+	Password:    cloudcenter.String("myPassword"),
+	EmailAddr:   cloudcenter.String("clientlibrary@cloudcenter-address.com"),
+	CompanyName: cloudcenter.String("company"),
+	PhoneNumber: cloudcenter.String("12345"),
+	ExternalId:  cloudcenter.String("23456"),
+	TenantId:    cloudcenter.String("1"),
 }
 
 user, err := client.AddUser(&newUser)
