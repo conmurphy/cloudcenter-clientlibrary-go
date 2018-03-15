@@ -20,7 +20,7 @@ type UserAPIResponse struct {
 type User struct {
 	Id                      *string `json:"id,omitempty"`
 	Resource                *string `json:"resource,omitempty"`
-	Username                *string `json:"username,omitempty"`
+	Username                *string `json:"username,omitempty"` //required
 	Password                *string `json:"password,omitempty"` //required
 	Enabled                 *bool   `json:"enabled,omitempty"`
 	Type                    *string `json:"type,omitempty"`

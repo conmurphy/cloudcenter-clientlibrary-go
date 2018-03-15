@@ -14,7 +14,7 @@ type SuspensionPolicyAPIResponse struct {
 	PageNumber         *int64             `json:"pageNumber,omitempty"`
 	TotalElements      *int64             `json:"totalElements,omitempty"`
 	TotalPages         *int64             `json:"totalPages"`
-	SuspensionPolicies []SuspensionPolicy `json:"suspensionpolicies,omitempty"`
+	SuspensionPolicies []SuspensionPolicy `json:"policies,omitempty"`
 }
 
 type SuspensionPolicy struct {
@@ -31,14 +31,15 @@ type SuspensionPolicy struct {
 	Priority                  *float64          `json:"priority,omitempty"`
 	Created                   *float64          `json:"created,omitempty"`
 	LastUpdated               *float64          `json:"lastUpdated,omitempty"`
+	OwnerId                   *int64            `json:"ownerId,omitempty"`
 }
 
 type Schedule struct {
-	Type      *string `json:"type,omitempty"`
-	Days      *string `json:"days,omitempty"`
-	StartTime *string `json:"startTime,omitempty"`
-	EndTime   *string `json:"endTime,omitempty"`
-	Repeats   *int64  `json:"repeats,omitempty"`
+	Type      *string   `json:"type,omitempty"`
+	Days      *[]string `json:"days,omitempty"`
+	StartTime *string   `json:"startTime,omitempty"`
+	EndTime   *string   `json:"endTime,omitempty"`
+	Repeats   *string   `json:"repeats,omitempty"`
 }
 
 type BlockoutPeriod struct {
@@ -65,7 +66,7 @@ func (s *Client) GetSuspensionPolicies() ([]SuspensionPolicy, error) {
 
 	var data SuspensionPolicyAPIResponse
 
-	url := fmt.Sprintf(s.BaseURL + "/v2/suspensionpolicies")
+	url := fmt.Sprintf(s.BaseURL + "/v2/suspensionPolicies")
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
@@ -89,7 +90,7 @@ func (s *Client) GetSuspensionPolicy(suspensionPolicyId int) (*SuspensionPolicy,
 
 	var data SuspensionPolicy
 
-	url := fmt.Sprintf(s.BaseURL + "/v2/suspensionpolicies/" + strconv.Itoa(suspensionPolicyId))
+	url := fmt.Sprintf(s.BaseURL + "/v2/suspensionPolicies/" + strconv.Itoa(suspensionPolicyId))
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err
@@ -112,7 +113,7 @@ func (s *Client) AddSuspensionPolicy(suspensionPolicy *SuspensionPolicy) (*Suspe
 
 	var data SuspensionPolicy
 
-	url := fmt.Sprintf(s.BaseURL + "/v2/suspensionpolicies")
+	url := fmt.Sprintf(s.BaseURL + "/v2/suspensionPolicies")
 
 	j, err := json.Marshal(suspensionPolicy)
 
@@ -147,7 +148,7 @@ func (s *Client) UpdateSuspensionPolicy(suspensionPolicy *SuspensionPolicy) (*Su
 	var data SuspensionPolicy
 
 	suspensionPolicyId := *suspensionPolicy.Id
-	url := fmt.Sprintf(s.BaseURL + "/v2/suspensionpolicies/" + suspensionPolicyId)
+	url := fmt.Sprintf(s.BaseURL + "/v2/suspensionPolicies/" + suspensionPolicyId)
 
 	j, err := json.Marshal(suspensionPolicy)
 
@@ -179,7 +180,7 @@ func (s *Client) UpdateSuspensionPolicy(suspensionPolicy *SuspensionPolicy) (*Su
 
 func (s *Client) DeleteSuspensionPolicy(suspensionPolicyId int) error {
 
-	url := fmt.Sprintf(s.BaseURL + "/v2/suspensionpolicies/" + strconv.Itoa(suspensionPolicyId))
+	url := fmt.Sprintf(s.BaseURL + "/v2/suspensionPolicies/" + strconv.Itoa(suspensionPolicyId))
 
 	req, err := http.NewRequest("DELETE", url, nil)
 	if err != nil {

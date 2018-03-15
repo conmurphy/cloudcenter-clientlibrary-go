@@ -14,7 +14,7 @@ type AgingPolicyAPIResponse struct {
 	PageNumber    *int64        `json:"pageNumber,omitempty"`
 	TotalElements *int64        `json:"totalElements,omitempty"`
 	TotalPages    *int64        `json:"totalPages"`
-	AgingPolicies []AgingPolicy `json:"agingpolicies,omitempty"`
+	AgingPolicies []AgingPolicy `json:"policies,omitempty"`
 }
 
 type AgingPolicy struct {
@@ -25,7 +25,7 @@ type AgingPolicy struct {
 	Description                    *string                `json:"description,omitempty"`
 	Enabled                        *bool                  `json:"enabled,omitempty"`
 	Type                           *string                `json:"type,omitempty"`
-	Limit                          *int64                 `json:"limit,omitempty"`
+	Limit                          *Limit                 `json:"limit,omitempty"`
 	TerminateWhenPolicyEnds        *bool                  `json:"terminateWhenPolicyEnds,omitempty"`
 	AllowGracePeriodForTermination *bool                  `json:"allowGracePeriodForTermination,omitempty"`
 	GraceLimit                     *GraceLimit            `json:"graceLimit,omitempty"`
@@ -39,7 +39,12 @@ type AgingPolicy struct {
 	LastUpdated                    *float64               `json:"lastUpdated,omitempty"`
 	Resources                      *[]AgingPolicyResource `json:"resources,omitempty"`
 	Priority                       *float64               `json:"priority,omitempty"`
-	OwnerId                        *string                `json:"ownerId,omitempty"`
+	OwnerId                        *int64                 `json:"ownerId,omitempty"`
+}
+
+type Limit struct {
+	Amount *float64 `json:"amount,omitempty"`
+	Unit   *string  `json:"unit,omitempty"`
 }
 
 type GraceLimit struct {
@@ -88,7 +93,7 @@ func (s *Client) GetAgingPolicies() ([]AgingPolicy, error) {
 
 	var data AgingPolicyAPIResponse
 
-	url := fmt.Sprintf(s.BaseURL + "/v2/agingpolicies")
+	url := fmt.Sprintf(s.BaseURL + "/v2/agingPolicies")
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
@@ -112,7 +117,7 @@ func (s *Client) GetAgingPolicy(agingPolicyId int) (*AgingPolicy, error) {
 
 	var data AgingPolicy
 
-	url := fmt.Sprintf(s.BaseURL + "/v2/agingpolicies/" + strconv.Itoa(agingPolicyId))
+	url := fmt.Sprintf(s.BaseURL + "/v2/agingPolicies/" + strconv.Itoa(agingPolicyId))
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err
@@ -135,7 +140,7 @@ func (s *Client) AddAgingPolicy(agingPolicy *AgingPolicy) (*AgingPolicy, error) 
 
 	var data AgingPolicy
 
-	url := fmt.Sprintf(s.BaseURL + "/v2/agingpolicies")
+	url := fmt.Sprintf(s.BaseURL + "/v2/agingPolicies")
 
 	j, err := json.Marshal(agingPolicy)
 
@@ -170,7 +175,7 @@ func (s *Client) UpdateAgingPolicy(agingPolicy *AgingPolicy) (*AgingPolicy, erro
 	var data AgingPolicy
 
 	agingPolicyId := *agingPolicy.Id
-	url := fmt.Sprintf(s.BaseURL + "/v2/agingpolicies/" + agingPolicyId)
+	url := fmt.Sprintf(s.BaseURL + "/v2/agingPolicies/" + agingPolicyId)
 
 	j, err := json.Marshal(agingPolicy)
 
@@ -202,7 +207,7 @@ func (s *Client) UpdateAgingPolicy(agingPolicy *AgingPolicy) (*AgingPolicy, erro
 
 func (s *Client) DeleteAgingPolicy(agingPolicyId int) error {
 
-	url := fmt.Sprintf(s.BaseURL + "/v2/agingpolicies/" + strconv.Itoa(agingPolicyId))
+	url := fmt.Sprintf(s.BaseURL + "/v2/agingPolicies/" + strconv.Itoa(agingPolicyId))
 
 	req, err := http.NewRequest("DELETE", url, nil)
 	if err != nil {
