@@ -112,3 +112,16 @@ Reference: https://willnorris.com/2014/05/go-rest-apis-and-pointers
 * cloudcenter.String()
 * cloudcenter.Float32()
 * cloudcenter.Float64()
+
+## Sync and Async
+
+* Synchronous APIs indicate that the program execution waits for a response to be returned by the API. The execution does not proceed until the call is completed. The real state of the API request is available in the response.
+
+* Asynchronous APIs do not wait for the API call to complete. Program execution continues, and until the call completes,  you can issue GET requests to review the state after the submission, during the execution, and after the call completion
+
+https://editor-docs.cloudcenter.cisco.com/display/40API/Synchronous+and+Asynchronous+APIs
+
+Two options have been implemented in this library for each async API (example resource):
+
+⋅⋅* AddCloudAccountSync: Client library will make an asynchronous call and wait until the task is complete. Once complete it will return either the newly created object or an error message.
+⋅⋅* AddCloudAccountAsync: Client library will make an asynchronous call and will return the operationStatus of the call. The client library user will be required to monitor the operation status and once successful retrieve the newly created object. 
