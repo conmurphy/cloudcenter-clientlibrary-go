@@ -160,22 +160,33 @@ Two options have been implemented in this library for each async API (example re
 ### ActionPolicies
 
 ```go
-type	ActionPolicy	struct	{
-	Id	*string	
-	Resource	*string	
-	Perms	*[]string	
-	Name	*string	
-	Description	*string	
-	EntityType	*string	
-	EventName	*string	
-	Actions	*[]Actions	
-	UserId	*string	
-	Enabled	*bool	
-	AutoEnable	*bool	
-	ForceEnable	*bool	
-	Global	*bool	
-}			
-```			
+type ActionPolicyAPIResponse struct {
+	Resource       *string        
+	Size           *int64         
+	PageNumber     *int64         
+	TotalElements  *int64         
+	TotalPages     *int64         
+	ActionPolicies []ActionPolicy 
+}
+```
+
+```go
+type ActionPolicy struct {
+	Id          *string    
+	Resource    *string    
+	Perms       *[]string  
+	Name        *string    
+	Description *string    
+	EntityType  *string    
+	EventName   *string    
+	Actions     *[]Actions 
+	UserId      *string    
+	Enabled     *bool      
+	AutoEnable  *bool      
+	ForceEnable *bool      
+	Global      *bool      
+}
+```
 			
 ### Actions
 ### ActivationProfiles
