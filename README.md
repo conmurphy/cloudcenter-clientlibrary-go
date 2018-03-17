@@ -126,6 +126,38 @@ Two options have been implemented in this library for each async API (example re
 *  __AddCloudAccountSync__: Client library will make an asynchronous call and wait until the task is complete. Once complete it will return either the newly created object or an error message.
 *  __AddCloudAccountAsync__: Client library will make an asynchronous call and will return the operationStatus of the call. The client library user will be required to monitor the operation status and once successful retrieve the newly created object. 
 
+## Reference
+
+* ActionPolicies
+* Actions
+* ActivationProfiles
+* AgingPolicies
+* Apps
+* bBundles
+* Client
+* CloudAccounts
+* CloudImageMapping
+* CloudInstanceTypes
+* CloudRegions
+* CloudStorageTypes
+* Clouds
+* Contracts
+* Environments
+* Groups
+* Images
+* Jobs
+* OperationStatus
+* Phases
+* Plans
+* Projects
+* Roles
+* Services
+* SuspensionPolicies
+* Tenants
+* Users
+* VirtualMachines
+
+
 
 WARNING:
 
