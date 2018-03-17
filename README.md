@@ -158,6 +158,25 @@ Two options have been implemented in this library for each async API (example re
 - [Virtualmachines](#virtualmachines)
 
 ### ActionPolicies
+
+```go
+type	ActionPolicy	struct	{
+	Id	*string	
+	Resource	*string	
+	Perms	*[]string	
+	Name	*string	
+	Description	*string	
+	EntityType	*string	
+	EventName	*string	
+	Actions	*[]Actions	
+	UserId	*string	
+	Enabled	*bool	
+	AutoEnable	*bool	
+	ForceEnable	*bool	
+	Global	*bool	
+}			
+```			
+			
 ### Actions
 ### ActivationProfiles
 ### AgingPolicies
