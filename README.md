@@ -128,12 +128,12 @@ Two options have been implemented in this library for each async API (example re
 
 ## Reference
 
-* ActionPolicies
+* [ActionPolicies](ActionPolicies)
 * Actions
 * ActivationProfiles
 * AgingPolicies
 * Apps
-* bBundles
+* Bundles
 * Client
 * CloudAccounts
 * CloudImageMapping
@@ -157,7 +157,7 @@ Two options have been implemented in this library for each async API (example re
 * Users
 * VirtualMachines
 
-
+### ActionPolicies
 
 WARNING:
 
