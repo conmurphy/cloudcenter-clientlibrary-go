@@ -270,13 +270,13 @@ type User struct {
 func (s *Client) AddUser(user *User) (*User, error)
 ```
 
-__Required Fields__
+##### __Required Fields__
 * EmailAddr
 * TenantId
 * ActivateRegions (When creating user with activation)
 * ActivationProfileId (required if using activation profile method)
 
-#### Example
+##### Example
 
 ```golang
 
@@ -309,7 +309,7 @@ if err != nil {
 ```go
 func (s *Client) DeleteUser(userId int) error
 ```
-#### Example
+##### Example
 ```go
 fmt.Println()
 /*
@@ -325,6 +325,7 @@ if err != nil {
 }
 ```
 ### VirtualMachines
+
 
 WARNING:
 
