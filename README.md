@@ -270,6 +270,13 @@ type User struct {
 func (s *Client) AddUser(user *User) (*User, error)
 ```
 
+Required Fields
+------
+* EmailAddr
+* TenantId
+* ActivateRegions (When creating user with activation)
+* ActivationProfileId (required if using activation profile method)
+
 #### Example
 
 ```golang
