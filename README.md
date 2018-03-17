@@ -127,8 +127,8 @@ Two options have been implemented in this library for each async API (example re
 *  __AddCloudAccountAsync__: Client library will make an asynchronous call and will return the operationStatus of the call. The client library user will be required to monitor the operation status and once successful retrieve the newly created object. 
 
 ## Reference
+- [ActionPolicies](#actionpolicies)
 
-* [ActionPolicies](#ActionPolicies)
 * Actions
 * ActivationProfiles
 * AgingPolicies
@@ -157,7 +157,7 @@ Two options have been implemented in this library for each async API (example re
 * Users
 * VirtualMachines
 
-# ActionPolicies
+### ActionPolicies
 
 WARNING:
 
