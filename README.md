@@ -218,6 +218,7 @@ type ActionPolicy struct {
 - [GetUsers](#getusers)
 - [GetUser](#getuser)
 - [GetUserByEmail](#getuserbyemail)
+- [AddUser](#adduser)
 - [UpdateUser](#updateuser)
 - [DeleteUser](#deleteuser)
 
