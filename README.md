@@ -187,7 +187,7 @@ type ActionPolicy struct {
 	Global      *bool      
 }
 ```
-			
+		
 ### Actions
 ### ActivationProfiles
 ### AgingPolicies
@@ -214,6 +214,103 @@ type ActionPolicy struct {
 ### SuspensionPolicies
 ### Tenants
 ### Users
+
+```go
+type UserAPIResponse struct {
+	Resource      string 
+	Size          int    
+	PageNumber    int    
+	TotalElements int    
+	TotalPages    int    
+	Users         []User 
+}
+```
+
+```go
+type User struct {
+	Id                      *string 
+	Resource                *string 
+	Username                *string  
+	Password                *string  
+	Enabled                 *bool   
+	Type                    *string 
+	FirstName               *string 
+	LastName                *string 
+	CompanyName             *string 
+	EmailAddr               *string 
+	EmailVerified           *bool   
+	PhoneNumber             *string 
+	ExternalId              *string 
+	AccessKeys              *string 
+	DisableReason           *string 
+	AccountSource           *string 
+	Status                  *string 
+	Detail                  *string 
+	ActivationData          *string 
+	Created                 *int64  
+	LastUpdated             *int64  
+	CoAdmin                 *bool   
+	TenantAdmin             *bool   
+	ActivationProfileId     *string 
+	HasSubscriptionPlanType *bool   
+	TenantId                *string 
+}
+```
+
+#### func (*Client) AddUser
+
+```go
+func (s *Client) AddUser(user *User) (*User, error)
+```
+
+#### Example
+
+```golang
+
+/*
+	Create user
+*/
+
+newUser := cloudcenter.User {
+	FirstName:   cloudcenter.String("client"),
+	LastName:    cloudcenter.String("library"),
+	Password:    cloudcenter.String("myPassword"),
+	EmailAddr:   cloudcenter.String("clientlibrary@cloudcenter-address.com"),
+	CompanyName: cloudcenter.String("company"),
+	PhoneNumber: cloudcenter.String("12345"),
+	ExternalId:  cloudcenter.String("23456"),
+	TenantId:    cloudcenter.String("1"),
+}
+
+user, err := client.AddUser(&newUser)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println(”New user created. \n UserId: " + user.Id + ", User last name: " + user.LastName)
+}
+```
+
+#### func (*Client) DeleteUser
+
+```go
+func (s *Client) DeleteUser(userId int) error
+```
+#### Example
+```go
+fmt.Println()
+/*
+	Delete user
+*/
+
+err := client.DeleteUser(6)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("User deleted")
+}
+```
 ### VirtualMachines
 
 WARNING:
