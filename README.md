@@ -63,7 +63,7 @@ Therefore in order to have a consistent experience all struct fields within this
 
 Helper functions have been created to simplify the creation of pointer types.
 
-### Without 
+### Without helper function
 
 ```golang
 firstName 	:= "client"
@@ -87,7 +87,7 @@ newUser := cloudcenter.User {
 	TenantId:    &tenantId,
 }
 ```
-### With
+### With helper function
 
 ```golang
 newUser := cloudcenter.User {
