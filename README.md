@@ -215,6 +215,12 @@ type ActionPolicy struct {
 ### Tenants
 ### Users
 
+- [GetUsers](#getusers)
+- [GetUser](#getuser)
+- [GetUserByEmail](#getuserbyemail)
+- [UpdateUser](#updateuser)
+- [DeleteUser](#deleteuser)
+
 ```go
 type UserAPIResponse struct {
 	Resource      string 
@@ -291,7 +297,7 @@ if err != nil {
 }
 ```
 
-#### func DeleteUser
+#### DeleteUser
 
 ```go
 func (s *Client) DeleteUser(userId int) error
