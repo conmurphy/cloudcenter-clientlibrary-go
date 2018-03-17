@@ -121,7 +121,7 @@ Reference: https://willnorris.com/2014/05/go-rest-apis-and-pointers
 
 https://editor-docs.cloudcenter.cisco.com/display/40API/Synchronous+and+Asynchronous+APIs
 
-Two options have been implemented in this library for each async API (example resource):
+Two options have been implemented in this library for each async API (AddCloudAccount used as example below):
 
 *  __AddCloudAccountSync__: Client library will make an asynchronous call and wait until the task is complete. Once complete it will return either the newly created object or an error message.
 *  __AddCloudAccountAsync__: Client library will make an asynchronous call and will return the operationStatus of the call. The client library user will be required to monitor the operation status and once successful retrieve the newly created object. 
