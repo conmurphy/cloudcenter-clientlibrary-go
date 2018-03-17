@@ -257,7 +257,7 @@ type User struct {
 }
 ```
 
-#### func (*Client) AddUser
+#### AddUser
 
 ```go
 func (s *Client) AddUser(user *User) (*User, error)
@@ -291,7 +291,7 @@ if err != nil {
 }
 ```
 
-#### func (*Client) DeleteUser
+#### func DeleteUser
 
 ```go
 func (s *Client) DeleteUser(userId int) error
