@@ -270,8 +270,7 @@ type User struct {
 func (s *Client) AddUser(user *User) (*User, error)
 ```
 
-Required Fields
-------
+__Required Fields__
 * EmailAddr
 * TenantId
 * ActivateRegions (When creating user with activation)
