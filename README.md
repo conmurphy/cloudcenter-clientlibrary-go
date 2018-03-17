@@ -128,7 +128,7 @@ Two options have been implemented in this library for each async API (example re
 
 ## Reference
 
-* [ActionPolicies](ActionPolicies)
+* [ActionPolicies](#ActionPolicies)
 * Actions
 * ActivationProfiles
 * AgingPolicies
