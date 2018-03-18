@@ -531,9 +531,333 @@ if err != nil {
 ### Jobs
 ### OperationStatus
 ### Phases
+
+```go
+type PhaseAPIResponse struct {
+	Resource      *string 
+	Size          *int64  
+	PageNumber    *int64  
+	TotalElements *int64  
+	TotalPages    *int64  
+	Phases        []Phase 
+}
+```
+
+```go
+type Phase struct {
+	Id                     *string                
+	ProjectId              *string                
+	Resource               *string                
+	Perms                  *[]string              
+	Name                   *string                
+	Order                  *float64               
+	PhasePlan              *PhasePlan             
+	PhaseBundles           *[]PhaseBundle         
+	PhaseCost              *PhaseCost             
+	Deployments            *[]Deployment          
+	DeploymentEnvironments *DeploymentEnvironment 
+}
+```
+
+```go
+type PhasePlan struct {
+	Id       *string 
+	PlanName *string 
+}
+```
+
+```go
+type PhaseBundle struct {
+	Id    *string 
+	Name  *string 
+	Count *int64  
+}
+```
+
+```go
+type PhaseCost struct {
+	OriginalBalance  *float64 
+	RemainingBalance *float64 
+	MeasurableUnit   *string  
+}
+```
+
+#### GetPhases
+
+```go
+func (s *Client) GetPhases(projectId int) ([]Phase, error)
+```
+
+##### Example
+
+```go
+phases, err := client.GetPhases(1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	for _, phase := range phases {
+		fmt.Println("Id: " + phase.Id + ", Name: " + phase.Name)
+	}
+}
+```
+
+#### GetPhase
+
+```go
+func (s *Client) GetPhase(projectId int, id int) (*Phase, error)
+```
+
+##### Example
+
+```go
+phase, err := client.GetPhase(1, 1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Id: " + phase.Id + ", Name: " + phase.Name)
+}
+```
+
+
 ### Plans
+
+```go
+type PlanAPIResponse struct {
+	Resource      *string 
+	Size          *int64  
+	PageNumber    *int64  
+	TotalElements *int64  
+	TotalPages    *int64  
+	Plans         []Plan  
+}
+```
+
+```go
+type Plan struct {
+	Id                       *string   
+	Resource                 *string   
+	Name                     *string   
+	Description              *string   
+	Perms                    *[]string 
+	TenantId                 *string   
+	Type                     *string   
+	MonthlyLimit             *int64    
+	NodeHourIncrement        *float64  
+	IncludedBundleId         *string   
+	Price                    *float64  
+	OnetimeFee               *float64  
+	AnnualFee                *float64  
+	StorageRate              *float64  
+	HourlyRate               *float64  
+	OverageRate              *float64  
+	OverageLimit             *float64  
+	RestrictedToAppStoreOnly *bool     
+	BillToVendor             *bool     
+	EnableRollover           *bool     
+	Disabled                 *bool     
+	ShowOnlyToAdmin          *bool     
+	NumberOfUsers            *int64    
+	NumberOfProjects         *int64    
+	PaymentProfileRequired   *bool     
+}
+```
+
+#### GetPlans
+
+```go
+func (s *Client) GetPlans(tenantId int) ([]Plan, error)
+```
+
+##### Example
+
+```go
+plans, err := client.GetPlans(1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	for _, plan := range plans {
+		fmt.Println("Id: " + plan.Id + ", Name: " + plan.Name)
+	}
+}
+```
+
+#### GetPlan
+
+```go
+func (s *Client) GetPlan(tenantId int, planId int) (*Plan, error)
+```
+
+##### Example
+
+```go
+plan, err := client.GetPlan(1, 1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Id: " + plan.Id + ", Name: " + plan.Name)
+}
+```
+
 ### Projects
+
+```go
+type ProjectAPIResponse struct {
+	Resource      *string   
+	Size          *int64    
+	PageNumber    *int64    
+	TotalElements *int64    
+	TotalPages    *int64    
+	Projects      []Project 
+}
+```
+
+```go
+type Project struct {
+	Id             *string      
+	Resource       *string      
+	Perms          *[]string    
+	Name           *string      
+	Description    *string      
+	ProjectOwnerId *int64       
+	IsDraft        *bool        
+	TargetEndDate  *string      
+	NotifyUsers    *bool        
+	PlanType       *string      
+	Deleted        *bool        
+	Quota          *Quota       
+	ProjectCost    *ProjectCost 
+	Apps           *[]Apps      
+	Phases         *[]Phase     
+}
+```
+
+```go
+type ProjectCost struct {
+	OriginalBalance  *float64 
+	RemainingBalance *float64 
+	MeasurableUnit   *string  
+}
+```
+
+#### GetProjects
+
+```go
+func (s *Client) GetProjects() ([]Project, error)
+```
+
+##### Example
+
+```go
+projects, err := client.GetProjects()
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	for _, project := range projects {
+		fmt.Println("Id: " + project.Id + ", Name: " + project.Name)
+	}
+}
+```
+
+#### GetProject
+
+```go
+func (s *Client) GetProject(id int) (*Project, error)
+```
+
+##### Example
+
+```go
+project, err := client.GetProject(1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Id: " + project.Id + ", Name: " + project.Name)
+}
+```
+
+
 ### Roles
+
+```go
+type RoleAPIResponse struct {
+	Resource      *string 
+	Size          *int64  
+	PageNumber    *int64  
+	TotalElements *int64  
+	TotalPages    *int64  
+	Roles         []Role  
+}
+```
+
+```go
+type Role struct {
+	Id          *string       
+	Resource    *string       
+	Perms       *[]string     
+	Name        *string       
+	Description *string       
+	TenantId    *string       
+	ObjectPerms *[]ObjectPerm 
+	Users       *[]User       
+	Groups      *[]Group      
+	OobRole     *bool         
+	LastUpdated *int64        
+	Created     *int64        
+}
+```
+
+```go
+type ObjectPerm struct {
+	ObjectType *string   
+	Perms      *[]string 
+}
+```
+
+#### GetRoles
+
+```go
+func (s *Client) GetRoles(tenantId int) ([]Role, error)
+```
+
+##### Example
+
+```go
+roles, err := client.GetRoles(1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	for _, role := range roles {
+		fmt.Println("Id: " + role.Id + ", Name: " + role.Name)
+	}
+}
+```
+
+#### GetRole
+
+```go
+func (s *Client) GetRole(tenantId int, roleId int) (*Role, error)
+```
+
+##### Example
+
+```go
+role, err := client.GetRole(1, 1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Id: " + role.Id + ", Name: " + role.Name)
+}
+```
+
+
 ### Services
 
 ```go
@@ -741,6 +1065,7 @@ type Tenant struct {
 	Deleted                         *bool         
 	Preferences                     *[]Preference 
 }
+```
 
 ```go
 type Preference struct {
