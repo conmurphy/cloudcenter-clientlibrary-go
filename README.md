@@ -6,6 +6,9 @@ It is currently a __Proof of Concept__ and has been developed and tested against
 
 ![alt tag](https://github.com/conmurphy/cloudcenter-clientlibrary-go/blob/master/images/overview.png)
 
+Table of Contents
+=================
+
   * [Cloudcenter Go Client Library](#cloudcenter-go-client-library)
       * [Quick Start](#quick-start)
       * [Helper Functions](#helper-functions)
@@ -138,6 +141,8 @@ It is currently a __Proof of Concept__ and has been developed and tested against
             * [DeleteUser](#deleteuser)
                * [Example](#example-47)
          * [VirtualMachines](#virtualmachines)
+
+Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 
 ## Quick Start
 
