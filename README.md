@@ -179,50 +179,6 @@ if err != nil {
 }
 ```
 
-## Quick Start - Creation with Helper Functions
-
-```golang
-package main
-import "github.com/cloudcenter-clientlibrary-go/cloudcenter”
-
-/*
-	Define new cloudcenter client
-*/
-
-client := cloudcenter.NewClient("cliqradmin", ”myAPIKey", "https://ccm.cloudcenter-address.com")
-
-/*
-	Create activation profile
-*/
-
-var activateRegions []cloudcenter.ActivateRegion
-
-newActivateRegion := cloudcenter.ActivateRegion{
-			RegionId: cloudcenter.String("1"),
-}
-
-activateRegions = append(activateRegions, newActivateRegion)
-
-newActivationProfile := cloudcenter.ActivationProfile{
-	TenantId:        cloudcenter.Int64(1),
-	Name:            cloudcenter.String("Client Library activation profile"),
-	Description:     cloudcenter.String("Client Library activation profile description"),
-	PlanId:          cloudcenter.String("1"),
-	BundleId:        cloudcenter.String("1"),
-	ContractId:      cloudcenter.String("1"),
-	DepEnvId:        cloudcenter.String("1"),
-	ActivateRegions: activateRegions,
-}
-
-activationProfile, err := client.AddActivationProfile(&newActivationProfile)
-
-if err != nil {
-	fmt.Println(err)
-} else {
-	fmt.Println("Activation Profile Id: " + activationProfile.Id + ", Description: " + activationProfile.Description)
-}
-```
-
 ## Quick Start - Creation from JSON file
 
 For some situations it may be easier to have the configuration represented as JSON rather than conifguring individually as per the two examples above. In this scenario you can either build the JSON file yourself or monitor the API POST call for the JSON data sent to CloudCenter. This can be achieved using the browsers built in developer tools.
