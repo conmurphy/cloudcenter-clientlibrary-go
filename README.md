@@ -666,12 +666,236 @@ type ParamCollectionItem struct {
 }
 ```
 
+#### GetApps
+
+```go
+func (s *Client) GetApps() ([]App, error)
+```
+
+##### Example
+
+```go
+apps, err := client.GetApps()
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	for _, app := range apps {
+		fmt.Println("Id: " + app.Id + ", Name: " + app.Name)
+	}
+}
+```
+
+#### GetApp
+
+```go
+func (s *Client) GetApp(appId int) (*App, error)
+```
+
+##### Example
+
+```go
+app, err := client.GetApp(760)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Id: " + app.Id + ", Name: " + app.Name)
+}
+```
 
 
 ### Bundles
-### Client
+
+```go
+type BundleAPIResponse struct {
+	Resource      *string  
+	Size          *int64   
+	PageNumber    *int64   
+	TotalElements *int64   
+	TotalPages    *int64   
+	Bundles       []Bundle 
+}
+```
+
+```go
+type Bundle struct {
+	Id               *string   
+	Resource         *string   
+	Perms            *[]string 
+	Type             *string   
+	Name             *string   
+	Description      *string   
+	Limit            *float64  
+	Price            *float64  
+	ExpirationDate   *float64  
+	ExpirationMonths *int64    
+	Disabled         *bool     
+	ShowOnlyToAdmin  *bool     
+	NumberOfUsers    *float64  
+	TenantId         *string   
+	PublishedAppIds  *[]string 
+}
+```
+
+#### GetBundles
+
+```go
+func (s *Client) GetBundles(TenantId int) ([]Bundle, error)
+```
+
+##### Example
+
+```go
+bundles, err := client.GetBundles(1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	for _, bundle := range bundles {
+		fmt.Println("Id: " + bundle.Id + ", Name: " + bundle.Name)
+	}
+}
+```
+
+#### GetBundle
+
+```go
+func (s *Client) GetBundle(TenantId int, BundleId int) (*Bundle, error)
+```
+
+##### Example
+
+```go
+bundle, err := client.GetBundle(1, 1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Id: " + bundle.Id + ", Name: " + bundle.Name)
+}
+```
+
+#### GetBundleFromName
+
+```go
+func (s *Client) GetBundleFromName(TenantId int, BundleNameSearchString string) (*Bundle, error)
+```
+
+##### Example
+
+```go
+bundle, err := client.GetBundleFromName(1, "myBundle")
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Id: " + bundle.Id + ", Name: " + bundle.Name)
+}
+```
+
 ### CloudAccounts
+
+```go
+type CloudAccountAPIResponse struct {
+	Resource      *string        
+	Size          *int64         
+	PageNumber    *int64         
+	TotalElements *int64         
+	TotalPages    *int64         
+	CloudAccounts []CloudAccount 
+}
+```
+
+```go
+type CloudAccount struct {
+	Id                 *string            
+	Resource           *string            
+	Perms              *[]string          
+	DisplayName        *string            
+	CloudId            *string            
+	UserId             *string            
+	AccountId          *string            
+	AccountName        *string            
+	AccountPassword    *string            
+	AccountDescription *string            
+	ManageCost         *bool              
+	PublicVisible      *bool              
+	AllowedUsers       *[]int64           
+	AccessPermission   *string            
+	AccountProperties  *[]AccountProperty 
+	TenantId           *string            
+}
+```
+
+```go
+type AccountProperty struct {
+	Name  *string 
+	Value *string 
+}
+```
+
+#### GetCloudAccounts
+
+```go
+func (s *Client) GetCloudAccounts(tenantId int, cloudId int) ([]CloudAccount, error)
+```
+
+##### Example
+
+```go
+cloudAccounts, err := client.GetCloudAccounts(1, 1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	for _, cloudAccount := range cloudAccounts {
+		fmt.Println("Id: " + cloudAccount.Id + ", Name: " + cloudAccount.DisplayName)
+	}
+}
+```
+
+#### GetCloudAccount
+
+```go
+func (s *Client) GetCloudAccount(tenantId int, cloudId int, accountId int) (*CloudAccount, error)
+```
+
+##### Example
+
+```go
+cloudAccount, err := client.GetCloudAccount(1, 1, 1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Id: " + cloudAccount.Id + ", Name: " + cloudAccount.DisplayName)
+}
+```
+
+#### GetCloudAccountByName
+
+```go
+func (s *Client) GetCloudAccountByName(tenantId int, cloudId int, displayName string) ([]CloudAccount, error)
+```
+
+##### Example
+
+```go
+cloudAccounts, err := client.GetCloudAccountByName(1, 1, "cloudAccountName")
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	for _, cloudAccount := range cloudAccounts {
+		fmt.Println("Id: " + cloudAccount.Id + ", Name: " + cloudAccount.AccountName + ", Name: " + cloudAccount.DisplayName)
+	}
+}
+```
+
 ### CloudImageMapping
+
+
 ### CloudInstanceTypes
 ### CloudRegions
 ### CloudStorageTypes
