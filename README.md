@@ -128,34 +128,34 @@ Two options have been implemented in this library for each async API (AddCloudAc
 
 ## Reference
 
-- [Actionpolicies](#actionpolicies)
+- [ActionPolicies](#actionpolicies)
 - [Actions](#actions)
-- [Activationprofiles](#activationprofiles)
-- [Agingpolicies](#agingpolicies)
+- [ActivationProfiles](#activationprofiles)
+- [AgingPolicies](#agingpolicies)
 - [Apps](#apps)
 - [Bundles](#bundles)
 - [Client](#client)
-- [Cloudaccounts](#cloudaccounts)
-- [Cloudimagemapping](#cloudimagemapping)
-- [Cloudinstancetypes](#cloudinstancetypes)
-- [Cloudregions](#cloudregions)
-- [Cloudstoragetypes](#cloudstoragetypes)
+- [CloudAccounts](#cloudaccounts)
+- [CloudImagemapping](#cloudimagemapping)
+- [CloudInstancetypes](#cloudinstancetypes)
+- [CloudRegions](#cloudregions)
+- [CloudStoragetypes](#cloudstoragetypes)
 - [Clouds](#clouds)
 - [Contracts](#contracts)
 - [Environments](#environments)
 - [Groups](#groups)
 - [Images](#images)
 - [Jobs](#jobs)
-- [Operationstatus](#operationstatus)
+- [OperationStatus](#operationstatus)
 - [Phases](#phases)
 - [Plans](#plans)
 - [Projects](#projects)
 - [Roles](#roles)
 - [Services](#services)
-- [Suspensionpolicies](#suspensionpolicies)
+- [SuspensionPolicies](#suspensionpolicies)
 - [Tenants](#tenants)
 - [Users](#users)
-- [Virtualmachines](#virtualmachines)
+- [VirtualMachines](#virtualmachines)
 
 ### ActionPolicies
 
@@ -193,7 +193,7 @@ type ActionPolicy struct {
 func (s *Client) GetActionPolicies() ([]ActionPolicy, error)
 ```
 
-#####Example
+##### Example
 
 ```go
 actionPolicies, err := client.GetActionPolicies()
@@ -215,7 +215,7 @@ if err != nil {
 func (s *Client) GetActionPolicy(actionPolicyId int) (*ActionPolicy, error)
 ```
 
-#####Example
+##### Example
 
 ```go
 actionPolicy, err := client.GetActionPolicy(1)
@@ -310,7 +310,7 @@ type ActionCustomParamSpec struct {
 func (s *Client) GetActions() ([]Action, error)
 ```
 
-#####Example
+##### Example
 
 ```go
 actions, err := client.GetActions()
@@ -332,7 +332,7 @@ if err != nil {
 func (s *Client) GetAction(id int) (*Action, error)
 ```
 
-#####Example
+##### Example
 
 ```go
 action, err := client.GetAction(1)
@@ -376,7 +376,7 @@ type ActivateRegion struct {
 func (s *Client) GetActivationProfiles(tenantId int) ([]ActivationProfile, error)
 ```
 
-#####Example
+##### Example
 
 ```go
 activationProfiles, err := client.GetActivationProfiles(1)
@@ -398,7 +398,7 @@ if err != nil {
 func (s *Client) GetActivationProfile(tenantId int, activationProfileId int) (*ActivationProfile, error)
 ```
 
-#####Example
+##### Example
 
 ```go
 activationProfile, err := client.GetActivationProfile(1, 1)
@@ -409,8 +409,113 @@ if err != nil {
 	fmt.Println("Id: " + activationProfile.Id + ", Name: " + activationProfile.Name)
 }
 ```
+
 ### AgingPolicies
+
+```go
+type AgingPolicy struct {
+	Id                             *string                
+	Resource                       *string                
+	Perms                          *[]string              
+	Name                           *string                
+	Description                    *string                
+	Enabled                        *bool                  
+	Type                           *string                
+	Limit                          *Limit                 
+	TerminateWhenPolicyEnds        *bool                  
+	AllowGracePeriodForTermination *bool                  
+	GraceLimit                     *GraceLimit            
+	AllowPolicyExtension           *bool                  
+	ExtensionLimit                 *ExtensionLimit        
+	AllowGracePeriodNotification   *bool                  
+	AllowPolicyExpiryNotification  *bool                  
+	Notifications                  *[]Notification        
+	IsPolicyActiveOnResources      *bool                  
+	Created                        *float64               
+	LastUpdated                    *float64               
+	Resources                      *[]AgingPolicyResource 
+	Priority                       *float64               
+	OwnerId                        *int64                 
+}
+```
+
+```go
+type Notification struct {
+	Template  *string     
+	Type      *string     
+	Enabled   *bool       
+	Reminders *[]Reminder 
+}
+```
+
+```go
+type AgingPolicyResource struct {
+	ResourceId                  *string  
+	ResourceType                *string  
+	AppliedDate                 *float64 
+	ResourceStartTime           *float64 
+	EstimatedPolicyEndTime      *float64 
+	AllowedCost                 *float64 
+	AccruedCost                 *float64 
+	NumberOfExtensionsUsed      *int64   
+	IsApprovalPending           *bool    
+	IsPreviousExtensionDenied   *bool    
+	IsPolicyReachingExpiry      *bool    
+	IsPolicyReachingGraceExpiry *bool    
+}
+```
+
+```go
+type Reminder struct {
+	Amount *float64 
+	Unit   *string  
+}
+```
+
+#### GetAgingPolicies
+
+```go
+func (s *Client) GetAgingPolicies() ([]AgingPolicy, error)
+```
+
+##### Example
+
+```go
+agingPolicies, err := client.GetAgingPolicies()
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	for _, agingPolicy := range agingPolicies {
+
+		fmt.Println("Id: " + agingPolicy.Id + ", Name: " + agingPolicy.Name)
+
+	}
+}
+```
+
+#### GetAgingPolicy
+
+```go
+func (s *Client) GetAgingPolicy(agingPolicyId int) (*AgingPolicy, error)
+```
+
+##### Example
+
+```go
+agingPolicy, err := client.GetAgingPolicies()
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Id: " + agingPolicy.Id + ", Name: " + agingPolicy.Name)
+}
+```
+
 ### Apps
+
+
+
 ### Bundles
 ### Client
 ### CloudAccounts
@@ -430,8 +535,258 @@ if err != nil {
 ### Projects
 ### Roles
 ### Services
+
+```go
+type ServiceAPIResponse struct {
+	Resource      *string   
+	Size          *int64    
+	PageNumber    *int64    
+	TotalElements *int64    
+	TotalPages    *int64    
+	Services      []Service 
+}
+```
+
+```go
+type Service struct {
+	Id                     *string              
+	OwnerUserId            *string              
+	TenantId               *string              
+	ParentService          *bool                
+	ParentServiceId        *string              
+	Resource               *string              
+	Perms                  *[]string            
+	Name                   *string              
+	DisplayName            *string              
+	LogoPath               *string              
+	Description            *string              
+	DefaultImageId         *int64               
+	ServiceType            *string              
+	SystemService          *bool                
+	ExternalService        *bool                
+	Visible                *bool                
+	ExternalBundleLocation *string              
+	BundleLocation         *string              
+	CostPerHour            *float64             
+	OwnerId                *string              
+	ServiceActions         *[]ServiceAction     
+	ServicePorts           *[]ServicePort       
+	ServiceParamSpecs      *[]ServiceParamSpec  
+	EgressRestrictions     *[]EgressRestriction 
+	Images                 *[]Image             
+	Repositories           *[]Repository        
+	ChildServices          *[]Service           
+	ExternalActions        *[]ExternalAction    
+}
+```
+
+```go
+type ServiceAction struct {
+	ActionName  *string 
+	ActionType  *string 
+	ActionValue *string 
+}
+```
+
+```go
+type ServicePort struct {
+	Protocol *string 
+	FromPort *string 
+	ToPort   *string 
+	CloudId  *string 
+}
+```
+
+```go
+type ServiceParamSpec struct {
+	ParamName            *string                
+	DisplayName          *string                
+	HelpText             *string                
+	Type                 *string                
+	ValueList            *string                
+	WebserviceListParams *[]WebserviceListParam 
+	DefaultValue         *string                
+	UserVisible          *bool                  
+	UserEditable         *bool                  
+	SystemParam          *bool                  
+	ExampleValue         *string                
+	Optional             *bool                  
+	ValueConstraint      *ValueConstraint       
+}
+```
+
+```go
+type EgressRestriction struct {
+	EgressServiceName *string 
+}
+```
+
+```go
+type WebserviceListParam struct {
+	URL           *string 
+	Protocol      *string 
+	Username      *string 
+	Password      *string 
+	RequestType   *string 
+	ContentType   *string 
+	CommandParams *string 
+	RequestBody   *string 
+	ResultString  *string 
+}
+```
+
+```go
+type Repository struct {
+	Id          *string   
+	Resource    *string   
+	Perms       *[]string 
+	Hostname    *string   
+	DisplayName *string   
+	Protocol    *string   
+	Description *string   
+	Port        *int64    
+}
+```
+
+```go
+type ExternalAction struct {
+	ActionName  *string 
+	ActionType  *string 
+	ActionValue *string 
+}
+```
+
+#### GetServices
+
+```go
+func (s *Client) GetServices(tenantId int) ([]Service, error)
+```
+
+##### Example
+
+```go
+services, err := client.GetServices(1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	for _, service := range services {
+		fmt.Println("Id: " + service.Id + ", DisplayName: " + service.DisplayName)
+	}
+}
+```
+
+#### GetService
+
+```go
+func (s *Client) GetService(tenantId int, serviceId int) (*Service, error)
+```
+
+##### Example
+
+```go
+service, err := client.GetService(1, 2)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Id: " + service.Id + ", Name: " + service.Name)
+}
+```
+
 ### SuspensionPolicies
 ### Tenants
+
+```go
+type TenantAPIResponse struct {
+	Resource      *string  
+	Size          *int     
+	PageNumber    *int     
+	TotalElements *int     
+	TotalPages    *int     
+	Tenants       []Tenant 
+}
+```
+
+```go
+type Tenant struct {
+	Id                              *string       
+	Resource                        *string       
+	Name                            *string       
+	Url                             *string       
+	About                           *string       
+	ContactEmail                    *string       
+	Phone                           *string       
+	UserId                          *string       
+	TermsOfService                  *string       
+	PrivacyPolicy                   *string       
+	RevShareRate                    *float64      
+	CcTransactionFeeRate            *float64      
+	MinAppFeeRate                   *float64      
+	EnableConsolidatedBilling       *bool         
+	ShortName                       *string       
+	EnablePurchaseOrder             *bool         
+	EnableEmailNotificationsToUsers *bool         
+	ParentTenantId                  *int64        
+	ExternalId                      *string       
+	DefaultActivationProfileId      *string       
+	EnableMonthlyBilling            *bool         
+	DefaultChargeType               *string       
+	LoginLogo                       *string       
+	HomePageLogo                    *string       
+	DomainName                      *string       
+	SkipDefaultUserSecurityGroup    *bool         
+	DisableAllEmailNotification     *bool         
+	TrademarkURL                    *string       
+	Deleted                         *bool         
+	Preferences                     *[]Preference 
+}
+
+```go
+type Preference struct {
+	Name  *string 
+	Value *string 
+}
+```
+
+#### GetTenants
+
+```go
+func (s *Client) GetTenants() ([]Tenant, error)
+```
+
+##### Example
+
+```go
+tenants, err := client.GetTenants()
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	for _, tenant := range tenants {
+		fmt.Println("Id: " + tenant.Id + ", Name: " + tenant.Name)
+	}
+}
+```
+
+#### GetTenant
+
+```go
+func (s *Client) GetTenant(id int) (*Tenant, error)
+```
+
+##### Example
+
+```go
+tenant, err := client.GetTenant(1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Id: " + tenant.Id + ", Name: " + tenant.Name)
+}
+```
+
 ### Users
 
 - [GetUsers](#getusers)
