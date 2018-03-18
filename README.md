@@ -143,6 +143,42 @@ Table of Contents
 
 Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 
+## Quick Start
+
+```golang
+package main
+import "github.com/cloudcenter-clientlibrary-go/cloudcenter”
+
+/*
+	Define new cloudcenter client
+*/
+
+client := cloudcenter.NewClient("cliqradmin", ”myAPIKey", "https://ccm.cloudcenter-address.com")
+
+/*
+	Create user
+*/
+
+newUser := cloudcenter.User {
+	FirstName:   cloudcenter.String("client"),
+	LastName:    cloudcenter.String("library"),
+	Password:    cloudcenter.String("myPassword"),
+	EmailAddr:   cloudcenter.String("clientlibrary@cloudcenter-address.com"),
+	CompanyName: cloudcenter.String("company"),
+	PhoneNumber: cloudcenter.String("12345"),
+	ExternalId:  cloudcenter.String("23456"),
+	TenantId:    cloudcenter.String("1"),
+}
+
+user, err := client.AddUser(&newUser)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println(”New user created. \n UserId: " + user.Id + ", User last name: " + user.LastName)
+}
+```
+
 ## Quick Start - Creation with Helper Functions
 
 ```golang
@@ -162,19 +198,19 @@ client := cloudcenter.NewClient("cliqradmin", ”myAPIKey", "https://ccm.cloudce
 var activateRegions []cloudcenter.ActivateRegion
 
 newActivateRegion := cloudcenter.ActivateRegion{
-			RegionId: "1",
+			RegionId: cloudcenter.String("1"),
 }
 
 activateRegions = append(activateRegions, newActivateRegion)
 
 newActivationProfile := cloudcenter.ActivationProfile{
-	TenantId:        1,
-	Name:            "Client Library activation profile",
-	Description:     "Client Library activation profile description",
-	PlanId:          "1",
-	BundleId:        "1",
-	ContractId:      "1",
-	DepEnvId:        "1",
+	TenantId:        cloudcenter.Int64(1),
+	Name:            cloudcenter.String("Client Library activation profile"),
+	Description:     cloudcenter.String("Client Library activation profile description"),
+	PlanId:          cloudcenter.String("1"),
+	BundleId:        cloudcenter.String("1"),
+	ContractId:      cloudcenter.String("1"),
+	DepEnvId:        cloudcenter.String("1"),
 	ActivateRegions: activateRegions,
 }
 
@@ -188,6 +224,9 @@ if err != nil {
 ```
 
 ## Quick Start - Creation from JSON file
+
+For some situations it may be easier to have the configuration represented as JSON rather than conifguring individually as per the two examples above. In this scenario you can either build the JSON file yourself or monitor the API POST call for the JSON data sent to CloudCenter. This can be achieved using the browsers built in developer tools.
+
 
 ```golang
 package main
