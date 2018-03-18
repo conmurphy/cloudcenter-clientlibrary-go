@@ -165,8 +165,6 @@ newUser := cloudcenter.User {
 	Password:    cloudcenter.String("myPassword"),
 	EmailAddr:   cloudcenter.String("clientlibrary@cloudcenter-address.com"),
 	CompanyName: cloudcenter.String("company"),
-	PhoneNumber: cloudcenter.String("12345"),
-	ExternalId:  cloudcenter.String("23456"),
 	TenantId:    cloudcenter.String("1"),
 }
 
@@ -183,6 +181,17 @@ if err != nil {
 
 For some situations it may be easier to have the configuration represented as JSON rather than conifguring individually as per the two examples above. In this scenario you can either build the JSON file yourself or monitor the API POST call for the JSON data sent to CloudCenter. This can be achieved using the browsers built in developer tools.
 
+Example JSON File - newUser.json
+```json
+{
+  "firstName": "Client",
+  "lastName": "Library",
+  "password": "myPassword",
+  "emailAddr": "clientlibrary@cloudcenter-address.com",
+  "companyName": "company",
+  "tenantId": "1"
+}
+```
 
 ```golang
 package main
@@ -195,33 +204,32 @@ import "github.com/cloudcenter-clientlibrary-go/cloudcenter”
 client := cloudcenter.NewClient("cliqradmin", ”myAPIKey", "https://ccm.cloudcenter-address.com")
 
 /*
-	Create activation profile
+	Create new user
 */
 
-activationProfileJSONFile, err := os.Open("activationProfile.json")
+userJSONFile, err := os.Open("newUser.json")
 
 if err != nil {
 	fmt.Println(err)
 }
 
-bytes, _ := ioutil.ReadAll(activationProfileJSONFile)
+bytes, _ := ioutil.ReadAll(userJSONFile)
 
-var activationProfile *cloudcenter.ActivationProfile
+var user *cloudcenter.User
 
+json.Unmarshal(bytes, &user)
 
-json.Unmarshal(bytes, &activationProfile)
-
-activationProfile, err = client.AddActivationProfile(activationProfile)
+user, err = client.AddUser(user)
 
 if err != nil {
 	fmt.Println(err)
 } else {
-	activationProfileId := *activationProfile.Id
-	activationProfileDescription := *activationProfile.Description
-	fmt.Println("Id: " + activationProfileId + ", Description: " + activationProfileDescription)
+	userId := *user.Id
+	userEnabled := *user.Enabled
+	fmt.Println("Id: " + userId + ", Enabled: " + strconv.FormatBool(userEnabled))
 }
 
-defer activationProfileJSONFile.Close()
+defer userJSONFile.Close()
 ```
 
 ## Helper Functions
