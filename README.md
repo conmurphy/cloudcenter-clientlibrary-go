@@ -207,9 +207,208 @@ if err != nil {
 
 	}
 }
+```
+
+#### GetActionPolicy
+
+```go
+func (s *Client) GetActionPolicy(actionPolicyId int) (*ActionPolicy, error)
+```
+
+#####Example
+
+```go
+actionPolicy, err := client.GetActionPolicy(1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Id: " + actionPolicy.Id + ", Name: " + actionPolicy.Name)
+}
+```
 
 ### Actions
+
+```go
+type ActionAPIResponse struct {
+	Resource      *string  
+	Size          *int64   
+	PageNumber    *int64   
+	TotalElements *int64   
+	TotalPages    *int64   
+	ActionJaxbs   []Action 
+}
+```
+
+```go
+type Action struct {
+	Id                     *string                  
+	Resource               *string                  
+	Perms                  *[]string                
+	Name                   *string                  
+	Description            *string                  
+	ActionType             *string                  
+	LastUpdatedTime        *string                  
+	TimeOut                *float64                 
+	Enabled                *bool                    
+	Encrypted              *bool                    
+	Deleted                *bool                    
+	SystemDefined          *bool                    
+	BulkOperationSupported *bool                    
+	IsAvailableToUser      *bool                    
+	Owner                  *int64                   
+	ActionParameters       *[]ActionParameter       
+	ActionResourceMappings *[]ActionResourceMapping 
+	ActionCustomParamSpecs *[]ActionCustomParamSpec 
+}
+```
+
+```go
+type ActionParameter struct {
+	ParamName   *string 
+	ParamValue  *string 
+	CustomParam *bool   
+	Required    *bool   
+	Preference  *string 
+}
+```
+
+```go
+type ActionResourceMapping struct {
+	Type                  *string                 
+	ActionResourceFilters *[]ActionResourceFilter 
+}
+```
+
+```go
+type ActionCustomParamSpec struct {
+	ParamName            *string              
+	DisplayName          *string              
+	HelpText             *string              
+	Type                 *string              
+	ValueList            *string              
+	DefaultValue         *string              
+	ConfirmValue         *string              
+	PathSuffixValue      *string              
+	UserVisible          *bool                
+	UserEditable         *bool                
+	SystemParam          *bool                
+	ExampleValue         *string              
+	DataUnit             *string              
+	Optional             *bool                
+	MultiselectSupported *bool                
+	ValueConstraint      *ValueConstraint     
+	Scope                *string              
+	WebserviceListParams *WebserviceListParam 
+	Preference           *string              
+}
+```
+
+#### GetActions
+
+```go
+func (s *Client) GetActions() ([]Action, error)
+```
+
+#####Example
+
+```go
+actions, err := client.GetActions()
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	for _, action := range actions {
+
+		fmt.Println("Id: " + action.Id + ", Name: " + action.Name)
+
+	}
+}
+```
+
+#### GetAction
+
+```go
+func (s *Client) GetAction(id int) (*Action, error)
+```
+
+#####Example
+
+```go
+action, err := client.GetAction(1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Id: " + action.Id + ", Name: " + action.Name)
+}
+```
+
 ### ActivationProfiles
+
+```go
+type ActivationProfile struct {
+	Id                  *string           
+	Name                *string           
+	Description         *string           
+	Resource            *string           
+	TenantId            *int64            
+	PlanId              *string           
+	BundleId            *string           
+	ContractId          *string           
+	DepEnvId            *string           
+	ActivateRegions     *[]ActivateRegion 
+	ImportApps          *[]string         
+	AgreeToContract     *bool             
+	SendActivationEmail *bool             
+}
+```
+
+```go
+type ActivateRegion struct {
+	RegionId string 
+}
+```
+
+#### GetActivationProfiles
+
+```go
+func (s *Client) GetActivationProfiles(tenantId int) ([]ActivationProfile, error)
+```
+
+#####Example
+
+```go
+activationProfiles, err := client.GetActivationProfiles(1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	for _, activationProfile := range activationProfiles {
+
+		fmt.Println("Id: " + activationProfile.Id + ", Name: " + activationProfile.Name)
+
+	}
+}
+```
+
+#### GetActivationProfile
+
+```go
+func (s *Client) GetActivationProfile(tenantId int, activationProfileId int) (*ActivationProfile, error)
+```
+
+#####Example
+
+```go
+activationProfile, err := client.GetActivationProfile(1, 1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Id: " + activationProfile.Id + ", Name: " + activationProfile.Name)
+}
+```
 ### AgingPolicies
 ### Apps
 ### Bundles
