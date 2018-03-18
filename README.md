@@ -1317,9 +1317,256 @@ if err != nil {
 
 ### Contracts
 
+```go
+type ContractAPIResponse struct {
+	Resource      *string    
+	Size          *int64     
+	PageNumber    *int64     
+	TotalElements *int64     
+	TotalPages    *int64     
+	Contracts     []Contract 
+}
+```
+
+```go
+type Contract struct {
+	Id              *string   
+	Resource        *string   
+	Name            *string   
+	Description     *string   
+	Perms           *[]string 
+	TenantId        *string   
+	Length          *int64    
+	Terms           *string   
+	DiscountRate    *float64  
+	Disabled        *bool     
+	ShowOnlyToAdmin *bool     
+	NumberOfUsers   *int64    
+}
+```
+
+#### GetContracts
+
+```go
+func (s *Client) GetContracts(tenantId int) ([]Contract, error)
+```
+
+##### Example
+
+```go
+contracts, err := client.GetContracts(1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	for _, contract := range contracts {
+		fmt.Println("Id: " + contract.Id + ", Name: " + contract.Name)
+	}
+}
+```
+
+#### GetContract
+
+```go
+func (s *Client) GetContract(tenantId int, contractId int) (*Contract, error)
+```
+
+##### Example
+
+```go
+contract, err := client.GetContract(1, 1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Id: " + contract.Id + ", Name: " + contract.Name)
+}
+```
 
 ### Environments
+
+```go
+type EnvironmentAPIResponse struct {
+	Resource      *string       
+	Size          *int64        
+	PageNumber    *int64        
+	TotalElements *int64        
+	TotalPages    *int64        
+	Environments  []Environment 
+}
+```
+
+```go
+type Environment struct {
+	Id                 *string            
+	Resource           *string            
+	Name               *string            
+	Perms              *[]string          
+	Description        *string            
+	AllowedClouds      *string            
+	DefaultSettings    *string            
+	RequiresApproval   *bool              
+	AssociatedClouds   *[]AssociatedCloud 
+	TotalDeployments   *int64             
+	ExtensionId        *string            
+	CostDetails        *CostDetail        
+	NetworkTypes       *[]NetworkType     
+	NetworkTypeEnabled *bool              
+	RestrictedUser     *bool              
+	DefaultRegionId    *string            
+	Owner              *int64             
+}
+```
+
+```go
+type AssociatedCloud struct {
+	RegionId                 *string                    
+	RegionName               *string                    
+	RegionDisplayName        *string                    
+	CloudFamily              *string                    
+	CloudId                  *string                    
+	CloudAccountId           *string                    
+	CloudName                *string                    
+	CloudAccountName         *string                    
+	CloudAssociationDefaults *[]CloudAssociationDefault 
+	Default                  *bool                      
+}
+```
+
+```go
+type CostDetail struct {
+	TotalCloudCost *float64 
+	TotalAppCost   *float64 
+	TotalJobsCost  *float64 
+}
+```
+
+```go
+type NetworkType struct {
+	Name                  *string  
+	Description           *string  
+	NumberOfNetworkMapped *float64 
+}
+```
+
+```go
+type CloudAssociationDefault struct {
+	Name  *string 
+	Value *string 
+}
+```
+
+#### GetEnvironments
+
+```go
+func (s *Client) GetEnvironments() ([]Environment, error)
+```
+
+##### Example
+
+```go
+environments, err := client.GetEnvironments()
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	for _, environment := range environments {
+		fmt.Println("Id: " + environment.Id + ", Name: " + environment.Name)
+	}
+}
+```
+
+#### GetEnvironment
+
+```go
+func (s *Client) GetEnvironment(id int) (*Environment, error)
+```
+
+##### Example
+
+```go
+environment, err := client.GetEnvironment(1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Id: " + environment.Id + ", Name: " + environment.Name)
+}
+```
+
 ### Groups
+
+```go
+type GroupAPIResponse struct {
+	Resource      *string 
+	Size          *int    
+	PageNumber    *int    
+	TotalElements *int    
+	TotalPages    *int    
+	Groups        []Group 
+}
+```
+
+```go
+type Group struct {
+	Id           *string   
+	Resource     *string   
+	Perms        *[]string 
+	Name         *string   
+	Description  *string   
+	TenantId     *string   
+	Users        *[]User   
+	Roles        *[]Role   
+	Created      *int      
+	LastUpdated  *int      
+	CreatedBySso *bool     
+}
+```
+
+#### GetGroups
+
+```go
+func (s *Client) GetGroups(tenantId int) ([]Group, error)
+```
+
+##### Example
+
+```go
+groups, err := client.GetGroups(1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	for _, group := range groups {
+		fmt.Println("Id: " + group.Id + ", Name: " + group.Name)
+		for _, user := range group.Users {
+			fmt.Println("Id: " + user.Id + ", Name: " + user.Username)
+		}
+	}
+}
+```
+
+#### GetGroup
+
+```go
+func (s *Client) GetGroup(tenantId int, groupId int) (*Group, error)
+```
+
+##### Example
+
+```go
+group, err := client.GetGroup(1, 1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Id: " + group.Id + ", Name: " + group.Name)
+	for _, user := range group.Users {
+		fmt.Println("Id: " + user.Id + ", Name: " + user.Username)
+	}
+}
+```
+
 ### Images
 
 ```go
