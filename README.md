@@ -187,7 +187,27 @@ type ActionPolicy struct {
 	Global      *bool      
 }
 ```
-		
+#### GetActionPolicies
+
+```go
+func (s *Client) GetActionPolicies() ([]ActionPolicy, error)
+```
+
+#####Example
+
+```go
+actionPolicies, err := client.GetActionPolicies()
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	for _, actionPolicy := range actionPolicies {
+
+		fmt.Println("Id: " + actionPolicy.Id + ", Name: " + actionPolicy.Name)
+
+	}
+}
+
 ### Actions
 ### ActivationProfiles
 ### AgingPolicies
