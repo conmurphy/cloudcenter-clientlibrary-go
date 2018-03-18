@@ -1169,8 +1169,155 @@ if err != nil {
 ```
 
 ### CloudStorageTypes
+
+```go
+type CloudStorageTypeAPIResponse struct {
+	Resource          *string            
+	Size              *int64             
+	PageNumber        *int64             
+	TotalElements     *int64             
+	TotalPages        *int64             
+	CloudStorageTypes []CloudStorageType 
+}
+```
+
+```go
+type CloudStorageType struct {
+	Id               *string  
+	CloudId          *string  
+	TenantId         *string  
+	RegionId         *string  
+	Resource         *string  
+	Name             *string  
+	Description      *string  
+	Type             *string  
+	CostPerMonth     *float64 
+	MinVolumeSize    *int64   
+	MaxVolumeSize    *int64   
+	MaxIOPS          *int64   
+	MaxThroughput    *int64   
+	ProvisionedIOPS  *bool    
+	IOPSCostPerMonth *float64 
+}
+```
+
+#### GetCloudStorageTypes
+
+```go
+func (s *Client) GetCloudStorageTypes(tenantId int, cloudId int, regionId int) ([]CloudStorageType, error)
+```
+
+##### Example
+
+```go
+cloudStorageTypes, err := client.GetCloudStorageTypes(1, 1, 1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	for _, cloudStorageType := range cloudStorageTypes {
+		fmt.Println("Id: " + cloudStorageType.Id + ", Resource: " + cloudStorageType.Resource)
+	}
+}
+```
+
+#### GetCloudStorageType
+
+```go
+func (s *Client) GetCloudStorageType(tenantId int, cloudId int, regionId int, cloudStorageTypeId int) (*CloudStorageType, error)
+```
+
+##### Example
+
+```go
+cloudStorageType, err := client.GetCloudStorageType(1, 1, 1, 1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Id: " + cloudStorageType.Id + ", Name: " + cloudStorageType.Name)
+}
+```
+
 ### Clouds
+
+```go
+type CloudAPIResponse struct {
+	Resource      *string 
+	Size          *int64  
+	PageNumber    *int64  
+	TotalElements *int64  
+	TotalPages    *int64  
+	Clouds        []Cloud 
+}
+```
+
+```go
+type Cloud struct {
+	Id          *string   
+	Resource    *string   
+	Perms       *[]string 
+	Name        *string   
+	Description *string   
+	CloudFamily *string   
+	PublicCloud *bool     
+	TenantId    *string   
+	Detail      *Detail   
+	CanDelete   *bool     
+}
+```
+
+```go
+type Detail struct {
+	CloudAccounts *[]CloudAccount 
+	CloudRegions  *[]CloudRegion  
+	Status        *string         
+	StatusDetail  *string         
+}
+```
+
+
+#### GetClouds
+
+```go
+func (s *Client) GetClouds(tenantId int) ([]Cloud, error)
+```
+
+##### Example
+
+```go
+clouds, err := client.GetClouds(1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	for _, cloud := range clouds {
+		fmt.Println("Id: " + cloud.Id + ", Name: " + cloud.Name)
+	}
+}
+```
+
+#### GetCloud
+
+```go
+func (s *Client) GetCloud(tenantId int, cloudId int) (*Cloud, error)
+```
+
+##### Example
+
+```go
+cloud, err := client.GetCloud(1, 1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Id: " + cloud.Id + ", Name: " + cloud.Name)
+}
+```
+
 ### Contracts
+
+
 ### Environments
 ### Groups
 ### Images
