@@ -206,17 +206,20 @@ if err != nil {
 
 bytes, _ := ioutil.ReadAll(activationProfileJSONFile)
 
-var activationProfile cloudcenter.ActivationProfile
+var activationProfile *cloudcenter.ActivationProfile
+
 
 json.Unmarshal(bytes, &activationProfile)
 
-activationProfile, err := client.AddActivationProfile(&activationProfile)
+activationProfile, err = client.AddActivationProfile(activationProfile)
 
 if err != nil {
 	fmt.Println(err)
 } else {
-	fmt.Println("Id: " + activationProfile.Id + ", Description: " + activationProfile.Description)
-		}
+	activationProfileId := *activationProfile.Id
+	activationProfileDescription := *activationProfile.Description
+	fmt.Println("Id: " + activationProfileId + ", Description: " + activationProfileDescription)
+}
 
 defer activationProfileJSONFile.Close()
 ```
