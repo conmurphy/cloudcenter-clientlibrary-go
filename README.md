@@ -514,6 +514,158 @@ if err != nil {
 
 ### Apps
 
+```go
+type AppAPIResponse struct {
+	Apps []App 
+}
+```
+
+```go
+type App struct {
+	Id              *string           
+	Resource        *string           
+	Perms           *[]string         
+	Name            *string           
+	Description     *string           
+	ServiceTierId   *string           
+	Versions        *[]string         
+	Version         *string           
+	Executor        *string           
+	Category        *string           
+	ServiceTiers    *[]App            
+	ProfileCategory *string           
+	Service         *Service          
+	Clusterable     *bool             
+	HWProfile       *HWProfile        
+	ParameterSpecs  *ParameterSpecs   
+	Parameters      *Parameters       
+	RevisionId      *int64            
+	Metadatas       *[]Metadata       
+	AppCategories   *[]AppCategory    
+	LogoPath        *string           
+	SupportedClouds *[]SupportedCloud 
+}
+```
+
+```go
+type HWProfile struct {
+	MemorySize               *int64 
+	NumOfCPUs                *int64 
+	NetworkSpeed             *int64 
+	NumOfNICs                *int64 
+	LocalStorageCount        *int64 
+	LocalStorageSize         *int64 
+	CudaSupport              *bool  
+	SSDSupport               *bool  
+	SupportHardwareProvision *bool  
+}
+```
+
+```go
+type Metadata struct {
+	Namespace *string 
+	Name      *string 
+	Value     *string 
+	Editable  *bool   
+	Required  *bool   
+}
+```
+
+```go
+type AppCategory struct {
+	Id       *string   
+	Resource *string   
+	Perms    *[]string 
+	Name     *string   
+	Type     *string   
+}
+```
+
+```go
+type SupportedCloud struct {
+	Id       *string 
+	Resource *string 
+}
+```
+
+```go
+type ParameterSpecs struct {
+	SystemParams *SystemParams 
+	CustomParams *CustomParams 
+	EnvVars      *EnvVar       
+}
+```
+
+```go
+type SystemParams struct {
+	Params *[]Param 
+	Size   *int64   
+}
+```
+
+```go
+type CustomParams struct {
+	Params *[]Param 
+	Size   *int64   
+}
+```
+
+```go
+type Param struct {
+	ParamName            *string           
+	DisplayName          *string           
+	HelpText             *string           
+	Type                 *string           
+	ValueList            *string           
+	DefaultValue         *string           
+	ConfirmValue         *string           
+	PathSuffixValue      *string           
+	UserVisible          *bool             
+	UserEditable         *bool             
+	SystemParam          *bool             
+	ExampleValue         *string           
+	DataUnit             *string           
+	Optional             *bool             
+	MultiselectSupported *bool             
+	ValueConstraint      *ValueConstraint  
+	Scope                *string           
+	WebserviceListParams *string           
+	CollectionList       *[]CollectionList 
+}
+```
+
+```go
+type ValueConstraint struct {
+	MinValue            *int64  
+	MaxValue            *int64  
+	MaxLength           *int64  
+	Regex               *string 
+	AllowSpaces         *bool   
+	SizeValue           *int64  
+	Step                *int64  
+	CalloutWorkflowName *string 
+}
+```
+
+```go
+type CollectionList struct {
+	ParamCollectionItem []ParamCollectionItem 
+}
+```
+
+```go
+type ParamCollectionItem struct {
+	CollectionType         *string 
+	CollectionName         *string 
+	CollectionDisplayName  *string 
+	CollectionValue        *string 
+	CollectionDefaultValue *string 
+	CollectionHelpText     *string 
+	CollectionSampleText   *string 
+	Optional               *bool   
+}
+```
+
 
 
 ### Bundles
@@ -528,8 +680,166 @@ if err != nil {
 ### Environments
 ### Groups
 ### Images
+
+```go
+type ImageAPIResponse struct {
+	Resource      *string 
+	Size          *int64  
+	PageNumber    *int64  
+	TotalElements *int64  
+	TotalPages    *int64  
+	Images        []Image 
+}
+```
+
+```go
+type Image struct {
+	Id                *string       
+	TenantId          *int64        
+	Resource          *string       
+	Perms             *[]string     
+	Name              *string       
+	InternalImageName *string       
+	Description       *string       
+	Visibility        *string       
+	ImageType         *string       
+	OSName            *string       
+	Tags              *[]string     
+	Enabled           *bool         
+	SystemImage       *bool         
+	NumOfNICs         *int64        
+	AttachCount       *int64        
+	Details           *ImageDetails 
+}
+```
+
+```go
+type ImageDetails struct {
+	Count       *int64        
+	CloudImages *[]CloudImage 
+}
+```
+
+```go
+type CloudImage struct {
+	Id                   *string     
+	Resource             *string     
+	Perms                *[]string   
+	RegionId             *string     
+	CloudProviderImageId *string     
+	LaunchUserName       *string     
+	ImageId              *string     
+	GrantAndRevoke       *bool       
+	ImageCloudAccountId  *int64      
+	Resources            *[]Resource 
+	Mappings             *[]Mapping  
+}
+```
+
+```go
+type Resource struct {
+	Name  *string 
+	Value *string 
+}
+```
+
+```go
+type Mapping struct {
+	Id                           *string            
+	CloudInstanceType            *CloudInstanceType 
+	CostOverride                 *float64           
+	CloudProviderImageIdOverride *string            
+}
+```
+
+```go
+type CloudInstanceType struct {
+	Id                        *string   
+	Resource                  *string   
+	Perms                     *[]string 
+	Name                      *string   
+	Description               *string   
+	Type                      *string   
+	TenantId                  *string   
+	CloudId                   *string   
+	RegionId                  *string   
+	CostPerHour               *float64  
+	MemorySize                *int64    
+	NumOfCPUs                 *int64    
+	NumOfNICs                 *int64    
+	LocalStorageSize          *int64    
+	SupportsSSD               *bool     
+	SupportsCUDA              *bool     
+	Supports32Bit             *bool     
+	Supports64Bit             *bool     
+	LocalStorageCount         *float64  
+	SupportsHardwareProvision *bool     
+}
+```
+
+#### GetImages
+
+```go
+func (s *Client) GetImages(tenantId int) ([]Image, error)
+```
+
+##### Example
+
+```go
+images, err := client.GetImages(1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	for _, image := range images {
+		fmt.Println("Id: " + image.Id + ", Resource: " + image.Resource)
+	}
+}
+```
+
+#### GetImage
+
+```go
+func (s *Client) GetImage(tenantId int, imageId int) (*Image, error)
+```
+
+##### Example
+
+```go
+image, err := client.GetImage(1, 2)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Id: " + image.Id + ", Name: " + image.Name)
+}
+```
+
+
+
+
 ### Jobs
 ### OperationStatus
+
+```go
+type OperationStatus struct {
+	OperationId          *string                
+	Id                   *string                
+	Status               *string                
+	Resource             *string                
+	Msg                  *string                
+	Progress             *int64                 
+	AdditionalParameters *[]AdditionalParameter 
+}
+```
+
+```go
+type AdditionalParameter struct {
+	Name  *string 
+	Value *string 
+}
+```
+
 ### Phases
 
 ```go
@@ -1179,10 +1489,6 @@ func (s *Client) AddUser(user *User) (*User, error)
 
 ```golang
 
-/*
-	Create user
-*/
-
 newUser := cloudcenter.User {
 	FirstName:   cloudcenter.String("client"),
 	LastName:    cloudcenter.String("library"),
@@ -1210,11 +1516,6 @@ func (s *Client) DeleteUser(userId int) error
 ```
 ##### Example
 ```go
-fmt.Println()
-/*
-	Delete user
-*/
-
 err := client.DeleteUser(6)
 
 if err != nil {
