@@ -159,6 +159,9 @@ Two options have been implemented in this library for each async API (AddCloudAc
 
 ### ActionPolicies
 
+- [GetActionPolicies](#getactionpolicies)
+- [GetActionPolicy](#getactionpolicy)
+
 ```go
 type ActionPolicyAPIResponse struct {
 	Resource       *string        
@@ -228,6 +231,9 @@ if err != nil {
 ```
 
 ### Actions
+
+- [GetActions](#getactions)
+- [GetAction](#getaction)
 
 ```go
 type ActionAPIResponse struct {
@@ -346,6 +352,9 @@ if err != nil {
 
 ### ActivationProfiles
 
+- [GetActivationProfiles](#getactivationprofiles)
+- [GetActivationProfile](#getactivationprofile)
+
 ```go
 type ActivationProfile struct {
 	Id                  *string           
@@ -411,6 +420,9 @@ if err != nil {
 ```
 
 ### AgingPolicies
+
+- [GetAgingPolicies](#getagingpolicies)
+- [GetAgingPolicy](#getagingpolicy)
 
 ```go
 type AgingPolicy struct {
