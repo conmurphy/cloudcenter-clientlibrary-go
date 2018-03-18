@@ -895,9 +895,279 @@ if err != nil {
 
 ### CloudImageMapping
 
+```go
+type CloudImageMappingAPIResponse struct {
+	Resource           *string             
+	Size               *int64              
+	PageNumber         *int64              
+	TotalElements      *int64              
+	TotalPages         *int64              
+	CloudImageMappings []CloudImageMapping 
+}
+```
+
+```go
+type CloudImageMapping struct {
+	Id                   *string     
+	Resource             *string     
+	Perms                *[]string   
+	TenantId             *string     
+	CloudId              *string     
+	CloudRegionId        *string     
+	RegionId             *string     
+	CloudImageId         *string     
+	CloudProviderImageId *string     
+	LaunchUserName       *string     
+	ImageId              *string     
+	GrantAndRevoke       *bool       
+	ImageCloudAccountId  *int64      
+	Resources            *[]Resource 
+	Mappings             *[]Mapping  
+}
+```
+
+#### GetCloudImageMappings
+
+```go
+func (s *Client) GetCloudImageMappings(tenantId int, cloudId int, regionId int) ([]CloudImageMapping, error)
+```
+
+##### Example
+
+```go
+cloudImages, err := client.GetCloudImageMappings(1, 1, 1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	for _, cloudImage := range cloudImages {
+		fmt.Println("Id: " + cloudImage.Id + ", Resource: " + cloudImage.Resource)
+	}
+}
+```
+
+#### GetCloudImageMapping
+
+```go
+func (s *Client) GetCloudImageMapping(tenantId int, cloudId int, regionId int, imageId int) (*CloudImageMapping, error)
+```
+
+##### Example
+
+```go
+cloudImage, err := client.GetCloudImageMapping(1, 1, 1,1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Id: " + cloudImage.Id + ", Resource: " + cloudImage.Resource)
+}
+```
 
 ### CloudInstanceTypes
+
+```go
+type CloudInstanceTypeAPIResponse struct {
+	Resource           *string             
+	Size               *int64              
+	PageNumber         *int64              
+	TotalElements      *int64              
+	TotalPages         *int64              
+	CloudInstanceTypes []CloudInstanceType 
+}
+```
+
+```go
+type CloudInstanceType struct {
+	Id                        *string   
+	Resource                  *string   
+	Perms                     *[]string 
+	Name                      *string   
+	Description               *string   
+	Type                      *string   
+	TenantId                  *string   
+	CloudId                   *string   
+	RegionId                  *string   
+	CostPerHour               *float64  
+	MemorySize                *int64    
+	NumOfCPUs                 *int64    
+	NumOfNICs                 *int64    
+	LocalStorageSize          *int64    
+	SupportsSSD               *bool     
+	SupportsCUDA              *bool     
+	Supports32Bit             *bool     
+	Supports64Bit             *bool     
+	LocalStorageCount         *float64  
+	SupportsHardwareProvision *bool     
+}
+```
+
+#### GetCloudInstanceTypes
+
+```go
+func (s *Client) GetCloudInstanceTypes(tenantId int, cloudId int, regionId int) ([]CloudInstanceType, error)
+```
+
+##### Example
+
+```go
+cloudInstanceTypes, err := client.GetCloudInstanceTypes(1, 1, 1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	for _, cloudInstanceType := range cloudInstanceTypes {
+		fmt.Println("Id: " + cloudInstanceType.Id + ", Resource: " + cloudInstanceType.Resource)
+	}
+}
+```
+
+#### GetCloudInstanceType
+
+```go
+func (s *Client) GetCloudInstanceType(tenantId int, cloudId int, regionId int, instanceId int) (*CloudInstanceType, error)
+```
+
+##### Example
+
+```go
+cloudInstanceType, err := client.GetCloudInstanceType(1, 1, 1,1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Id: " + cloudInstanceType.Id + ", Resource: " + cloudInstanceType.Resource)
+}
+```
+
 ### CloudRegions
+
+```go
+type CloudRegionAPIResponse struct {
+	Resource      *string       
+	Size          *int64        
+	PageNumber    *int64        
+	TotalElements *int64        
+	TotalPages    *int64        
+	CloudRegions  []CloudRegion 
+}
+```
+
+```go
+type CloudRegion struct {
+	Id                     *string           
+	TenantId               *string           
+	CloudId                *string           
+	CloudRegionId          *string           
+	ImportRegion           *ImportRegion     
+	Resource               *string           
+	Perms                  *[]string         
+	DisplayName            *string           
+	RegionName             *string           
+	Description            *string           
+	Gateway                *Gateway          
+	Storage                *Storage          
+	Enabled                *bool             
+	Activated              *bool             
+	PublicCloud            *bool             
+	NumUsers               *int32            
+	Status                 *string           
+	StatusDetail           *string           
+	RegionProperties       *[]RegionProperty 
+	ExternalBundleLocation *string           
+	ExternalActions        *[]ExternalAction 
+}
+```
+
+```go
+type ImportRegion struct {
+	Name        *string 
+	DisplayName *string 
+}
+```
+
+```go
+type Gateway struct {
+	Address        *string 
+	DNSName        *string 
+	Status         *string 
+	CloudId        *string 
+	CloudAccountId *string 
+}
+```
+
+```go
+type Storage struct {
+	RegionId              *string                 
+	CloudAccountId        *string                 
+	Size                  *int64                  
+	NumNodes              *int64                  
+	CloudSpecificSettings *[]CloudSpecificSetting 
+	Address               *string                 
+}
+```
+
+```go
+type CloudSpecificSetting struct {
+	Name  *string 
+	Value *string 
+}
+```
+
+```go
+type RegionProperty struct {
+	Name  *string 
+	Value *string 
+}
+```
+
+```go
+type ExternalAction struct {
+	ActionName  *string 
+	ActionType  *string 
+	ActionValue *string 
+}
+```
+
+#### GetCloudRegions
+
+```go
+func (s *Client) GetCloudRegions(tenantId int, cloudId int) ([]CloudRegion, error)
+
+```
+
+##### Example
+
+```go
+cloudRegions, err := client.GetCloudRegions(1, 1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	for _, cloudRegion := range cloudRegions {
+		fmt.Println("Id: " + cloudRegion.Id + ", Name: " + cloudRegion.RegionName)
+	}
+}
+```
+
+#### GetCloudRegion
+
+```go
+func (s *Client) GetCloudRegion(tenantId int, cloudId int, regionId int) (*CloudRegion, error)
+```
+
+##### Example
+
+```go
+cloudRegion, err := client.GetCloudRegion(1, 1, 1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Id: " + cloudRegion.Id + ", Name: " + cloudRegion.RegionName)
+}
+```
+
 ### CloudStorageTypes
 ### Clouds
 ### Contracts
