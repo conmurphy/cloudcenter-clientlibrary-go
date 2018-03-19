@@ -2421,6 +2421,13 @@ if err != nil {
 ### SuspensionPolicies
 ### Tenants
 
+- [GetTenants](#gettenants)
+- [GetTenant](#gettenant)
+- [AddTenant](#addtenant)
+- [UpdateTenant](#updatetenant)
+- [DeleteTenantAsync](#deletetenantasync)
+- [DeleteTenantSync](#deletetenantSync)
+
 ```go
 type TenantAPIResponse struct {
 	Resource      *string  
@@ -2512,11 +2519,131 @@ if err != nil {
 }
 ```
 
+#### AddTenant
+
+```go
+func (s *Client) AddTenant(tenant *Tenant) error
+```
+
+##### __Required Fields__
+* Name
+* ShortName
+* UserId
+
+##### Example
+
+```golang
+newTenant := cloudcenter.Tenant{
+	UserId:                          "5",
+	Name:                            "client-library-tenant",
+	ShortName:                       "client-library-tenant",
+	DomainName:                      "clientlibrary.cloudcenter.com",
+	Phone:                           "1234567890",
+	Url:                             "http://clientlibrary.cloudcenter.com",
+	ContactEmail:                    "poweruser@dcloud.cisco.com",
+	About:                           "clientlibrary tenant",
+	EnablePurchaseOrder:             false,
+	EnableEmailNotificationsToUsers: false,
+	EnableMonthlyBilling:            false,
+	DefaultChargeType:               "Hourly",
+}
+
+fmt.Println(client.AddTenant(&newTenant))
+```
+
+#### UpdateTenant
+
+```go
+func (s *Client) UpdateTenant(tenant *Tenant) (*Tenant, error)
+```
+
+##### __Required Fields__
+* Id 
+  * (Value of field should not be changed)
+* UserId 
+  * (Value of field should not be changed)
+* Name 
+  * (Value of field should not be changed)
+* ShortName 
+  * (Value of field should not be changed)
+
+##### Example
+
+```golang
+newTenant := cloudcenter.Tenant{
+	Id:                              cloudcenter.String("2"),
+	UserId:                          cloudcenter.String("5"),
+	Name:                            cloudcenter.String("client-library-tenant"),
+	ShortName:                       cloudcenter.String("client-library-tenant"),
+	DomainName:                      cloudcenter.String("clientlibrary.cloudcenter.com"),
+	Phone:                           cloudcenter.String("1234567890"),
+	Url:                             cloudcenter.String("http://clientlibrary.cloudcenter.com"),
+	ContactEmail:                    cloudcenter.String("poweruser@dcloud.cisco.com"),
+	About:                           cloudcenter.String("clientlibrary tenant"),
+	EnablePurchaseOrder:             cloudcenter.Bool(false),
+	EnableEmailNotificationsToUsers: cloudcenter.Bool(false),
+	EnableMonthlyBilling:            cloudcenter.Bool(false),
+	DefaultChargeType:               cloudcenter.String("Hourly"),
+}
+
+fmt.Println(client.UpdateTenant(&newTenant))
+```
+
+#### DeleteTenantAsync
+
+```go
+func (s *Client) DeleteTenantAsync(tenantId int) (*OperationStatus, error)
+```
+##### Example
+```go
+err := client.DeleteUser(6)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("User deleted")
+}
+```
+
+#### DeleteTenantSync
+
+```go
+func (s *Client) DeleteTenantSync(tenantId int) error
+```
+##### Example
+```go
+operationStatus, err := client.DeleteTenantAsync(3)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		operationStatusId := *operationStatus.Id
+		operationStatusStatus := *operationStatus.Status
+		operationStatusMsg := *operationStatus.Msg
+		fmt.Println("Operation Status: " + operationStatusId + ", Status: " + operationStatusStatus + ", Message: " + operationStatusMsg)
+
+		for operationStatusStatus == "RUNNING" {
+			operationStatusStatus = *operationStatus.Status
+			operationStatusId := *operationStatus.Id
+			operationStatus, err = client.GetOperationStatus(operationStatusId)
+		}
+
+		if operationStatusStatus == "SUCCESS" {
+			fmt.Println("Tenant deleted")
+		}
+	}
+}
+```
+
 ### Users
 
 - [GetUsers](#getusers)
 - [GetUser](#getuser)
-- [GetUserByEmail](#getuserbyemail)
+- [GetUserFromEmail](#getuserfromemail)
 - [AddUser](#adduser)
 - [UpdateUser](#updateuser)
 - [DeleteUser](#deleteuser)
