@@ -2426,7 +2426,7 @@ if err != nil {
 - [AddTenant](#addtenant)
 - [UpdateTenant](#updatetenant)
 - [DeleteTenantAsync](#deletetenantasync)
-- [DeleteTenantSync](#deletetenantSync)
+- [DeleteTenantSync](#deletetenantsync)
 
 ```go
 type TenantAPIResponse struct {
@@ -2595,22 +2595,7 @@ fmt.Println(client.UpdateTenant(&newTenant))
 func (s *Client) DeleteTenantAsync(tenantId int) (*OperationStatus, error)
 ```
 ##### Example
-```go
-err := client.DeleteUser(6)
 
-if err != nil {
-	fmt.Println(err)
-} else {
-	fmt.Println("User deleted")
-}
-```
-
-#### DeleteTenantSync
-
-```go
-func (s *Client) DeleteTenantSync(tenantId int) error
-```
-##### Example
 ```go
 operationStatus, err := client.DeleteTenantAsync(3)
 
@@ -2636,6 +2621,23 @@ if err != nil {
 			fmt.Println("Tenant deleted")
 		}
 	}
+}
+```
+
+#### DeleteTenantSync
+
+```go
+func (s *Client) DeleteTenantSync(tenantId int) error
+```
+##### Example
+
+```go
+err := client.DeleteUser(6)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("User deleted")
 }
 ```
 
