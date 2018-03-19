@@ -2563,6 +2563,71 @@ type User struct {
 }
 ```
 
+#### GetUsers
+
+```go
+func (s *Client) GetUsers() ([]User, error)
+```
+
+##### Example
+
+```golang
+users, err := client.GetUsers()
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	for _, user := range users {
+		userId := *user.Id
+		username := *user.Username
+		userTenantId := *user.TenantId
+		fmt.Println("UserId: " + userId + ", Username: " + username + ", TenantId: " + userTenantId)
+	}
+}
+```
+
+#### GetUser
+
+```go
+func (s *Client) GetUser(id int) (*User, error)
+```
+
+##### Example
+
+```golang
+user, err := client.GetUser(1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	userId := *user.Id
+	username := *user.Username
+	userTenantId := *user.TenantId
+	fmt.Println("UserId: " + userId + ", Username: " + username + ", TenantId: " + userTenantId)
+}
+```
+
+#### GetUserFromEmail
+
+```go
+func (s *Client) GetUserFromEmail(emailToSearch string) (*User, error)
+```
+
+##### Example
+
+```golang
+user, err = client.GetUserFromEmail("admin@cliqrtech.com")
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	userId := *user.Id
+	username := *user.Username
+	userTenantId := *user.TenantId
+	fmt.Println("UserId: " + userId + ", Username: " + username + ", TenantId: " + userTenantId)
+}
+```
+
 #### AddUser
 
 ```go
