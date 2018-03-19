@@ -2632,12 +2632,12 @@ func (s *Client) DeleteTenantSync(tenantId int) error
 ##### Example
 
 ```go
-err := client.DeleteUser(6)
+err := client.DeleteTenant(6)
 
 if err != nil {
 	fmt.Println(err)
 } else {
-	fmt.Println("User deleted")
+	fmt.Println("Tenant deleted")
 }
 ```
 
