@@ -2606,10 +2606,14 @@ func (s *Client) UpdateUser(user *User) (*User, error)
 ```
 
 ##### __Required Fields__
-* Id (Value of field should not be changed)
-* TenantId (Value of field should not be changed)
-* Username (Value of field should not be changed)
-* Type (Value of field should not be changed)
+* Id 
+⋅⋅* (Value of field should not be changed)
+* TenantId 
+⋅⋅* (Value of field should not be changed)
+* Username 
+⋅⋅* (Value of field should not be changed)
+* Type 
+⋅⋅* (Value of field should not be changed)
 * EmailAddr
 
 
