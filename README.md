@@ -2377,12 +2377,30 @@ func (s *Client) UpdateService(service *Service) (*Service, error)
 ```
 ##### Example
 ```go
-err := client.DeleteService(1, 66)
+var images []cloudcenter.Image
+
+newImage := cloudcenter.Image{
+	Id: cloudcenter.String("1"),
+}
+
+images = append(images, newImage)
+
+newService := cloudcenter.Service{
+	Id:          cloudcenter.String("66"),
+	TenantId:    cloudcenter.String("1"),
+	Name:        cloudcenter.String("ClientLibraryService"),
+	DisplayName: cloudcenter.String("Client Library Service"),
+	Images:      &images,
+}
+
+service, err := client.UpdateService(&newService)
 
 if err != nil {
 	fmt.Println(err)
 } else {
-	fmt.Println("Service deleted")
+	serviceId := *service.Id
+	serviceName := *service.Name
+	fmt.Println("Id: " + serviceId + ", Name: " + serviceName)
 }
 ```
 
