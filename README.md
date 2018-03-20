@@ -2926,6 +2926,7 @@ func (s *Client) AddUser(user *User) (*User, error)
 ##### __Required Fields__
 * EmailAddr
 * TenantId
+* Password
 * ActivateRegions (When creating user with activation)
 * ActivationProfileId (required if using activation profile method)
 
@@ -2961,26 +2962,23 @@ func (s *Client) UpdateUser(user *User) (*User, error)
 
 ##### __Required Fields__
 * Id 
-  * (Value of field should not be changed)
 * TenantId 
-  * (Value of field should not be changed)
+* AccountSource
 * Username 
-  * (Value of field should not be changed)
 * Type 
-  * (Value of field should not be changed)
 * EmailAddr
 
 
 ##### Example
 
 ```golang
-
 newUser := cloudcenter.User{
 	Id:        cloudcenter.String("2"),
 	TenantId:  cloudcenter.String("1"),
 	Username:  cloudcenter.String("cliqradmin"),
 	Type:      cloudcenter.String("TENANT"),
 	EmailAddr: cloudcenter.String("admin@cliqrtech.com"),
+	AccountSource: cloudcenter.String("AdminCreated"),
 }
 
 user, err := client.UpdateUser(&newUser)
