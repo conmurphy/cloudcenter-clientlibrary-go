@@ -77,7 +77,9 @@ user, err := client.AddUser(&newUser)
 if err != nil {
 	fmt.Println(err)
 } else {
-	fmt.Println(”New user created. \n UserId: " + user.Id + ", User last name: " + user.LastName)
+	userId := *user.Id
+	userEnabled := *user.Enabled
+	fmt.Println(”New user created. \n UserId: " + user.Id + ", Enabled: " + strconv.FormatBool(userEnabled))
 }
 ```
 
