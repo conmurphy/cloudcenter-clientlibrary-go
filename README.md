@@ -2008,6 +2008,12 @@ if err != nil {
 
 ### Projects
 
+- [GetProjects](#getprojects)
+- [GetProject](#getproject)
+- [AddProject](#addproject)
+- [UpdateProject](#updateproject)
+- [DeleteProject](#deleteproject)
+
 ```go
 type ProjectAPIResponse struct {
 	Resource      *string   
@@ -2085,8 +2091,82 @@ if err != nil {
 }
 ```
 
+#### AddProject
+
+```go
+func (s *Client) AddProject(project *Project) (*Project, error)
+```
+
+##### __Required Fields__
+* Name
+
+##### Example
+```go
+newProject := cloudcenter.Project{
+	Name: cloudcenter.String("ClientLibrary project"),
+}
+
+project, err := client.AddProject(&newProject)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	projectName := *project.Name
+	projectId := *project.Id
+	fmt.Println("Project Id: " + projectId + ", Name: " + projectName)
+}
+```
+#### UpdateProject
+
+```go
+func (s *Client) UpdateProject(project *Project) (*Project, error)
+```
+
+##### __Required Fields__
+* Id
+* Name
+
+##### Example
+```go
+newProject := cloudcenter.Project{
+	Id: cloudcenter.String("1"),
+	Name: cloudcenter.String("ClientLibrary project"),
+}
+
+project, err := client.UpdateProject(&newProject)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	projectName := *project.Name
+	projectId := *project.Id
+	fmt.Println("Project Id: " + projectId + ", Name: " + projectName)
+}
+```
+#### DeleteProject
+
+```go
+func (s *Client) DeleteProject(projectId int) error
+```
+
+##### Example
+```go
+err := client.DeleteProject(12)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Project deleted")
+}
+```
 
 ### Roles
+
+- [GetRoles](#getroles)
+- [GetRole](#getrole)
+- [AddRole](#addrole)
+- [UpdateRole](#updaterole)
+- [DeleteRole](#deleterole)
 
 ```go
 type RoleAPIResponse struct {
