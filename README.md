@@ -2164,6 +2164,12 @@ if err != nil {
 
 ### Services
 
+- [GetServices](#getservices)
+- [GetService](#getservice)
+- [AddService](#addservice)
+- [UpdateService](#updateservice)
+- [DeleteService](#deleteservice)
+
 ```go
 type ServiceAPIResponse struct {
 	Resource      *string   
@@ -2319,6 +2325,81 @@ if err != nil {
 	fmt.Println(err)
 } else {
 	fmt.Println("Id: " + service.Id + ", Name: " + service.Name)
+}
+```
+
+#### AddService
+
+```go
+func (s *Client) AddService(service *Service) (*Service, error)
+```
+
+##### __Required Fields__
+* TenantId
+* Name
+* DisplayName
+* Images
+
+
+##### Example
+```go
+var images []cloudcenter.Image
+
+newImage := cloudcenter.Image{
+	Id: cloudcenter.String("1"),
+}
+
+images = append(images, newImage)
+
+newService := cloudcenter.Service{
+	TenantId:    cloudcenter.String("1"),
+	Name:        cloudcenter.String("ClientLibraryService"),
+	DisplayName: cloudcenter.String("Client Library Service"),
+	Images:      &images,
+}
+
+service, err := client.AddService(&newService)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	serviceId := *service.Id
+	serviceName := *service.Name
+	fmt.Println("Id: " + serviceId + ", Name: " + serviceName)
+}
+	
+```
+
+#### UpdateService
+
+```go
+func (s *Client) UpdateService(service *Service) (*Service, error)
+```
+##### Example
+```go
+err := client.DeleteService(1, 66)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Service deleted")
+}
+```
+
+
+#### DeleteService
+
+```go
+func (s *Client) DeleteService(tenantId int, serviceId int) error
+```
+##### Example
+```go
+err := client.DeleteService(1, 66)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Service deleted")
 }
 ```
 
