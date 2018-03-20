@@ -2458,7 +2458,9 @@ if err != nil {
 	fmt.Println(err)
 } else {
 	for _, service := range services {
-		fmt.Println("Id: " + service.Id + ", DisplayName: " + service.DisplayName)
+		serviceId := *service.Id
+		serviceName := *service.Name
+		fmt.Println("Id: " + serviceId + ", Name: " + serviceName)
 	}
 }
 ```
@@ -2477,7 +2479,9 @@ service, err := client.GetService(1, 2)
 if err != nil {
 	fmt.Println(err)
 } else {
-	fmt.Println("Id: " + service.Id + ", Name: " + service.Name)
+	serviceId := *service.Id
+	serviceName := *service.Name
+	fmt.Println("Id: " + serviceId + ", Name: " + serviceName)
 }
 ```
 
@@ -2660,7 +2664,9 @@ if err != nil {
 	fmt.Println(err)
 } else {
 	for _, tenant := range tenants {
-		fmt.Println("Id: " + tenant.Id + ", Name: " + tenant.Name)
+		tenantId := *tenant.Id
+		tenantName := *tenant.Name
+		fmt.Println("Id: " + tenantId + ", Name: " + tenantName)
 	}
 }
 ```
@@ -2679,7 +2685,9 @@ tenant, err := client.GetTenant(1)
 if err != nil {
 	fmt.Println(err)
 } else {
-	fmt.Println("Id: " + tenant.Id + ", Name: " + tenant.Name)
+	tenantId := *tenant.Id
+	tenantName := *tenant.Name
+	fmt.Println("Id: " + tenantId + ", Name: " + tenantName)
 }
 ```
 
@@ -2698,18 +2706,18 @@ func (s *Client) AddTenant(tenant *Tenant) error
 
 ```golang
 newTenant := cloudcenter.Tenant{
-	UserId:                          "5",
-	Name:                            "client-library-tenant",
-	ShortName:                       "client-library-tenant",
-	DomainName:                      "clientlibrary.cloudcenter.com",
-	Phone:                           "1234567890",
-	Url:                             "http://clientlibrary.cloudcenter.com",
-	ContactEmail:                    "poweruser@dcloud.cisco.com",
-	About:                           "clientlibrary tenant",
-	EnablePurchaseOrder:             false,
-	EnableEmailNotificationsToUsers: false,
-	EnableMonthlyBilling:            false,
-	DefaultChargeType:               "Hourly",
+	UserId:                           cloudcenter.String("5",
+	Name:                             cloudcenter.String("client-library-tenant"),
+	ShortName:                        cloudcenter.String("client-library-tenant"),
+	DomainName:                       cloudcenter.String("clientlibrary.cloudcenter.com"),
+	Phone:                            cloudcenter.String("1234567890"),
+	Url:                              cloudcenter.String("http://clientlibrary.cloudcenter.com"),
+	ContactEmail:                     cloudcenter.String("poweruser@dcloud.cisco.com"),
+	About:                            cloudcenter.String("clientlibrary tenant"),
+	EnablePurchaseOrder:              cloudcenter.Bool(false),
+	EnableEmailNotificationsToUsers:  cloudcenter.Bool(false),
+	EnableMonthlyBilling:             cloudcenter.Bool(false),
+	DefaultChargeType:                cloudcenter.String("Hourly)",
 }
 
 fmt.Println(client.AddTenant(&newTenant))
