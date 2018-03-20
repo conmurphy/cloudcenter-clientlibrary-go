@@ -2161,6 +2161,79 @@ if err != nil {
 }
 ```
 
+#### AddRole
+
+```go
+func (s *Client) AddRole(role *Role) (*Role, error)
+```
+
+##### __Required Fields__
+* TenantId
+* Name
+
+##### Example
+```go
+newRole := cloudcenter.Role{
+	TenantId: cloudcenter.String("1"),
+	Name:     cloudcenter.String("ClientLibrary Role"),
+}
+
+role, err := client.AddRole(&newRole)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	roleName := *role.Name
+	roleId := *role.Id
+	fmt.Println("Role Id: " + roleId + ", Name: " + roleName)
+}
+```
+
+#### UpdateRole
+
+```go
+func (s *Client) UpdateRole(role *Role) (*Role, error)
+```
+
+##### __Required Fields__
+* Id
+* TenantId
+* Name
+
+##### Example
+```go
+newRole := cloudcenter.Role{
+	Id: cloudcenter.String("24"),
+	TenantId: cloudcenter.String("1"),
+	Name:     cloudcenter.String("ClientLibrary Role"),
+}
+
+role, err := client.UpdateRole(&newRole)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	roleName := *role.Name
+	roleId := *role.Id
+	fmt.Println("Role Id: " + roleId + ", Name: " + roleName)
+}
+```
+
+#### DeleteRole
+
+```go
+func (s *Client) DeleteRole(tenantId int, roleId int) error
+```
+##### Example
+```go
+err := client.DeleteRole(1, 12)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Role deleted")
+}
+```
 
 ### Services
 
@@ -2375,6 +2448,14 @@ if err != nil {
 ```go
 func (s *Client) UpdateService(service *Service) (*Service, error)
 ```
+
+##### __Required Fields__
+* Id
+* TenantId
+* Name
+* DisplayName
+* Images
+
 ##### Example
 ```go
 var images []cloudcenter.Image
@@ -2562,13 +2643,9 @@ func (s *Client) UpdateTenant(tenant *Tenant) (*Tenant, error)
 
 ##### __Required Fields__
 * Id 
-  * (Value of field should not be changed)
 * UserId 
-  * (Value of field should not be changed)
 * Name 
-  * (Value of field should not be changed)
 * ShortName 
-  * (Value of field should not be changed)
 
 ##### Example
 
