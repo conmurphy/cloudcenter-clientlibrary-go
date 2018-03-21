@@ -1055,7 +1055,9 @@ if err != nil {
 	fmt.Println(err)
 } else {
 	for _, cloudImage := range cloudImages {
-		fmt.Println("Id: " + cloudImage.Id + ", Resource: " + cloudImage.Resource)
+		cloudImageMappingId := *cloudImageMapping.Id
+		cloudImageMappingResource := *cloudImageMapping.Resource
+		fmt.Println("Id: " + cloudImageMappingId + ", Name: " + cloudImageMappingResource)
 	}
 }
 ```
@@ -1074,7 +1076,9 @@ cloudImage, err := client.GetCloudImageMapping(1, 1, 1,1)
 if err != nil {
 	fmt.Println(err)
 } else {
-	fmt.Println("Id: " + cloudImage.Id + ", Resource: " + cloudImage.Resource)
+	cloudImageMappingId := *cloudImageMapping.Id
+	cloudImageMappingResource := *cloudImageMapping.Resource
+	fmt.Println("Id: " + cloudImageMappingId + ", Name: " + cloudImageMappingResource)
 }
 ```
 
@@ -1230,7 +1234,9 @@ if err != nil {
 	fmt.Println(err)
 } else {
 	for _, cloudInstanceType := range cloudInstanceTypes {
-		fmt.Println("Id: " + cloudInstanceType.Id + ", Resource: " + cloudInstanceType.Resource)
+		cloudInstanceTypeId := *cloudInstanceType.Id
+		cloudInstanceTypeName := *cloudInstanceType.Name
+		fmt.Println("Id: " + cloudInstanceTypeId + ", Name: " + cloudInstanceTypeName)
 	}
 }
 ```
@@ -1249,7 +1255,9 @@ cloudInstanceType, err := client.GetCloudInstanceType(1, 1, 1,1)
 if err != nil {
 	fmt.Println(err)
 } else {
-	fmt.Println("Id: " + cloudInstanceType.Id + ", Resource: " + cloudInstanceType.Resource)
+	cloudInstanceTypeId := *cloudInstanceType.Id
+	cloudInstanceTypeName := *cloudInstanceType.Name
+	fmt.Println("Id: " + cloudInstanceTypeId + ", Name: " + cloudInstanceTypeName)
 }
 ```
 
