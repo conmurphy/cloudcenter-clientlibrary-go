@@ -904,6 +904,13 @@ if err != nil {
 
 ### CloudAccounts
 
+- [GetCloudAccounts](#getcloudimageaccounts)
+- [GetCloudAccount](#getcloudaccount)
+- [AddCloudAccountAsync](#addcloudaccountAsync)
+- [AddCloudAccountSync](#addcloudaccountsync)
+- [UpdateCloudAccount](#updatecloudaccount)
+- [DeleteCloudAccount](#deletecloudaccount)
+
 ```go
 type CloudAccountAPIResponse struct {
 	Resource      *string        
@@ -958,7 +965,9 @@ if err != nil {
 	fmt.Println(err)
 } else {
 	for _, cloudAccount := range cloudAccounts {
-		fmt.Println("Id: " + cloudAccount.Id + ", Name: " + cloudAccount.DisplayName)
+		cloudAccountId := *cloudAccount.Id
+		cloudAccountDisplayName := *cloudAccount.DisplayName
+		fmt.Println("Cloud Account Id: " + cloudAccountId + ", Name: " + cloudAccountDisplayName)
 	}
 }
 ```
@@ -977,7 +986,9 @@ cloudAccount, err := client.GetCloudAccount(1, 1, 1)
 if err != nil {
 	fmt.Println(err)
 } else {
-	fmt.Println("Id: " + cloudAccount.Id + ", Name: " + cloudAccount.DisplayName)
+	cloudAccountId := *cloudAccount.Id
+	cloudAccountDisplayName := *cloudAccount.DisplayName
+	fmt.Println("Cloud Account Id: " + cloudAccountId + ", Name: " + cloudAccountDisplayName)
 }
 ```
 
@@ -996,8 +1007,264 @@ if err != nil {
 	fmt.Println(err)
 } else {
 	for _, cloudAccount := range cloudAccounts {
-		fmt.Println("Id: " + cloudAccount.Id + ", Name: " + cloudAccount.AccountName + ", Name: " + cloudAccount.DisplayName)
+		cloudAccountId := *cloudAccount.Id
+		cloudAccountDisplayName := *cloudAccount.DisplayName
+		fmt.Println("Cloud Account Id: " + cloudAccountId + ", Name: " + cloudAccountDisplayName)
 	}
+}
+```
+
+#### AddCloudAccountAsync
+
+```go
+func (s *Client) AddCloudAccountAsync(cloudAccount *CloudAccount) (*OperationStatus, error)
+```
+
+##### __Required Fields__
+* TenantId
+* CloudId
+* UserId
+* AccountId
+* AccountName
+* DisplayName
+* AccountPassword
+
+
+##### Example
+```go
+newCloudAccount := cloudcenter.CloudAccount{
+	TenantId:        cloudcenter.String("1"),
+	CloudId:         cloudcenter.String("1"),
+	UserId:          cloudcenter.String("2"),
+	AccountId:       cloudcenter.String("myCloudAccountId"),
+	AccountName:     cloudcenter.String("administrator@vsphere.local"),
+	DisplayName:     cloudcenter.String("myCloudAccountName"),
+	AccountPassword: cloudcenter.String("myPassword"),
+}
+
+operationStatus, err := client.AddCloudAccountAsync(&newCloudAccount)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	// Since this is an async call we will receive an operation status
+
+	status := *operationStatus.Status
+	operationStatusId := *operationStatus.OperationId
+
+	fmt.Println("Operation Id: " + operationStatusId + ", Status: " + status)
+
+	// We need to periodically check the status to find out if it is a success, failure, or still running
+
+	for status == "RUNNING" {
+
+		operationStatus, err := client.GetOperationStatus(operationStatusId)
+		
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		status = *operationStatus.Status
+
+		// If it's still running it should have an operationId that we can use to update the status
+		// If it's not running (i.e failed or success) it won't have an Id. We need this check
+		// to ensure we don't have a "runtime error: invalid memory address or nil pointer dereference"
+		if status == "RUNNING" {
+			operationStatusId = *operationStatus.OperationId
+		}
+
+	}
+
+	if status == "SUCCESS" {
+		newCloudAccountDisplayName := *newCloudAccount.DisplayName
+		cloudAccounts, err := client.GetCloudAccountByName(1, 1, newCloudAccountDisplayName)
+
+		if err != nil {
+			fmt.Println(err)
+		} else {
+			for _, cloudAccount := range cloudAccounts {
+				cloudAccountId := *cloudAccount.Id
+				cloudAccountDisplayName := *cloudAccount.DisplayName
+				fmt.Println("Cloud Account Id: " + cloudAccountId + ", Name: " + cloudAccountDisplayName)
+			}
+		}
+	}
+
+}
+```
+#### AddCloudAccountSync
+
+```go
+func (s *Client) AddCloudAccountSync(cloudAccount *CloudAccount) (*CloudAccount, error)
+```
+
+##### __Required Fields__
+* TenantId
+* CloudId
+* UserId
+* AccountId
+* AccountName
+* DisplayName
+* AccountPassword
+
+##### Example
+```go
+newCloudAccount := cloudcenter.CloudAccount{
+	TenantId:        cloudcenter.String("1"),
+	CloudId:         cloudcenter.String("1"),
+	UserId:          cloudcenter.String("2"),
+	AccountId:       cloudcenter.String("myCloudAccountId"),
+	AccountName:     cloudcenter.String("administrator@vsphere.local"),
+	DisplayName:     cloudcenter.String("myCloudAccountName"),
+	AccountPassword: cloudcenter.String("myPassword"),
+}
+
+cloudAccount, err := client.AddCloudAccountSync(&newCloudAccount)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	cloudAccountId := *cloudAccount.Id
+	cloudAccountDisplayName := *cloudAccount.DisplayName
+	fmt.Println("Cloud Account Id: " + cloudAccountId + ", Name: " + cloudAccountDisplayName)
+}
+```
+
+#### UpdateCloudAccountAsync
+
+```go
+func (s *Client) UpdateCloudAccountAsync(cloudAccount *CloudAccount) (*OperationStatus, error)
+```
+
+##### __Required Fields__
+* Id
+* TenantId
+* CloudId
+* UserId
+* AccountId
+* AccountName
+* DisplayName
+* AccountPassword
+
+##### Example
+```go
+newCloudAccount := cloudcenter.CloudAccount{
+	Id:        cloudcenter.String("19"),
+	TenantId:        cloudcenter.String("1"),
+	CloudId:         cloudcenter.String("1"),
+	UserId:          cloudcenter.String("2"),
+	AccountId:       cloudcenter.String("myCloudAccountId"),
+	AccountName:     cloudcenter.String("administrator@vsphere.local"),
+	DisplayName:     cloudcenter.String("myCloudAccountName"),
+	AccountPassword: cloudcenter.String("myPassword"),
+}
+
+operationStatus, err := client.UpdateCloudAccountAsync(&newCloudAccount)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	// Since this is an async call we will receive an operation status
+
+	status := *operationStatus.Status
+	operationStatusId := *operationStatus.OperationId
+
+	fmt.Println("Operation Id: " + operationStatusId + ", Status: " + status)
+
+	// We need to periodically check the status to find out if it is a success, failure, or still running
+
+	for status == "RUNNING" {
+
+		operationStatus, err := client.GetOperationStatus(operationStatusId)
+		
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		status = *operationStatus.Status
+
+		// If it's still running it should have an operationId that we can use to update the status
+		// If it's not running (i.e failed or success) it won't have an Id. We need this check
+		// to ensure we don't have a "runtime error: invalid memory address or nil pointer dereference"
+		if status == "RUNNING" {
+			operationStatusId = *operationStatus.OperationId
+		}
+
+	}
+
+	if status == "SUCCESS" {
+		newCloudAccountDisplayName := *newCloudAccount.DisplayName
+		cloudAccounts, err := client.GetCloudAccountByName(1, 1, newCloudAccountDisplayName)
+
+		if err != nil {
+			fmt.Println(err)
+		} else {
+			for _, cloudAccount := range cloudAccounts {
+				cloudAccountId := *cloudAccount.Id
+				cloudAccountDisplayName := *cloudAccount.DisplayName
+				fmt.Println("Cloud Account Id: " + cloudAccountId + ", Name: " + cloudAccountDisplayName)
+			}
+		}
+	}
+
+}
+```
+
+#### UpdateCloudAccountSync
+
+```go
+func (s *Client) UpdateCloudAccountSync(cloudAccount *CloudAccount) (*CloudAccount, error)
+```
+
+##### __Required Fields__
+* Id
+* TenantId
+* CloudId
+* UserId
+* AccountId
+* AccountName
+* DisplayName
+* AccountPassword
+
+##### Example
+```go
+newCloudAccount := cloudcenter.CloudAccount{
+	Id: 		 cloudcenter.String("5"),
+	TenantId:        cloudcenter.String("1"),
+	CloudId:         cloudcenter.String("1"),
+	UserId:          cloudcenter.String("2"),
+	AccountId:       cloudcenter.String("myCloudAccountId"),
+	AccountName:     cloudcenter.String("administrator@vsphere.local"),
+	DisplayName:     cloudcenter.String("myCloudAccountName"),
+	AccountPassword: cloudcenter.String("myPassword"),
+}
+
+cloudAccount, err := client.UpdateCloudAccountSync(&newCloudAccount)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	cloudAccountId := *cloudAccount.Id
+	cloudAccountDisplayName := *cloudAccount.DisplayName
+	fmt.Println("Cloud Account Id: " + cloudAccountId + ", Name: " + cloudAccountDisplayName)
+}
+```
+```
+
+#### DeleteCloudAccount
+
+```go
+func (s *Client) DeleteCloudAccount(tenantId int, cloudId int, accountId int) error
+```
+
+##### Example
+```go
+err := client.DeleteCloudAccount(1,1,1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Cloud account deleted")
 }
 ```
 
@@ -1173,7 +1440,6 @@ if err != nil {
 	fmt.Println("Cloud instance type deleted")
 }
 ```
-
 
 ### CloudInstanceTypes
 
