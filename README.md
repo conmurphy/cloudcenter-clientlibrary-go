@@ -1425,6 +1425,12 @@ if err != nil {
 
 ### Contracts
 
+- [GetContracts](#getcontracts)
+- [GetContract](#getcontract)
+- [AddContract](#addcontract)
+- [UpdateContract](#updatecontract)
+- [DeleteContract](#deletecontract)
+
 ```go
 type ContractAPIResponse struct {
 	Resource      *string    
@@ -1491,6 +1497,89 @@ if err != nil {
 }
 ```
 
+#### AddContract
+
+```go
+func (s *Client) AddContract(contract *Contract) (*Contract, error)
+```
+
+##### __Required Fields__
+* TenantId
+* Name
+* Length
+* Terms
+
+##### Example
+```go
+newContract := cloudcenter.Contract{
+	TenantId: cloudcenter.String("1"),
+	Name:     cloudcenter.String("ClientLibrary contract"),
+	Length:   cloudcenter.Int64(12),
+	Terms:    cloudcenter.String("ClientLibrary contract terms"),
+}
+
+contract, err := client.AddContract(&newContract)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	contractId := *contract.Id
+	contractDisabled := *contract.Disabled
+	fmt.Println("Contract Id: " + contractId + ", Disabled: " + strconv.FormatBool(contractDisabled))
+}
+```
+
+#### UpdateContract
+
+```go
+func (s *Client) UpdateContract(contract *Contract) (*Contract, error)
+```
+
+##### __Required Fields__
+* Id
+* TenantId
+* Name
+* Length
+* Terms
+
+##### Example
+```go
+newContract := cloudcenter.Contract{
+	Id:       cloudcenter.String("2"),
+	TenantId: cloudcenter.String("1"),
+	Name:     cloudcenter.String("ClientLibrary contract"),
+	Length:   cloudcenter.Int64(12),
+	Terms:    cloudcenter.String("ClientLibrary contract terms"),
+}
+
+contract, err := client.UpdateContract(&newContract)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	contractId := *contract.Id
+	contractDisabled := *contract.Disabled
+	fmt.Println("Contract Id: " + contractId + ", Disabled: " + strconv.FormatBool(contractDisabled))
+}
+```
+
+#### DeleteContract
+
+```go
+func (s *Client) DeleteContract(tenantId int, contractId int) error
+```
+
+##### Example
+```go
+err := client.DeleteContract(1,1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Contract deleted")
+}
+```
+
 ### Environments
 
 - [GetEnvironments](#getenvironment)
@@ -1498,6 +1587,7 @@ if err != nil {
 - [AddEnvironment](#addenvironment)
 - [UpdateEnvironment](#updateenvironment)
 - [DeleteEnvironment](#deleteenvironment)
+
 ```go
 type EnvironmentAPIResponse struct {
 	Resource      *string       
@@ -1636,6 +1726,7 @@ if err != nil {
 	fmt.Println("Environment Id: " + environmentId + ", Resource: " + environmentResource)
 }
 ```
+
 #### UpdateEnvironment
 
 ```go
@@ -1645,7 +1736,6 @@ func (s *Client) UpdateEnvironment(environment *Environment) (*Environment, erro
 ##### __Required Fields__
 * Id
 * Name
-
 
 ##### Example
 ```go
@@ -1680,6 +1770,7 @@ if err != nil {
 	fmt.Println("Environment deleted")
 }
 ```
+
 ### Groups
 
 - [GetGroups](#getgroups)
