@@ -1,11 +1,15 @@
 package cloudcenter
 
-import "fmt"
-import "net/http"
+import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"net/http"
+	"strconv"
 
-import "encoding/json"
-import "strconv"
-import "bytes"
+	validator "gopkg.in/validator.v2"
+)
 
 type CloudStorageTypeAPIResponse struct {
 	Resource          *string            `json:"resource,omitempty"`
@@ -18,13 +22,13 @@ type CloudStorageTypeAPIResponse struct {
 
 type CloudStorageType struct {
 	Id               *string  `json:"id,omitempty"`
-	CloudId          *string  `json:"cloudId,omitempty"`
-	TenantId         *string  `json:"tenantId,omitempty"`
-	RegionId         *string  `json:"regionId,omitempty"`
+	CloudId          *string  `json:"cloudId,omitempty" validate:"nonzero"`
+	TenantId         *string  `json:"tenantId,omitempty" validate:"nonzero"`
+	RegionId         *string  `json:"regionId,omitempty" validate:"nonzero"`
 	Resource         *string  `json:"resource,omitempty"`
-	Name             *string  `json:"name,omitempty"`
+	Name             *string  `json:"name,omitempty" validate:"nonzero"`
 	Description      *string  `json:"description,omitempty"`
-	Type             *string  `json:"type,omitempty"`
+	Type             *string  `json:"type,omitempty" validate:"nonzero"`
 	CostPerMonth     *float64 `json:"costPerMonth,omitempty"`
 	MinVolumeSize    *int64   `json:"minVolumeSize,omitempty"`
 	MaxVolumeSize    *int64   `json:"maxVolumeSize,omitempty"`
@@ -85,6 +89,10 @@ func (s *Client) AddCloudStorageType(cloudStorageType *CloudStorageType) (*Cloud
 
 	var data CloudStorageType
 
+	if errs := validator.Validate(cloudStorageType); errs != nil {
+		return nil, errs
+	}
+
 	cloudStorageTypeTenantId := *cloudStorageType.TenantId
 	cloudStorageTypeCloudId := *cloudStorageType.CloudId
 	cloudStorageTypeRegionId := *cloudStorageType.RegionId
@@ -123,10 +131,19 @@ func (s *Client) UpdateCloudStorageType(cloudStorageType *CloudStorageType) (*Cl
 
 	var data CloudStorageType
 
+	if errs := validator.Validate(cloudStorageType); errs != nil {
+		return nil, errs
+	}
+
+	if nonzero(cloudStorageType.Id) {
+		return nil, errors.New("CloudStorageType.Id is missing")
+	}
+
 	cloudStorageTypeTenantId := *cloudStorageType.TenantId
 	cloudStorageTypeCloudId := *cloudStorageType.CloudId
 	cloudStorageTypeId := *cloudStorageType.Id
 	cloudStorageTypeRegionId := *cloudStorageType.RegionId
+
 	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + cloudStorageTypeTenantId + "/clouds/" + cloudStorageTypeCloudId + "/regions/" + cloudStorageTypeRegionId + "/storageTypes/" + cloudStorageTypeId)
 
 	j, err := json.Marshal(cloudStorageType)

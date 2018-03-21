@@ -1,10 +1,15 @@
 package cloudcenter
 
-import "fmt"
-import "net/http"
-import "encoding/json"
-import "strconv"
-import "bytes"
+import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"net/http"
+	"strconv"
+
+	validator "gopkg.in/validator.v2"
+)
 
 type CloudAPIResponse struct {
 	Resource      *string `json:"resource,omitempty"`
@@ -19,11 +24,11 @@ type Cloud struct {
 	Id          *string   `json:"id,omitempty"`
 	Resource    *string   `json:"resource,omitempty"`
 	Perms       *[]string `json:"perms,omitempty"`
-	Name        *string   `json:"name,omitempty"`
+	Name        *string   `json:"name,omitempty" validate:"nonzero"`
 	Description *string   `json:"description,omitempty"`
-	CloudFamily *string   `json:"cloudFamily,omitempty"`
+	CloudFamily *string   `json:"cloudFamily,omitempty" validate:"nonzero"`
 	PublicCloud *bool     `json:"publicCloud,omitempty"`
-	TenantId    *string   `json:"tenantId,omitempty"`
+	TenantId    *string   `json:"tenantId,omitempty" validate:"nonzero"`
 	Detail      *Detail   `json:"detail,omitempty"`
 	CanDelete   *bool     `json:"canDelete,omitempty"`
 }
@@ -86,7 +91,12 @@ func (s *Client) AddCloud(cloud *Cloud) (*Cloud, error) {
 
 	var data Cloud
 
+	if errs := validator.Validate(cloud); errs != nil {
+		return nil, errs
+	}
+
 	cloudTenantId := *cloud.TenantId
+
 	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + cloudTenantId + "/clouds")
 
 	j, err := json.Marshal(cloud)
@@ -121,7 +131,16 @@ func (s *Client) UpdateCloud(cloud *Cloud) (*Cloud, error) {
 
 	var data Cloud
 
+	if errs := validator.Validate(cloud); errs != nil {
+		return nil, errs
+	}
+
 	cloudTenantId := *cloud.TenantId
+
+	if nonzero(cloud.Id) {
+		return nil, errors.New("Cloud.Id is missing")
+	}
+
 	cloudId := *cloud.Id
 	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + cloudTenantId + "/clouds/" + cloudId)
 

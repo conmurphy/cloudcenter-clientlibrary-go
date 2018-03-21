@@ -1,10 +1,15 @@
 package cloudcenter
 
-import "fmt"
-import "net/http"
-import "strconv"
-import "encoding/json"
-import "bytes"
+import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"net/http"
+	"strconv"
+
+	validator "gopkg.in/validator.v2"
+)
 
 type ContractAPIResponse struct {
 	Resource      *string    `json:"resource"`
@@ -18,12 +23,12 @@ type ContractAPIResponse struct {
 type Contract struct {
 	Id              *string   `json:"id,omitempty"`
 	Resource        *string   `json:"resource,omitempty"`
-	Name            *string   `json:"name,omitempty"`
+	Name            *string   `json:"name,omitempty" validate:"nonzero"`
 	Description     *string   `json:"description,omitempty"`
 	Perms           *[]string `json:"perms"`
-	TenantId        *string   `json:"tenantId,omitempty"`
-	Length          *int64    `json:"length,omitempty"`
-	Terms           *string   `json:"terms,omitempty"`
+	TenantId        *string   `json:"tenantId,omitempty" validate:"nonzero"`
+	Length          *int64    `json:"length,omitempty" validate:"nonzero"`
+	Terms           *string   `json:"terms,omitempty" validate:"nonzero"`
 	DiscountRate    *float64  `json:"discountRate,omitempty"`
 	Disabled        *bool     `json:"disabled,omitempty"`
 	ShowOnlyToAdmin *bool     `json:"showOnlyToAdmin,omitempty"`
@@ -81,6 +86,10 @@ func (s *Client) AddContract(contract *Contract) (*Contract, error) {
 
 	var data Contract
 
+	if errs := validator.Validate(contract); errs != nil {
+		return nil, errs
+	}
+
 	contractTenantId := *contract.TenantId
 	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + contractTenantId + "/contracts")
 
@@ -116,7 +125,16 @@ func (s *Client) UpdateContract(contract *Contract) (*Contract, error) {
 
 	var data Contract
 
+	if errs := validator.Validate(contract); errs != nil {
+		return nil, errs
+	}
+
 	contractTenantId := *contract.TenantId
+
+	if nonzero(contract.Id) {
+		return nil, errors.New("Contract.Id is missing")
+	}
+
 	contractId := *contract.Id
 	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + contractTenantId + "/contracts/" + contractId)
 
