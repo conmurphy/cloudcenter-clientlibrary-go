@@ -1150,6 +1150,13 @@ if err != nil {
 
 ### CloudRegions
 
+- [GetCloudRegions](#getcloudregions)
+- [GetCloudRegion](#getcloudregion)
+- [AddCloudRegion](#addcloudregion)
+- [UpdateCloudRegion](#updatecloudregion)
+- [DeleteCloudRegion](#deletecloudregion)
+
+
 ```go
 type CloudRegionAPIResponse struct {
 	Resource      *string       
@@ -1253,7 +1260,9 @@ if err != nil {
 	fmt.Println(err)
 } else {
 	for _, cloudRegion := range cloudRegions {
-		fmt.Println("Id: " + cloudRegion.Id + ", Name: " + cloudRegion.RegionName)
+		cloudRegionId := *cloudRegion.Id
+		cloudRegionDisplayName := *cloudRegion.DisplayName
+		fmt.Println("Cloud Region Id: " + cloudRegionId + ", DisplayName: " + cloudRegionDisplayName)
 	}
 }
 ```
@@ -1272,9 +1281,95 @@ cloudRegion, err := client.GetCloudRegion(1, 1, 1)
 if err != nil {
 	fmt.Println(err)
 } else {
-	fmt.Println("Id: " + cloudRegion.Id + ", Name: " + cloudRegion.RegionName)
+	cloudRegionId := *cloudRegion.Id
+	cloudRegionDisplayName := *cloudRegion.DisplayName
+	fmt.Println("Cloud Region Id: " + cloudRegionId + ", DisplayName: " + cloudRegionDisplayName)
 }
 ```
+
+
+#### AddCloudRegion
+
+```go
+func (s *Client) AddCloudRegion(cloudRegion *CloudRegion) (*CloudRegion, error)
+```
+
+##### __Required Fields__
+* TenantId
+* CloudId
+* RegionName
+* DisplayName
+
+
+##### Example
+```go
+newCloudRegion := cloudcenter.CloudRegion{
+	TenantId:    cloudcenter.String("1"),
+	CloudId:     cloudcenter.String("2"),
+	RegionName:  cloudcenter.String("clientlibrary-west"),
+	DisplayName: cloudcenter.String("Client Library West Region"),
+}
+
+cloudRegion, err := client.AddCloudRegion(&newCloudRegion)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	cloudRegionId := *cloudRegion.Id
+	cloudRegionDisplayName := *cloudRegion.DisplayName
+	fmt.Println("Cloud Region Id: " + cloudRegionId + ", DisplayName: " + cloudRegionDisplayName)
+}
+```
+
+#### UpdateCloudRegion
+
+```go
+func (s *Client) UpdateCloudRegion(cloudRegion *CloudRegion) (*CloudRegion, error)
+```
+
+##### __Required Fields__
+* Id
+* TenantId
+* CloudId
+* DisplayName
+
+##### Example
+```go
+newCloudRegion := cloudcenter.CloudRegion{
+	Id:    cloudcenter.String("3"),
+	TenantId:    cloudcenter.String("1"),
+	CloudId:     cloudcenter.String("2"),
+	DisplayName: cloudcenter.String("Client Library West Region"),
+}
+
+cloudRegion, err := client.UpdateCloudRegion(&newCloudRegion)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	cloudRegionId := *cloudRegion.Id
+	cloudRegionDisplayName := *cloudRegion.DisplayName
+	fmt.Println("Cloud Region Id: " + cloudRegionId + ", DisplayName: " + cloudRegionDisplayName)
+}
+```
+
+#### DeleteCloudRegion
+
+```go
+func (s *Client) DeleteCloudRegion(tenantId int, cloudId int, cloudRegionId int) error
+```
+
+##### Example
+```go
+err := client.DeleteCloudRegion(1,1,1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Cloud region deleted")
+}
+```
+
 
 ### CloudStorageTypes
 
