@@ -1,10 +1,15 @@
 package cloudcenter
 
-import "fmt"
-import "net/http"
-import "strconv"
-import "encoding/json"
-import "bytes"
+import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"net/http"
+	"strconv"
+
+	validator "gopkg.in/validator.v2"
+)
 
 type EnvironmentAPIResponse struct {
 	Resource      *string       `json:"resource,omitempty"`
@@ -18,7 +23,7 @@ type EnvironmentAPIResponse struct {
 type Environment struct {
 	Id                 *string            `json:"id,omitempty"`
 	Resource           *string            `json:"resource,omitempty"`
-	Name               *string            `json:"name,omitempty"`
+	Name               *string            `json:"name,omitempty" validate:"nonzero"`
 	Perms              *[]string          `json:"perms,omitempty"`
 	Description        *string            `json:"description,omitempty"`
 	AllowedClouds      *string            `json:"allowedClouds,omitempty"`
@@ -114,6 +119,10 @@ func (s *Client) AddEnvironment(environment *Environment) (*Environment, error) 
 
 	var data Environment
 
+	if errs := validator.Validate(environment); errs != nil {
+		return nil, errs
+	}
+
 	url := fmt.Sprintf(s.BaseURL + "/v1/environments")
 
 	j, err := json.Marshal(environment)
@@ -147,6 +156,14 @@ func (s *Client) AddEnvironment(environment *Environment) (*Environment, error) 
 func (s *Client) UpdateEnvironment(environment *Environment) (*Environment, error) {
 
 	var data Environment
+
+	if errs := validator.Validate(environment); errs != nil {
+		return nil, errs
+	}
+
+	if nonzero(environment.Id) {
+		return nil, errors.New("Environment.Id is missing")
+	}
 
 	environmentId := *environment.Id
 	url := fmt.Sprintf(s.BaseURL + "/v1/environments/" + environmentId)

@@ -1,11 +1,15 @@
 package cloudcenter
 
-import "fmt"
-import "net/http"
-import "encoding/json"
-import "strconv"
+import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"net/http"
+	"strconv"
 
-import "bytes"
+	validator "gopkg.in/validator.v2"
+)
 
 //import "errors"
 
@@ -25,7 +29,7 @@ type Group struct {
 	Perms        *[]string `json:"perms,omitempty"`
 	Name         *string   `json:"name,omitempty"`
 	Description  *string   `json:"description,omitempty"`
-	TenantId     *string   `json:"tenantId,omitempty"`
+	TenantId     *string   `json:"tenantId,omitempty" validate:"nonzero"`
 	Users        *[]User   `json:"users,omitempty"`
 	Roles        *[]Role   `json:"roles,omitempty"`
 	Created      *int      `json:"created,omitempty"`
@@ -85,7 +89,12 @@ func (s *Client) AddGroup(group *Group) (*Group, error) {
 
 	var data Group
 
+	if errs := validator.Validate(group); errs != nil {
+		return nil, errs
+	}
+
 	groupTenantId := *group.TenantId
+
 	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + groupTenantId + "/groups")
 
 	j, err := json.Marshal(group)
@@ -120,7 +129,16 @@ func (s *Client) UpdateGroup(group *Group) (*Group, error) {
 
 	var data Group
 
+	if errs := validator.Validate(group); errs != nil {
+		return nil, errs
+	}
+
 	groupTenantId := *group.TenantId
+
+	if nonzero(group.Id) {
+		return nil, errors.New("Group.Id is missing")
+	}
+
 	groupId := *group.Id
 	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + groupTenantId + "/groups/" + groupId)
 
