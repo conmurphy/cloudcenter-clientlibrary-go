@@ -1943,7 +1943,8 @@ func (s *Client) AddPhase(phase *Phase) (*Phase, error)
 ```
 
 ##### __Required Fields__
-* TenantId
+* ProjectId
+* Name
 
 
 ##### Example
@@ -1958,6 +1959,8 @@ func (s *Client) UpdatePhase(phase *Phase) (*Phase, error)
 
 ##### __Required Fields__
 * Id
+* ProjectId
+* Name
 
 
 ##### Example
