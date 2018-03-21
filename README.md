@@ -1085,12 +1085,34 @@ func (s *Client) AddCloudImageMapping(cloudImage *CloudImageMapping) (*CloudImag
 ```
 
 ##### __Required Fields__
-*
+* TenantId
+* CloudId
+* RegionId
+* CloudRegionId
+* CloudProviderImageId
+* ImageId
 
 
 ##### Example
 ```go
+newCloudImageMapping := cloudcenter.CloudImageMapping{
+	TenantId:             cloudcenter.String("1"),
+	CloudId:              cloudcenter.String("1"),
+	RegionId:             cloudcenter.String("1"),
+	CloudRegionId:        cloudcenter.String("1"),
+	CloudProviderImageId: cloudcenter.String("3a55133-749f-4cde-b80e-332781ae9b99"),
+	ImageId:              cloudcenter.String("2"),
+}
 
+cloudImageMapping, err := client.AddCloudImageMapping(&newCloudImageMapping)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	cloudImageMappingId := *cloudImageMapping.Id
+	cloudImageMappingResource := *cloudImageMapping.Resource
+	fmt.Println("Id: " + cloudImageMappingId + ", Name: " + cloudImageMappingResource)
+}
 ```
 
 #### UpdateCloudImageMapping
@@ -1101,9 +1123,34 @@ func (s *Client) UpdateCloudImageMapping(cloudImage *CloudImageMapping) (*CloudI
 
 ##### __Required Fields__
 * Id
+* TenantId
+* CloudId
+* RegionId
+* CloudRegionId
+* CloudProviderImageId
+* ImageId
 
 ##### Example
 ```go
+newCloudImageMapping := cloudcenter.CloudImageMapping{
+	Id:             cloudcenter.String("14"),
+	TenantId:             cloudcenter.String("1"),
+	CloudId:              cloudcenter.String("1"),
+	RegionId:             cloudcenter.String("1"),
+	CloudRegionId:        cloudcenter.String("1"),
+	CloudProviderImageId: cloudcenter.String("3a55133-749f-4cde-b80e-332781ae9b99"),
+	ImageId:              cloudcenter.String("2"),
+}
+
+cloudImageMapping, err := client.UpdateCloudImageMapping(&newCloudImageMapping)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	cloudImageMappingId := *cloudImageMapping.Id
+	cloudImageMappingResource := *cloudImageMapping.Resource
+	fmt.Println("Id: " + cloudImageMappingId + ", Name: " + cloudImageMappingResource)
+}
 ```
 
 #### DeleteCloudImageMapping
