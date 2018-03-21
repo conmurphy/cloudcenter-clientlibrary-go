@@ -1,11 +1,15 @@
 package cloudcenter
 
-import "fmt"
-import "net/http"
+import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"net/http"
+	"strconv"
 
-import "encoding/json"
-import "strconv"
-import "bytes"
+	validator "gopkg.in/validator.v2"
+)
 
 type ImageAPIResponse struct {
 	Resource      *string `json:"resource,omitempty"`
@@ -21,12 +25,12 @@ type Image struct {
 	TenantId          *int64        `json:"tenantId,omitempty"`
 	Resource          *string       `json:"resource,omitempty"`
 	Perms             *[]string     `json:"perms,omitempty"`
-	Name              *string       `json:"name,omitempty"`
+	Name              *string       `json:"name,omitempty" validate:"nonzero"`
 	InternalImageName *string       `json:"internalImageName,omitempty"`
 	Description       *string       `json:"description,omitempty"`
 	Visibility        *string       `json:"visibility,omitempty"`
-	ImageType         *string       `json:"imageType,omitempty"`
-	OSName            *string       `json:"osName,omitempty"`
+	ImageType         *string       `json:"imageType,omitempty" validate:"nonzero"`
+	OSName            *string       `json:"osName,omitempty" validate:"nonzero"`
 	Tags              *[]string     `json:"tags,omitempty"`
 	Enabled           *bool         `json:"enabled,omitempty"`
 	SystemImage       *bool         `json:"systemImage,omitempty"`
@@ -105,9 +109,13 @@ func (s *Client) AddImage(image *Image) (*Image, error) {
 
 	var data Image
 
+	if errs := validator.Validate(image); errs != nil {
+		return nil, errs
+	}
+
 	imageTenantId := int(*image.TenantId)
-	imageId := *image.Id
-	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + strconv.Itoa(imageTenantId) + "/images/" + imageId)
+
+	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + strconv.Itoa(imageTenantId) + "/images")
 
 	j, err := json.Marshal(image)
 
@@ -141,6 +149,14 @@ func (s *Client) AddImage(image *Image) (*Image, error) {
 func (s *Client) UpdateImage(image *Image) (*Image, error) {
 
 	var data Image
+
+	if errs := validator.Validate(image); errs != nil {
+		return nil, errs
+	}
+
+	if nonzero(image.Id) {
+		return nil, errors.New("Image.Id is missing")
+	}
 
 	imageTenantId := int(*image.TenantId)
 	imageId := *image.Id

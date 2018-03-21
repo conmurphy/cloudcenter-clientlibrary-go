@@ -194,9 +194,9 @@ type VirtualMachines struct {
 	StartTime             *string                `json:"startTime,omitempty"`
 	EndTime               *string                `json:"endTime,omitempty"`
 	NodeNetworkInterfaces []NodeNetworkInterface `json:"nodeNetworkInterfaces,omitempty"`
-	CostDetails           CostDetails            `json:"costDetails",omitempty"`
-	TaskDetails           []TaskDetails          `json:"costDetails",omitempty"`
-	AdditionalInfo        []AdditionalInfo       `json:"additionalInfo",omitempty"`
+	CostDetails           CostDetails            `json:"costDetails,omitempty"`
+	TaskDetails           []TaskDetails          `json:"taskDetails,omitempty"`
+	AdditionalInfo        []AdditionalInfo       `json:"additionalInfo,omitempty"`
 }
 
 type NodeNetworkInterface struct {
@@ -240,7 +240,7 @@ type BareMetalMachine struct {
 	Status      *string     `json:"status,omitempty"`
 	StartTime   *string     `json:"startTime,omitempty"`
 	EndTime     *string     `json:"endTime,omitempty"`
-	CostDetails CostDetails `json:"costDetails",omitempty"`
+	CostDetails CostDetails `json:"costDetails,omitempty"`
 }
 
 func (s *Client) GetJobs() ([]Job, error) {
@@ -384,8 +384,6 @@ func (s *Client) AddJobSync(job *Job, retrySeconds int) (*Job, error) {
 		}
 	}
 
-	return nil, errors.New("Job deployment failed")
-
 }
 
 func (s *Client) AddJobAsync(job *Job) (*Job, error) {
@@ -420,7 +418,6 @@ func (s *Client) AddJobAsync(job *Job) (*Job, error) {
 		}
 	}
 
-	return nil, errors.New("Job deployment failed")
 }
 
 func (s *Client) UpdateJobSync(job *Job, retrySeconds int) (*Job, error) {
@@ -497,8 +494,6 @@ func (s *Client) UpdateJobSync(job *Job, retrySeconds int) (*Job, error) {
 		}
 	}
 
-	return nil, errors.New("Job update failed")
-
 }
 
 func (s *Client) UpdateJobAsync(job *Job) (*Job, error) {
@@ -535,7 +530,6 @@ func (s *Client) UpdateJobAsync(job *Job) (*Job, error) {
 		}
 	}
 
-	return nil, errors.New("Job update failed")
 }
 
 func (s *Client) DeleteJobSync(jobId int) error {
@@ -579,8 +573,6 @@ func (s *Client) DeleteJobSync(jobId int) error {
 		}
 
 	}
-
-	return errors.New("Job deletion failed")
 
 }
 

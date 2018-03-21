@@ -1,11 +1,15 @@
 package cloudcenter
 
-import "fmt"
-import "net/http"
+import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"net/http"
+	"strconv"
 
-import "encoding/json"
-import "strconv"
-import "bytes"
+	validator "gopkg.in/validator.v2"
+)
 
 type ServiceAPIResponse struct {
 	Resource      *string   `json:"resource,omitempty"`
@@ -19,13 +23,13 @@ type ServiceAPIResponse struct {
 type Service struct {
 	Id                     *string              `json:"id,omitempty"`
 	OwnerUserId            *string              `json:"ownerUserId,omitempty"`
-	TenantId               *string              `json:"tenantId,omitempty"`
+	TenantId               *string              `json:"tenantId,omitempty" validate:"nonzero"`
 	ParentService          *bool                `json:"parentService,omitempty"`
 	ParentServiceId        *string              `json:"parentServiceId,omitempty"`
 	Resource               *string              `json:"resource,omitempty"`
 	Perms                  *[]string            `json:"perms,omitempty"`
-	Name                   *string              `json:"name,omitempty"`
-	DisplayName            *string              `json:"displayName,omitempty"`
+	Name                   *string              `json:"name,omitempty" validate:"nonzero"`
+	DisplayName            *string              `json:"displayName,omitempty" validate:"nonzero"`
 	LogoPath               *string              `json:"logoPath,omitempty"`
 	Description            *string              `json:"description,omitempty"`
 	DefaultImageId         *int64               `json:"defaultImageId,omitempty"`
@@ -41,7 +45,7 @@ type Service struct {
 	ServicePorts           *[]ServicePort       `json:"servicePorts,omitempty"`
 	ServiceParamSpecs      *[]ServiceParamSpec  `json:"serviceParamSpecs,omitempty"`
 	EgressRestrictions     *[]EgressRestriction `json:"egressRestrictions,omitempty"`
-	Images                 *[]Image             `json:"images,omitempty"`
+	Images                 *[]Image             `json:"images,omitempty" validate:"nonzero"`
 	Repositories           *[]Repository        `json:"repositories,omitempty"`
 	ChildServices          *[]Service           `json:"childServices,omitempty"`
 	ExternalActions        *[]ExternalAction    `json:"externalActions,omitempty"`
@@ -142,9 +146,13 @@ func (s *Client) AddService(service *Service) (*Service, error) {
 
 	var data Service
 
+	if errs := validator.Validate(service); errs != nil {
+		return nil, errs
+	}
+
 	serviceTenantId := *service.TenantId
-	serviceId := *service.Id
-	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + serviceTenantId + "/services/" + serviceId)
+
+	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + serviceTenantId + "/services")
 
 	j, err := json.Marshal(service)
 
@@ -179,7 +187,16 @@ func (s *Client) UpdateService(service *Service) (*Service, error) {
 
 	var data Service
 
+	if errs := validator.Validate(service); errs != nil {
+		return nil, errs
+	}
+
 	serviceTenantId := *service.TenantId
+
+	if nonzero(service.Id) {
+		return nil, errors.New("Service.Id is missing")
+	}
+
 	serviceId := *service.Id
 	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + serviceTenantId + "/services/" + serviceId)
 

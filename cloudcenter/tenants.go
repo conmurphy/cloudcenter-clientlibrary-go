@@ -1,11 +1,15 @@
 package cloudcenter
 
-import "fmt"
-import "net/http"
-import "encoding/json"
-import "strconv"
-import "bytes"
-import "errors"
+import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"net/http"
+	"strconv"
+
+	validator "gopkg.in/validator.v2"
+)
 
 type TenantAPIResponse struct {
 	Resource      *string  `json:"resource"`
@@ -17,21 +21,21 @@ type TenantAPIResponse struct {
 }
 
 type Tenant struct {
-	Id                              *string       `json:"id"`
+	Id                              *string       `json:"id,omitempty"`
 	Resource                        *string       `json:"resource,omitempty"`
-	Name                            *string       `json:"name,omitempty"`
+	Name                            *string       `json:"name,omitempty" validate:"nonzero"`
 	Url                             *string       `json:"url,omitempty"`
 	About                           *string       `json:"about,omitempty"`
 	ContactEmail                    *string       `json:"contactEmail,omitempty"`
 	Phone                           *string       `json:"phone,omitempty"`
-	UserId                          *string       `json:"userId,omitempty"`
+	UserId                          *string       `json:"userId,omitempty" validate:"nonzero"`
 	TermsOfService                  *string       `json:"termsOfService,omitempty"`
 	PrivacyPolicy                   *string       `json:"privacyPolicy,omitempty"`
 	RevShareRate                    *float64      `json:"revShareRate,omitempty"`
 	CcTransactionFeeRate            *float64      `json:"ccTransactionFeeRate,omitempty"`
 	MinAppFeeRate                   *float64      `json:"minAppFeeRate,omitempty"`
 	EnableConsolidatedBilling       *bool         `json:"enableConsolidatedBilling,omitempty"`
-	ShortName                       *string       `json:"shortName,omitempty"`
+	ShortName                       *string       `json:"shortName,omitempty" validate:"nonzero"`
 	EnablePurchaseOrder             *bool         `json:"enablePurchaseOrder,omitempty"`
 	EnableEmailNotificationsToUsers *bool         `json:"enableEmailNotificationsToUsers,omitempty"`
 	ParentTenantId                  *int64        `json:"parentTenantId,omitempty"`
@@ -101,6 +105,10 @@ func (s *Client) GetTenant(id int) (*Tenant, error) {
 
 func (s *Client) AddTenant(tenant *Tenant) error {
 
+	if errs := validator.Validate(tenant); errs != nil {
+		return errs
+	}
+
 	url := fmt.Sprintf(s.BaseURL + "/v1/tenants")
 
 	j, err := json.Marshal(tenant)
@@ -120,6 +128,14 @@ func (s *Client) AddTenant(tenant *Tenant) error {
 func (s *Client) UpdateTenant(tenant *Tenant) (*Tenant, error) {
 
 	var data Tenant
+
+	if errs := validator.Validate(tenant); errs != nil {
+		return nil, errs
+	}
+
+	if nonzero(tenant.Id) {
+		return nil, errors.New("Tenant.Id is missing")
+	}
 
 	tenantId := *tenant.Id
 	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + tenantId)

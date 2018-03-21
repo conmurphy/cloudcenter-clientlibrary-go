@@ -1,10 +1,15 @@
 package cloudcenter
 
-import "fmt"
-import "net/http"
-import "strconv"
-import "encoding/json"
-import "bytes"
+import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"net/http"
+	"strconv"
+
+	validator "gopkg.in/validator.v2"
+)
 
 type PlanAPIResponse struct {
 	Resource      *string `json:"resource"`
@@ -18,11 +23,11 @@ type PlanAPIResponse struct {
 type Plan struct {
 	Id                       *string   `json:"id,omitempty"`
 	Resource                 *string   `json:"resource,omitempty"`
-	Name                     *string   `json:"name,omitempty"`
+	Name                     *string   `json:"name,omitempty" validate:"nonzero"`
 	Description              *string   `json:"description,omitempty"`
 	Perms                    *[]string `json:"perms"`
-	TenantId                 *string   `json:"tenantId,omitempty"`
-	Type                     *string   `json:"type,omitempty"`
+	TenantId                 *string   `json:"tenantId,omitempty" validate:"nonzero"`
+	Type                     *string   `json:"type,omitempty" validate:"nonzero"`
 	MonthlyLimit             *int64    `json:"monthlyLimit,omitempty"`
 	NodeHourIncrement        *float64  `json:"nodeHourIncrement,omitempty"`
 	IncludedBundleId         *string   `json:"includedBundleId,omitempty"`
@@ -94,7 +99,12 @@ func (s *Client) AddPlan(plan *Plan) (*Plan, error) {
 
 	var data Plan
 
+	if errs := validator.Validate(plan); errs != nil {
+		return nil, errs
+	}
+
 	planTenantId := *plan.TenantId
+
 	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + planTenantId + "/plans")
 
 	j, err := json.Marshal(plan)
@@ -129,8 +139,17 @@ func (s *Client) UpdatePlan(plan *Plan) (*Plan, error) {
 
 	var data Plan
 
+	if errs := validator.Validate(plan); errs != nil {
+		return nil, errs
+	}
+
+	if nonzero(plan.Id) {
+		return nil, errors.New("Id is missing")
+	}
+
 	planTenantId := *plan.TenantId
 	planId := *plan.Id
+
 	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + planTenantId + "/plans/" + planId)
 
 	j, err := json.Marshal(plan)

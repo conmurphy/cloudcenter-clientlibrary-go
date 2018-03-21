@@ -1,11 +1,15 @@
 package cloudcenter
 
-import "fmt"
-import "net/http"
-import "encoding/json"
-import "strconv"
+import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"net/http"
+	"strconv"
 
-import "bytes"
+	validator "gopkg.in/validator.v2"
+)
 
 //import "errors"
 
@@ -23,9 +27,9 @@ type Role struct {
 	Id          *string       `json:"id,omitempty"`
 	Resource    *string       `json:"resource,omitempty"`
 	Perms       *[]string     `json:"perms,omitempty"`
-	Name        *string       `json:"name,omitempty"`
+	Name        *string       `json:"name,omitempty" validate:"nonzero"`
 	Description *string       `json:"description,omitempty"`
-	TenantId    *string       `json:"tenantId,omitempty"` //required
+	TenantId    *string       `json:"tenantId,omitempty" validate:"nonzero"`
 	ObjectPerms *[]ObjectPerm `json:"objectPerms,omitempty"`
 	Users       *[]User       `json:"users,omitempty"`
 	Groups      *[]Group      `json:"groups,omitempty"`
@@ -91,6 +95,10 @@ func (s *Client) AddRole(role *Role) (*Role, error) {
 
 	var data Role
 
+	if errs := validator.Validate(role); errs != nil {
+		return nil, errs
+	}
+
 	roleTenantId := *role.TenantId
 	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + roleTenantId + "/roles")
 
@@ -126,8 +134,18 @@ func (s *Client) UpdateRole(role *Role) (*Role, error) {
 
 	var data Role
 
+	if errs := validator.Validate(role); errs != nil {
+		return nil, errs
+	}
+
 	roleTenantId := *role.TenantId
+
+	if nonzero(role.Id) {
+		return nil, errors.New("Role.Id is missing")
+	}
+
 	roleId := *role.Id
+
 	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + roleTenantId + "/roles/" + roleId)
 
 	j, err := json.Marshal(role)

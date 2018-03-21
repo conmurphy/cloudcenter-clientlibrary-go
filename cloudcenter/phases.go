@@ -1,10 +1,15 @@
 package cloudcenter
 
-import "fmt"
-import "net/http"
-import "strconv"
-import "encoding/json"
-import "bytes"
+import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"net/http"
+	"strconv"
+
+	validator "gopkg.in/validator.v2"
+)
 
 //import "bytes"
 
@@ -19,7 +24,7 @@ type PhaseAPIResponse struct {
 
 type Phase struct {
 	Id                     *string                `json:"id,omitempty"`
-	ProjectId              *string                `json:"projectId,omitempty"`
+	ProjectId              *string                `json:"projectId,omitempty" validate:"nonzero"`
 	Resource               *string                `json:"resource,omitempty"`
 	Perms                  *[]string              `json:"perms,omitempty"`
 	Name                   *string                `json:"name,omitempty"`
@@ -119,6 +124,10 @@ func (s *Client) AddPhase(phase *Phase) (*Phase, error) {
 
 	var data Phase
 
+	if errs := validator.Validate(phase); errs != nil {
+		return nil, errs
+	}
+
 	phaseProjectID := *phase.ProjectId
 
 	url := fmt.Sprintf(s.BaseURL + "/v1/projects/" + phaseProjectID + "/phases")
@@ -136,6 +145,7 @@ func (s *Client) AddPhase(phase *Phase) (*Phase, error) {
 
 	bytes, err := s.doRequest(req)
 
+	fmt.Println(string(bytes))
 	if err != nil {
 		return nil, err
 	}
@@ -155,8 +165,17 @@ func (s *Client) UpdatePhase(phase *Phase) (*Phase, error) {
 
 	var data Phase
 
+	if errs := validator.Validate(phase); errs != nil {
+		return nil, errs
+	}
+
+	if nonzero(phase.Id) {
+		return nil, errors.New("Phase.Id is missing")
+	}
+
 	phaseId := *phase.Id
 	phaseProjectID := *phase.ProjectId
+
 	url := fmt.Sprintf(s.BaseURL + "/v1/projects/" + phaseProjectID + "/phases/" + phaseId)
 
 	j, err := json.Marshal(phase)

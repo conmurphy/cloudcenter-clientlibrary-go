@@ -14,15 +14,15 @@
 //  // Create user
 //
 //  newUser := cloudcenter.User{
-//	  TenantId:    "1",
-//	  FirstName:   "client",
-//	  LastName:    "library",
-//	  Password:    "myPassword",
-//	  EmailAddr:   "clientlibrary@cloudcenter.com",
-//	  CompanyName: "Company",
-//	  PhoneNumber: "12345",
-//	  ExternalId:  "23456",
-//  }
+//  		FirstName:   cloudcenter.String("client"),
+//  		LastName:    cloudcenter.String("library"),
+//  		Password:    cloudcenter.String("myPassword"),
+//  		EmailAddr:   cloudcenter.String("clientlibrary@cloudcenter.com"),
+//  		CompanyName: cloudcenter.String("company"),
+//  		PhoneNumber: cloudcenter.String("12345"),
+//  		ExternalId:  cloudcenter.String("23456"),
+//  		TenantId:    cloudcenter.String("1"),
+//  	}
 //
 //  user, err := client.AddUser(&newUser)
 //
@@ -31,15 +31,74 @@
 //  } else {
 //	  fmt.Println(”New user created. \n UserId: " + user.Id + ", Username: " + user.LastName)
 //  }
+//
+// Helper Functions
+//
+// As per the following link, using the Marshal function from the encoding/json library treats false booleans as if they were nil values, and thus it omits them from the JSON response. To make a distinction between a non-existent boolean and false boolean we need to use a ```*bool``` in the struct.
+//
+// type User struct {
+// 	Id                      *string `json:"id,omitempty"`
+// 	FirstName               *string `json:"firstName,omitempty"`
+// 	LastName                *string `json:"lastName,omitempty"`
+// 	Password                *string `json:"password,omitempty"`
+// 	EmailAddr               *string `json:"emailAddr,omitempty"`
+// 	Enabled                 *bool   `json:"enabled,omitempty"`
+// 	TenantAdmin             *bool   `json:"tenantAdmin,omitempty"`
+// }
+// https://github.com/golang/go/issues/13284
+//
+// Therefore in order to have a consistent experience all struct fields within this client library use pointers. This provides a way to differentiate between unset values, nil, and an intentional zero value, such as "", false, or 0.
+//
+// Helper functions have been created to simplify the creation of pointer types.
+//
+// Without
+//
+// firstName 	:= "client"
+// lastName 	:= "library"//
+// password	    := "myPassword"
+// emailAddr	:= "clientlibrary@cloudcenter-address.com"
+// companyName	:= "company"
+// phoneNumber	:= "12345"
+// externalId	:= "23456"
+// tenantId	:= "1"
+//
+// newUser := cloudcenter.User {
+// 	FirstName:   &firstName,
+// 	LastName:    &lastName,
+// 	Password:    &password,
+// 	EmailAddr:  &emailAddr,
+// 	CompanyName: &companyName,
+// 	PhoneNumber: &phoneNumber,
+// 	ExternalId: &externalId,
+// 	TenantId:    &tenantId,
+// }
+//
+// With
+//
+// newUser := cloudcenter.User {
+// 	FirstName:   cloudcenter.String("client"),
+// 	LastName:    cloudcenter.String("library"),
+// 	Password:    cloudcenter.String("myPassword"),
+// 	EmailAddr:   cloudcenter.String("clientlibrary@cloudcenter-address.com"),
+// 	CompanyName: cloudcenter.String("company"),
+// 	PhoneNumber: cloudcenter.String("12345"),
+// 	ExternalId:  cloudcenter.String("23456"),
+// 	TenantId:    cloudcenter.String("1"),
+// }
+//
+// Reference: https://willnorris.com/2014/05/go-rest-apis-and-pointers
 package cloudcenter
 
-import "fmt"
-import "net/http"
-import "io/ioutil"
-import "crypto/tls"
-import "io"
-import "mime/multipart"
-import "os"
+import (
+	"crypto/tls"
+	"fmt"
+	"io"
+	"io/ioutil"
+	"mime/multipart"
+	"net/http"
+	"os"
+	"reflect"
+)
 
 //import "encoding/json"
 
@@ -159,4 +218,26 @@ func Float32(value float32) *float32 {
 // Helper routine used to return pointer - will used to simplify the use of the clientlibrary
 func Float64(value float64) *float64 {
 	return &value
+}
+
+//modified from unexported nonzero function in the validtor package
+//https://github.com/go-validator/validator/blob/v2/builtins.go
+func nonzero(v interface{}) bool {
+	st := reflect.ValueOf(v)
+	nonZeroValue := false
+	switch st.Kind() {
+	case reflect.Ptr, reflect.Interface:
+		nonZeroValue = st.IsNil()
+	case reflect.Invalid:
+		nonZeroValue = true // always invalid
+	case reflect.Struct:
+		nonZeroValue = false // always valid since only nil pointers are empty
+	default:
+		return true
+	}
+
+	if nonZeroValue {
+		return true
+	}
+	return false
 }

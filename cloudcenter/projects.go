@@ -1,10 +1,15 @@
 package cloudcenter
 
-import "fmt"
-import "net/http"
-import "strconv"
-import "encoding/json"
-import "bytes"
+import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"net/http"
+	"strconv"
+
+	validator "gopkg.in/validator.v2"
+)
 
 //import "bytes"
 
@@ -21,7 +26,7 @@ type Project struct {
 	Id             *string      `json:"id,omitempty"`
 	Resource       *string      `json:"resource,omitempty"`
 	Perms          *[]string    `json:"perms,omitempty"`
-	Name           *string      `json:"name,omitempty"`
+	Name           *string      `json:"name,omitempty"  validate:"nonzero"`
 	Description    *string      `json:"description,omitempty"`
 	ProjectOwnerId *int64       `json:"projectOwnerId,omitempty"`
 	IsDraft        *bool        `json:"isDraft,omitempty"`
@@ -105,6 +110,10 @@ func (s *Client) AddProject(project *Project) (*Project, error) {
 
 	var data Project
 
+	if errs := validator.Validate(project); errs != nil {
+		return nil, errs
+	}
+
 	url := fmt.Sprintf(s.BaseURL + "/v1/projects")
 
 	j, err := json.Marshal(project)
@@ -139,7 +148,16 @@ func (s *Client) UpdateProject(project *Project) (*Project, error) {
 
 	var data Project
 
+	if errs := validator.Validate(project); errs != nil {
+		return nil, errs
+	}
+
+	if nonzero(project.Id) {
+		return nil, errors.New("Project.Id is missing")
+	}
+
 	projectId := *project.Id
+
 	url := fmt.Sprintf(s.BaseURL + "/v1/projects/" + projectId)
 
 	j, err := json.Marshal(project)
