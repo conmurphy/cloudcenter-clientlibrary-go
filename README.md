@@ -1838,6 +1838,12 @@ type AdditionalParameter struct {
 
 ### Phases
 
+- [GetPhases](#getphases)
+- [GetPhase](#getphase)
+- [AddPhase](#addphase)
+- [UpdatePhase](#updatephase)
+- [DeletePhase](#deletephase)
+
 ```go
 type PhaseAPIResponse struct {
 	Resource      *string 
@@ -1903,7 +1909,9 @@ if err != nil {
 	fmt.Println(err)
 } else {
 	for _, phase := range phases {
-		fmt.Println("Id: " + phase.Id + ", Name: " + phase.Name)
+		phaseId := *phase.Id
+		phaseName := *phase.Name
+		fmt.Println("Id: " + phaseId + ", Name: " + phaseName)
 	}
 }
 ```
@@ -1922,17 +1930,63 @@ phase, err := client.GetPhase(1, 1)
 if err != nil {
 	fmt.Println(err)
 } else {
-	fmt.Println("Id: " + phase.Id + ", Name: " + phase.Name)
+	phaseId := *phase.Id
+	phaseName := *phase.Name
+	fmt.Println("Id: " + phaseId + ", Name: " + phaseName)
 }
 ```
 
+#### AddPhase
+
+```go
+func (s *Client) AddPhase(phase *Phase) (*Phase, error)
+```
+
+##### __Required Fields__
+* TenantId
+
+
+##### Example
+```go
+
+```
+#### UpdatePhase
+
+```go
+func (s *Client) UpdatePhase(phase *Phase) (*Phase, error)
+```
+
+##### __Required Fields__
+* Id
+
+
+##### Example
+```go
+
+```
+#### DeletePlan
+
+```go
+func (s *Client) DeletePhase(phaseProjectID int, phaseId int) error
+```
+
+##### Example
+```go
+err := client.DeletePhase(1,1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Phase deleted")
+}
+```
 
 ### Plans
 
 - [GetPlans](#getplans)
 - [GetPlan](#getplan)
 - [AddPlan](#addplan)
-- [UpdatePlam](#updateplan)
+- [UpdatePlan](#updateplan)
 - [DeletePlan](#deleteplan)
 
 ```go
@@ -1991,7 +2045,9 @@ if err != nil {
 	fmt.Println(err)
 } else {
 	for _, plan := range plans {
-		fmt.Println("Id: " + plan.Id + ", Name: " + plan.Name)
+		planId := *plan.Id
+		planName := *plan.Name
+		fmt.Println("Id: " + planId + ", Name: " + planName)
 	}
 }
 ```
@@ -2010,7 +2066,9 @@ plan, err := client.GetPlan(1, 1)
 if err != nil {
 	fmt.Println(err)
 } else {
-	fmt.Println("Id: " + plan.Id + ", Name: " + plan.Name)
+	planId := *plan.Id
+	planName := *plan.Name
+	fmt.Println("Id: " + planId + ", Name: " + planName)
 }
 ```
 
@@ -2082,7 +2140,7 @@ func (s *Client) DeletePlan(tenantId int, planId int) error
 
 ##### Example
 ```go
-err := client.DeletePlan(12)
+err := client.DeletePlan(1, 12)
 
 if err != nil {
 	fmt.Println(err)
@@ -2154,7 +2212,9 @@ if err != nil {
 	fmt.Println(err)
 } else {
 	for _, project := range projects {
-		fmt.Println("Id: " + project.Id + ", Name: " + project.Name)
+		projectName := *project.Name
+		projectId := *project.Id
+		fmt.Println("Project Id: " + projectId + ", Name: " + projectName)
 	}
 }
 ```
@@ -2173,7 +2233,9 @@ project, err := client.GetProject(1)
 if err != nil {
 	fmt.Println(err)
 } else {
-	fmt.Println("Id: " + project.Id + ", Name: " + project.Name)
+	projectName := *project.Name
+	projectId := *project.Id
+	fmt.Println("Project Id: " + projectId + ", Name: " + projectName)
 }
 ```
 
@@ -2304,7 +2366,9 @@ if err != nil {
 	fmt.Println(err)
 } else {
 	for _, role := range roles {
-		fmt.Println("Id: " + role.Id + ", Name: " + role.Name)
+		roleName := *role.Name
+		roleId := *role.Id
+		fmt.Println("Role Id: " + roleId + ", Name: " + roleName)
 	}
 }
 ```
@@ -2323,7 +2387,9 @@ role, err := client.GetRole(1, 1)
 if err != nil {
 	fmt.Println(err)
 } else {
-	fmt.Println("Id: " + role.Id + ", Name: " + role.Name)
+	roleName := *role.Name
+	roleId := *role.Id
+	fmt.Println("Role Id: " + roleId + ", Name: " + roleName)
 }
 ```
 
