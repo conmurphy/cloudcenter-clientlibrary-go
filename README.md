@@ -18,127 +18,31 @@ Table of Contents
       * [Sync and Async](#sync-and-async)
       * [Reference](#reference)
          * [ActionPolicies](#actionpolicies)
-            * [GetActionPolicies](#getactionpolicies)
-               * [Example](#example)
-            * [GetActionPolicy](#getactionpolicy)
-               * [Example](#example-1)
          * [Actions](#actions)
-            * [GetActions](#getactions)
-               * [Example](#example-2)
-            * [GetAction](#getaction)
-               * [Example](#example-3)
          * [ActivationProfiles](#activationprofiles)
-            * [GetActivationProfiles](#getactivationprofiles)
-               * [Example](#example-4)
-            * [GetActivationProfile](#getactivationprofile)
-               * [Example](#example-5)
          * [AgingPolicies](#agingpolicies)
-            * [GetAgingPolicies](#getagingpolicies)
-               * [Example](#example-6)
-            * [GetAgingPolicy](#getagingpolicy)
-               * [Example](#example-7)
          * [Apps](#apps)
-            * [GetApps](#getapps)
-               * [Example](#example-8)
-            * [GetApp](#getapp)
-               * [Example](#example-9)
          * [Bundles](#bundles)
-            * [GetBundles](#getbundles)
-               * [Example](#example-10)
-            * [GetBundle](#getbundle)
-               * [Example](#example-11)
-            * [GetBundleFromName](#getbundlefromname)
-               * [Example](#example-12)
          * [CloudAccounts](#cloudaccounts)
-            * [GetCloudAccounts](#getcloudaccounts)
-               * [Example](#example-13)
-            * [GetCloudAccount](#getcloudaccount)
-               * [Example](#example-14)
-            * [GetCloudAccountByName](#getcloudaccountbyname)
-               * [Example](#example-15)
          * [CloudImageMapping](#cloudimagemapping)
-            * [GetCloudImageMappings](#getcloudimagemappings)
-               * [Example](#example-16)
-            * [GetCloudImageMapping](#getcloudimagemapping)
-               * [Example](#example-17)
          * [CloudInstanceTypes](#cloudinstancetypes)
-            * [GetCloudInstanceTypes](#getcloudinstancetypes)
-               * [Example](#example-18)
-            * [GetCloudInstanceType](#getcloudinstancetype)
-               * [Example](#example-19)
          * [CloudRegions](#cloudregions)
-            * [GetCloudRegions](#getcloudregions)
-               * [Example](#example-20)
-            * [GetCloudRegion](#getcloudregion)
-               * [Example](#example-21)
          * [CloudStorageTypes](#cloudstoragetypes)
-            * [GetCloudStorageTypes](#getcloudstoragetypes)
-               * [Example](#example-22)
-            * [GetCloudStorageType](#getcloudstoragetype)
-               * [Example](#example-23)
          * [Clouds](#clouds)
-            * [GetClouds](#getclouds)
-               * [Example](#example-24)
-            * [GetCloud](#getcloud)
-               * [Example](#example-25)
          * [Contracts](#contracts)
-            * [GetContracts](#getcontracts)
-               * [Example](#example-26)
-            * [GetContract](#getcontract)
-               * [Example](#example-27)
          * [Environments](#environments)
-            * [GetEnvironments](#getenvironments)
-               * [Example](#example-28)
-            * [GetEnvironment](#getenvironment)
-               * [Example](#example-29)
          * [Groups](#groups)
-            * [GetGroups](#getgroups)
-               * [Example](#example-30)
-            * [GetGroup](#getgroup)
-               * [Example](#example-31)
          * [Images](#images)
-            * [GetImages](#getimages)
-               * [Example](#example-32)
-            * [GetImage](#getimage)
-               * [Example](#example-33)
          * [Jobs](#jobs)
          * [OperationStatus](#operationstatus)
          * [Phases](#phases)
-            * [GetPhases](#getphases)
-               * [Example](#example-34)
-            * [GetPhase](#getphase)
-               * [Example](#example-35)
          * [Plans](#plans)
-            * [GetPlans](#getplans)
-               * [Example](#example-36)
-            * [GetPlan](#getplan)
-               * [Example](#example-37)
          * [Projects](#projects)
-            * [GetProjects](#getprojects)
-               * [Example](#example-38)
-            * [GetProject](#getproject)
-               * [Example](#example-39)
          * [Roles](#roles)
-            * [GetRoles](#getroles)
-               * [Example](#example-40)
-            * [GetRole](#getrole)
-               * [Example](#example-41)
          * [Services](#services)
-            * [GetServices](#getservices)
-               * [Example](#example-42)
-            * [GetService](#getservice)
-               * [Example](#example-43)
          * [SuspensionPolicies](#suspensionpolicies)
          * [Tenants](#tenants)
-            * [GetTenants](#gettenants)
-               * [Example](#example-44)
-            * [GetTenant](#gettenant)
-               * [Example](#example-45)
          * [Users](#users)
-            * [AddUser](#adduser)
-               * [Example](#example-46)
-            * [DeleteUser](#deleteuser)
-               * [Example](#example-47)
          * [VirtualMachines](#virtualmachines)
 
 Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
@@ -173,7 +77,9 @@ user, err := client.AddUser(&newUser)
 if err != nil {
 	fmt.Println(err)
 } else {
-	fmt.Println(”New user created. \n UserId: " + user.Id + ", User last name: " + user.LastName)
+	userId := *user.Id
+	userEnabled := *user.Enabled
+	fmt.Println(”New user created. \n UserId: " + user.Id + ", Enabled: " + strconv.FormatBool(userEnabled))
 }
 ```
 
@@ -1587,6 +1493,11 @@ if err != nil {
 
 ### Environments
 
+- [GetEnvironments](#getenvironment)
+- [GetEnvironment](#getenvironment)
+- [AddEnvironment](#addenvironment)
+- [UpdateEnvironment](#updateenvironment)
+- [DeleteEnvironment](#deleteenvironment)
 ```go
 type EnvironmentAPIResponse struct {
 	Resource      *string       
@@ -1673,7 +1584,9 @@ if err != nil {
 	fmt.Println(err)
 } else {
 	for _, environment := range environments {
-		fmt.Println("Id: " + environment.Id + ", Name: " + environment.Name)
+		environmentId := *environment.Id
+		environmentName := *environment.Name
+		fmt.Println("Environment Id: " + environmentId + ", Name: " + environmentName)
 	}
 }
 ```
@@ -1692,11 +1605,88 @@ environment, err := client.GetEnvironment(1)
 if err != nil {
 	fmt.Println(err)
 } else {
-	fmt.Println("Id: " + environment.Id + ", Name: " + environment.Name)
+	environmentId := *environment.Id
+	environmentName := *environment.Name
+	fmt.Println("Environment Id: " + environmentId + ", Name: " + environmentName)
 }
 ```
 
+#### AddEnvironment
+
+```go
+func (s *Client) AddEnvironment(environment *Environment) (*Environment, error)
+```
+
+##### __Required Fields__
+* Name
+
+##### Example
+```go
+newEnvironment := cloudcenter.Environment{
+	Name: cloudcenter.String("Client Library environment"),
+}
+
+environment, err := client.AddEnvironment(&newEnvironment)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	environmentId := *environment.Id
+	environmentResource := *environment.Resource
+	fmt.Println("Environment Id: " + environmentId + ", Resource: " + environmentResource)
+}
+```
+#### UpdateEnvironment
+
+```go
+func (s *Client) UpdateEnvironment(environment *Environment) (*Environment, error)
+```
+
+##### __Required Fields__
+* Id
+* Name
+
+
+##### Example
+```go
+newEnvironment := cloudcenter.Environment{
+	Id: cloudcenter.String("5"),
+	Name: cloudcenter.String("Client Library environment"),
+}
+
+environment, err := client.UpdateEnvironment(&newEnvironment)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	environmentId := *environment.Id
+	environmentResource := *environment.Resource
+	fmt.Println("Environment Id: " + environmentId + ", Resource: " + environmentResource)
+}
+```
+#### DeleteEnvironment
+
+```go
+func (s *Client) DeleteEnvironment(environmentId int) error
+```
+
+##### Example
+```go
+err := client.DeleteGroup(4)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Environment deleted")
+}
+```
 ### Groups
+
+- [GetGroups](#getgroups)
+- [GetGroup](#getgroup)
+- [AddGroup](#addgroup)
+- [UpdateGroup](#updategroup)
+- [DeleteGroup](#deletegroup)
 
 ```go
 type GroupAPIResponse struct {
@@ -1740,10 +1730,9 @@ if err != nil {
 	fmt.Println(err)
 } else {
 	for _, group := range groups {
-		fmt.Println("Id: " + group.Id + ", Name: " + group.Name)
-		for _, user := range group.Users {
-			fmt.Println("Id: " + user.Id + ", Name: " + user.Username)
-		}
+		groupId := *group.Id
+		groupName := *group.Name
+		fmt.Println("Group Id: " + groupId + ", Name: " + groupName)
 	}
 }
 ```
@@ -1762,14 +1751,93 @@ group, err := client.GetGroup(1, 1)
 if err != nil {
 	fmt.Println(err)
 } else {
-	fmt.Println("Id: " + group.Id + ", Name: " + group.Name)
-	for _, user := range group.Users {
-		fmt.Println("Id: " + user.Id + ", Name: " + user.Username)
-	}
+	groupId := *group.Id
+	groupName := *group.Name
+	fmt.Println("Group Id: " + groupId + ", Name: " + groupName)
+}
+```
+
+#### AddGroup
+
+```go
+func (s *Client) AddGroup(group *Group) (*Group, error)
+```
+
+##### __Required Fields__
+* TenantId 
+* Name
+
+##### Example
+```go
+newGroup := cloudcenter.Group{
+	TenantId: cloudcenter.String("1"),
+	Name:     cloudcenter.String("New Client Library group"),
+}
+
+group, err := client.AddGroup(&newGroup)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	groupId := *group.Id
+	groupName := *group.Name
+	fmt.Println("Group Id: " + groupId + ", Name: " + groupName)
+}
+```
+#### UpdateGroup
+
+```go
+func (s *Client) UpdateGroup(group *Group) (*Group, error)
+```
+
+##### __Required Fields__
+* Id
+* TenantId 
+* Name
+
+##### Example
+```go
+newGroup := cloudcenter.Group{
+	Id:       cloudcenter.String("4"),
+	TenantId: cloudcenter.String("1"),
+	Name:     cloudcenter.String("New Client Library group"),
+}
+
+group, err := client.UpdateGroup(&newGroup)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	groupId := *group.Id
+	groupName := *group.Name
+	fmt.Println("Group Id: " + groupId + ", Name: " + groupName)
+}
+
+```
+#### DeleteGroup
+
+```go
+func (s *Client) DeleteGroup(tenantId int, groupId int) error
+```
+
+##### Example
+```go
+err := client.DeleteGroup(1,1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Group deleted")
 }
 ```
 
 ### Images
+
+- [GetImages](#getimages)
+- [GetImage](#getimage)
+- [AddImage](#addimage)
+- [UpdateImage](#updateimage)
+- [DeleteImage](#deleteimage)
 
 ```go
 type ImageAPIResponse struct {
@@ -1882,7 +1950,9 @@ if err != nil {
 	fmt.Println(err)
 } else {
 	for _, image := range images {
-		fmt.Println("Id: " + image.Id + ", Resource: " + image.Resource)
+		imageId := *image.Id
+		imageResource := *image.Resource
+		fmt.Println("Id: " + imageId + ", Resource: " + imageResource)
 	}
 }
 ```
@@ -1901,12 +1971,92 @@ image, err := client.GetImage(1, 2)
 if err != nil {
 	fmt.Println(err)
 } else {
-	fmt.Println("Id: " + image.Id + ", Name: " + image.Name)
+	imageId := *image.Id
+	imageResource := *image.Resource
+	fmt.Println("Id: " + imageId + ", Resource: " + imageResource)
 }
 ```
 
+#### AddImage
 
+```go
+func (s *Client) AddImage(image *Image) (*Image, error)
+```
 
+##### __Required Fields__
+* TenantId 
+* Name
+* ImageType
+* OSName
+
+##### Example
+```go
+newImage := cloudcenter.Image{
+	TenantId:  cloudcenter.Int64(1),
+	Name:      cloudcenter.String("Ubuntu 14.4"),
+	ImageType: cloudcenter.String("CLOUD_WORKER"),
+	OSName:    cloudcenter.String("LINUX"),
+}
+
+image, err := client.AddImage(&newImage)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	imageId := *image.Id
+	imageResource := *image.Resource
+	fmt.Println("Id: " + imageId + ", Resource: " + imageResource)
+}
+```
+#### UpdateImage
+
+```go
+func (s *Client) UpdateImage(image *Image) (*Image, error)
+```
+
+##### __Required Fields__
+* Id
+* TenantId 
+* Name
+* ImageType
+* OSName
+
+##### Example
+```go
+newImage := cloudcenter.Image{
+	Id:      cloudcenter.String("12"),
+	TenantId:  cloudcenter.Int64(1),
+	Name:      cloudcenter.String("Updated Ubuntu 14.4"),
+	ImageType: cloudcenter.String("CLOUD_WORKER"),
+	OSName:    cloudcenter.String("LINUX"),
+}
+
+image, err := client.UpdateImage(&newImage)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	imageId := *image.Id
+	imageResource := *image.Resource
+	fmt.Println("Id: " + imageId + ", Resource: " + imageResource)
+}
+```
+#### DeleteImage
+
+```go
+func (s *Client) DeleteImage(tenantId int, imageId int) error
+```
+
+##### Example
+```go
+err := client.DeleteImage(1,1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Image deleted")
+}
+```
 
 ### Jobs
 ### OperationStatus
@@ -1931,6 +2081,12 @@ type AdditionalParameter struct {
 ```
 
 ### Phases
+
+- [GetPhases](#getphases)
+- [GetPhase](#getphase)
+- [AddPhase](#addphase)
+- [UpdatePhase](#updatephase)
+- [DeletePhase](#deletephase)
 
 ```go
 type PhaseAPIResponse struct {
@@ -1997,7 +2153,9 @@ if err != nil {
 	fmt.Println(err)
 } else {
 	for _, phase := range phases {
-		fmt.Println("Id: " + phase.Id + ", Name: " + phase.Name)
+		phaseId := *phase.Id
+		phaseName := *phase.Name
+		fmt.Println("Id: " + phaseId + ", Name: " + phaseName)
 	}
 }
 ```
@@ -2016,12 +2174,67 @@ phase, err := client.GetPhase(1, 1)
 if err != nil {
 	fmt.Println(err)
 } else {
-	fmt.Println("Id: " + phase.Id + ", Name: " + phase.Name)
+	phaseId := *phase.Id
+	phaseName := *phase.Name
+	fmt.Println("Id: " + phaseId + ", Name: " + phaseName)
 }
 ```
 
+#### AddPhase
+
+```go
+func (s *Client) AddPhase(phase *Phase) (*Phase, error)
+```
+
+##### __Required Fields__
+* ProjectId
+* Name
+
+
+##### Example
+```go
+
+```
+#### UpdatePhase
+
+```go
+func (s *Client) UpdatePhase(phase *Phase) (*Phase, error)
+```
+
+##### __Required Fields__
+* Id
+* ProjectId
+* Name
+
+
+##### Example
+```go
+
+```
+#### DeletePhase
+
+```go
+func (s *Client) DeletePhase(phaseProjectID int, phaseId int) error
+```
+
+##### Example
+```go
+err := client.DeletePhase(1,1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Phase deleted")
+}
+```
 
 ### Plans
+
+- [GetPlans](#getplans)
+- [GetPlan](#getplan)
+- [AddPlan](#addplan)
+- [UpdatePlan](#updateplan)
+- [DeletePlan](#deleteplan)
 
 ```go
 type PlanAPIResponse struct {
@@ -2079,7 +2292,9 @@ if err != nil {
 	fmt.Println(err)
 } else {
 	for _, plan := range plans {
-		fmt.Println("Id: " + plan.Id + ", Name: " + plan.Name)
+		planId := *plan.Id
+		planName := *plan.Name
+		fmt.Println("Id: " + planId + ", Name: " + planName)
 	}
 }
 ```
@@ -2098,11 +2313,97 @@ plan, err := client.GetPlan(1, 1)
 if err != nil {
 	fmt.Println(err)
 } else {
-	fmt.Println("Id: " + plan.Id + ", Name: " + plan.Name)
+	planId := *plan.Id
+	planName := *plan.Name
+	fmt.Println("Id: " + planId + ", Name: " + planName)
 }
 ```
 
+#### AddPlan
+
+```go
+func (s *Client) AddPlan(plan *Plan) (*Plan, error)
+```
+
+##### __Required Fields__
+* TenantId
+* Name
+* Type
+
+##### Example
+```go
+newPlan := cloudcenter.Plan{
+	TenantId: cloudcenter.String("1"),
+	Name:     cloudcenter.String("client library plan"),
+	Type: cloudcenter.String("UNLIMITED_PLAN"),
+}
+
+plan, err := client.AddPlan(&newPlan)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	planId := *plan.Id
+	planDisabled := *plan.Disabled
+	fmt.Println("Plan Id: " + planId + ", Disabled: " + strconv.FormatBool(planDisabled))
+}
+```
+#### UpdatePlan
+
+```go
+func (s *Client) UpdatePlan(plan *Plan) (*Plan, error)
+```
+
+##### __Required Fields__
+* Id
+* TenantId
+* Name
+* Type
+
+##### Example
+```go
+newPlan := cloudcenter.Plan{
+	Id: cloudcenter.String("2"),
+	TenantId: cloudcenter.String("1"),
+	Name:     cloudcenter.String("client library plan"),
+	Type: cloudcenter.String("UNLIMITED_PLAN"),
+}
+
+plan, err := client.UpdatePlan(&newPlan)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	planId := *plan.Id
+	planDisabled := *plan.Disabled
+	fmt.Println("Plan Id: " + planId + ", Disabled: " + strconv.FormatBool(planDisabled))
+}
+```
+#### DeletePlan
+
+```go
+func (s *Client) DeletePlan(tenantId int, planId int) error
+```
+
+##### Example
+```go
+err := client.DeletePlan(1, 12)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Plan deleted")
+}
+```
+
+
 ### Projects
+
+- [GetProjects](#getprojects)
+- [GetProject](#getproject)
+- [AddProject](#addproject)
+- [UpdateProject](#updateproject)
+- [DeleteProject](#deleteproject)
 
 ```go
 type ProjectAPIResponse struct {
@@ -2158,7 +2459,9 @@ if err != nil {
 	fmt.Println(err)
 } else {
 	for _, project := range projects {
-		fmt.Println("Id: " + project.Id + ", Name: " + project.Name)
+		projectName := *project.Name
+		projectId := *project.Id
+		fmt.Println("Project Id: " + projectId + ", Name: " + projectName)
 	}
 }
 ```
@@ -2177,12 +2480,88 @@ project, err := client.GetProject(1)
 if err != nil {
 	fmt.Println(err)
 } else {
-	fmt.Println("Id: " + project.Id + ", Name: " + project.Name)
+	projectName := *project.Name
+	projectId := *project.Id
+	fmt.Println("Project Id: " + projectId + ", Name: " + projectName)
 }
 ```
 
+#### AddProject
+
+```go
+func (s *Client) AddProject(project *Project) (*Project, error)
+```
+
+##### __Required Fields__
+* Name
+
+##### Example
+```go
+newProject := cloudcenter.Project{
+	Name: cloudcenter.String("ClientLibrary project"),
+}
+
+project, err := client.AddProject(&newProject)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	projectName := *project.Name
+	projectId := *project.Id
+	fmt.Println("Project Id: " + projectId + ", Name: " + projectName)
+}
+```
+#### UpdateProject
+
+```go
+func (s *Client) UpdateProject(project *Project) (*Project, error)
+```
+
+##### __Required Fields__
+* Id
+* Name
+
+##### Example
+```go
+newProject := cloudcenter.Project{
+	Id: cloudcenter.String("1"),
+	Name: cloudcenter.String("ClientLibrary project"),
+}
+
+project, err := client.UpdateProject(&newProject)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	projectName := *project.Name
+	projectId := *project.Id
+	fmt.Println("Project Id: " + projectId + ", Name: " + projectName)
+}
+```
+#### DeleteProject
+
+```go
+func (s *Client) DeleteProject(projectId int) error
+```
+
+##### Example
+```go
+err := client.DeleteProject(12)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Project deleted")
+}
+```
 
 ### Roles
+
+- [GetRoles](#getroles)
+- [GetRole](#getrole)
+- [AddRole](#addrole)
+- [UpdateRole](#updaterole)
+- [DeleteRole](#deleterole)
 
 ```go
 type RoleAPIResponse struct {
@@ -2234,7 +2613,9 @@ if err != nil {
 	fmt.Println(err)
 } else {
 	for _, role := range roles {
-		fmt.Println("Id: " + role.Id + ", Name: " + role.Name)
+		roleName := *role.Name
+		roleId := *role.Id
+		fmt.Println("Role Id: " + roleId + ", Name: " + roleName)
 	}
 }
 ```
@@ -2253,12 +2634,93 @@ role, err := client.GetRole(1, 1)
 if err != nil {
 	fmt.Println(err)
 } else {
-	fmt.Println("Id: " + role.Id + ", Name: " + role.Name)
+	roleName := *role.Name
+	roleId := *role.Id
+	fmt.Println("Role Id: " + roleId + ", Name: " + roleName)
 }
 ```
 
+#### AddRole
+
+```go
+func (s *Client) AddRole(role *Role) (*Role, error)
+```
+
+##### __Required Fields__
+* TenantId
+* Name
+
+##### Example
+```go
+newRole := cloudcenter.Role{
+	TenantId: cloudcenter.String("1"),
+	Name:     cloudcenter.String("ClientLibrary Role"),
+}
+
+role, err := client.AddRole(&newRole)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	roleName := *role.Name
+	roleId := *role.Id
+	fmt.Println("Role Id: " + roleId + ", Name: " + roleName)
+}
+```
+
+#### UpdateRole
+
+```go
+func (s *Client) UpdateRole(role *Role) (*Role, error)
+```
+
+##### __Required Fields__
+* Id
+* TenantId
+* Name
+
+##### Example
+```go
+newRole := cloudcenter.Role{
+	Id: cloudcenter.String("24"),
+	TenantId: cloudcenter.String("1"),
+	Name:     cloudcenter.String("ClientLibrary Role"),
+}
+
+role, err := client.UpdateRole(&newRole)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	roleName := *role.Name
+	roleId := *role.Id
+	fmt.Println("Role Id: " + roleId + ", Name: " + roleName)
+}
+```
+
+#### DeleteRole
+
+```go
+func (s *Client) DeleteRole(tenantId int, roleId int) error
+```
+##### Example
+```go
+err := client.DeleteRole(1, 12)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Role deleted")
+}
+```
 
 ### Services
+
+- [GetServices](#getservices)
+- [GetService](#getservice)
+- [AddService](#addservice)
+- [UpdateService](#updateservice)
+- [DeleteService](#deleteservice)
 
 ```go
 type ServiceAPIResponse struct {
@@ -2395,7 +2857,9 @@ if err != nil {
 	fmt.Println(err)
 } else {
 	for _, service := range services {
-		fmt.Println("Id: " + service.Id + ", DisplayName: " + service.DisplayName)
+		serviceId := *service.Id
+		serviceName := *service.Name
+		fmt.Println("Id: " + serviceId + ", Name: " + serviceName)
 	}
 }
 ```
@@ -2414,7 +2878,110 @@ service, err := client.GetService(1, 2)
 if err != nil {
 	fmt.Println(err)
 } else {
-	fmt.Println("Id: " + service.Id + ", Name: " + service.Name)
+	serviceId := *service.Id
+	serviceName := *service.Name
+	fmt.Println("Id: " + serviceId + ", Name: " + serviceName)
+}
+```
+
+#### AddService
+
+```go
+func (s *Client) AddService(service *Service) (*Service, error)
+```
+
+##### __Required Fields__
+* TenantId
+* Name
+* DisplayName
+* Images
+
+
+##### Example
+```go
+var images []cloudcenter.Image
+
+newImage := cloudcenter.Image{
+	Id: cloudcenter.String("1"),
+}
+
+images = append(images, newImage)
+
+newService := cloudcenter.Service{
+	TenantId:    cloudcenter.String("1"),
+	Name:        cloudcenter.String("ClientLibraryService"),
+	DisplayName: cloudcenter.String("Client Library Service"),
+	Images:      &images,
+}
+
+service, err := client.AddService(&newService)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	serviceId := *service.Id
+	serviceName := *service.Name
+	fmt.Println("Id: " + serviceId + ", Name: " + serviceName)
+}
+	
+```
+
+#### UpdateService
+
+```go
+func (s *Client) UpdateService(service *Service) (*Service, error)
+```
+
+##### __Required Fields__
+* Id
+* TenantId
+* Name
+* DisplayName
+* Images
+
+##### Example
+```go
+var images []cloudcenter.Image
+
+newImage := cloudcenter.Image{
+	Id: cloudcenter.String("1"),
+}
+
+images = append(images, newImage)
+
+newService := cloudcenter.Service{
+	Id:          cloudcenter.String("66"),
+	TenantId:    cloudcenter.String("1"),
+	Name:        cloudcenter.String("ClientLibraryService"),
+	DisplayName: cloudcenter.String("Client Library Service"),
+	Images:      &images,
+}
+
+service, err := client.UpdateService(&newService)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	serviceId := *service.Id
+	serviceName := *service.Name
+	fmt.Println("Id: " + serviceId + ", Name: " + serviceName)
+}
+```
+
+
+#### DeleteService
+
+```go
+func (s *Client) DeleteService(tenantId int, serviceId int) error
+```
+##### Example
+```go
+err := client.DeleteService(1, 66)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Service deleted")
 }
 ```
 
@@ -2496,7 +3063,9 @@ if err != nil {
 	fmt.Println(err)
 } else {
 	for _, tenant := range tenants {
-		fmt.Println("Id: " + tenant.Id + ", Name: " + tenant.Name)
+		tenantId := *tenant.Id
+		tenantName := *tenant.Name
+		fmt.Println("Id: " + tenantId + ", Name: " + tenantName)
 	}
 }
 ```
@@ -2515,7 +3084,9 @@ tenant, err := client.GetTenant(1)
 if err != nil {
 	fmt.Println(err)
 } else {
-	fmt.Println("Id: " + tenant.Id + ", Name: " + tenant.Name)
+	tenantId := *tenant.Id
+	tenantName := *tenant.Name
+	fmt.Println("Id: " + tenantId + ", Name: " + tenantName)
 }
 ```
 
@@ -2534,18 +3105,18 @@ func (s *Client) AddTenant(tenant *Tenant) error
 
 ```golang
 newTenant := cloudcenter.Tenant{
-	UserId:                          "5",
-	Name:                            "client-library-tenant",
-	ShortName:                       "client-library-tenant",
-	DomainName:                      "clientlibrary.cloudcenter.com",
-	Phone:                           "1234567890",
-	Url:                             "http://clientlibrary.cloudcenter.com",
-	ContactEmail:                    "poweruser@dcloud.cisco.com",
-	About:                           "clientlibrary tenant",
-	EnablePurchaseOrder:             false,
-	EnableEmailNotificationsToUsers: false,
-	EnableMonthlyBilling:            false,
-	DefaultChargeType:               "Hourly",
+	UserId:                           cloudcenter.String("5",
+	Name:                             cloudcenter.String("client-library-tenant"),
+	ShortName:                        cloudcenter.String("client-library-tenant"),
+	DomainName:                       cloudcenter.String("clientlibrary.cloudcenter.com"),
+	Phone:                            cloudcenter.String("1234567890"),
+	Url:                              cloudcenter.String("http://clientlibrary.cloudcenter.com"),
+	ContactEmail:                     cloudcenter.String("poweruser@dcloud.cisco.com"),
+	About:                            cloudcenter.String("clientlibrary tenant"),
+	EnablePurchaseOrder:              cloudcenter.Bool(false),
+	EnableEmailNotificationsToUsers:  cloudcenter.Bool(false),
+	EnableMonthlyBilling:             cloudcenter.Bool(false),
+	DefaultChargeType:                cloudcenter.String("Hourly)",
 }
 
 fmt.Println(client.AddTenant(&newTenant))
@@ -2559,13 +3130,9 @@ func (s *Client) UpdateTenant(tenant *Tenant) (*Tenant, error)
 
 ##### __Required Fields__
 * Id 
-  * (Value of field should not be changed)
 * UserId 
-  * (Value of field should not be changed)
 * Name 
-  * (Value of field should not be changed)
 * ShortName 
-  * (Value of field should not be changed)
 
 ##### Example
 
@@ -2632,12 +3199,12 @@ func (s *Client) DeleteTenantSync(tenantId int) error
 ##### Example
 
 ```go
-err := client.DeleteUser(6)
+err := client.DeleteTenant(6)
 
 if err != nil {
 	fmt.Println(err)
 } else {
-	fmt.Println("User deleted")
+	fmt.Println("Tenant deleted")
 }
 ```
 
@@ -2766,6 +3333,7 @@ func (s *Client) AddUser(user *User) (*User, error)
 ##### __Required Fields__
 * EmailAddr
 * TenantId
+* Password
 * ActivateRegions (When creating user with activation)
 * ActivationProfileId (required if using activation profile method)
 
@@ -2801,26 +3369,23 @@ func (s *Client) UpdateUser(user *User) (*User, error)
 
 ##### __Required Fields__
 * Id 
-  * (Value of field should not be changed)
 * TenantId 
-  * (Value of field should not be changed)
+* AccountSource
 * Username 
-  * (Value of field should not be changed)
 * Type 
-  * (Value of field should not be changed)
 * EmailAddr
 
 
 ##### Example
 
 ```golang
-
 newUser := cloudcenter.User{
 	Id:        cloudcenter.String("2"),
 	TenantId:  cloudcenter.String("1"),
 	Username:  cloudcenter.String("cliqradmin"),
 	Type:      cloudcenter.String("TENANT"),
 	EmailAddr: cloudcenter.String("admin@cliqrtech.com"),
+	AccountSource: cloudcenter.String("AdminCreated"),
 }
 
 user, err := client.UpdateUser(&newUser)
