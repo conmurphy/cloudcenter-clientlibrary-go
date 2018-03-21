@@ -906,7 +906,7 @@ if err != nil {
 
 - [GetCloudAccounts](#getcloudimageaccounts)
 - [GetCloudAccount](#getcloudaccount)
-- [AddCloudAccountAsync](#addcloudaccountAsync)
+- [AddCloudAccountAsync](#addcloudaccountasync)
 - [AddCloudAccountSync](#addcloudaccountsync)
 - [UpdateCloudAccount](#updatecloudaccount)
 - [DeleteCloudAccount](#deletecloudaccount)
