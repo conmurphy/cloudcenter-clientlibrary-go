@@ -1677,6 +1677,12 @@ if err != nil {
 
 ### Images
 
+- [GetImages](#getimages)
+- [GetImage](#getimagee)
+- [AddImage](#addimagee)
+- [UpdateImage](#updateimagee)
+- [DeleteImagee](#deleteimagee)
+
 ```go
 type ImageAPIResponse struct {
 	Resource      *string 
@@ -1788,7 +1794,9 @@ if err != nil {
 	fmt.Println(err)
 } else {
 	for _, image := range images {
-		fmt.Println("Id: " + image.Id + ", Resource: " + image.Resource)
+		imageId := *image.Id
+		imageResource := *image.Resource
+		fmt.Println("Id: " + imageId + ", Resource: " + imageResource)
 	}
 }
 ```
@@ -1807,12 +1815,91 @@ image, err := client.GetImage(1, 2)
 if err != nil {
 	fmt.Println(err)
 } else {
-	fmt.Println("Id: " + image.Id + ", Name: " + image.Name)
+	imageId := *image.Id
+	imageResource := *image.Resource
+	fmt.Println("Id: " + imageId + ", Resource: " + imageResource)
 }
 ```
 
+#### AddImage
 
+```go
+func (s *Client) AddImage(image *Image) (*Image, error)
+```
 
+##### __Required Fields__
+* TenantId 
+* Name
+* ImageType
+* OSName
+
+##### Example
+```go
+newImage := cloudcenter.Image{
+	TenantId:  cloudcenter.Int64(1),
+	Name:      cloudcenter.String("Ubuntu 14.4"),
+	ImageType: cloudcenter.String("CLOUD_WORKER"),
+	OSName:    cloudcenter.String("LINUX"),
+}
+
+image, err := client.AddImage(&newImage)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	imageId := *image.Id
+	imageResource := *image.Resource
+	fmt.Println("Id: " + imageId + ", Resource: " + imageResource)
+}
+```
+#### UpdateImage
+
+```go
+func (s *Client) UpdateImage(image *Image) (*Image, error)
+```
+
+##### __Required Fields__
+* TenantId 
+* Name
+* ImageType
+* OSName
+
+##### Example
+```go
+newImage := cloudcenter.Image{
+	Id:      cloudcenter.String("12"),
+	TenantId:  cloudcenter.Int64(1),
+	Name:      cloudcenter.String("Updated Ubuntu 14.4"),
+	ImageType: cloudcenter.String("CLOUD_WORKER"),
+	OSName:    cloudcenter.String("LINUX"),
+}
+
+image, err := client.UpdateImage(&newImage)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	imageId := *image.Id
+	imageResource := *image.Resource
+	fmt.Println("Id: " + imageId + ", Resource: " + imageResource)
+}
+```
+#### DeleteImage
+
+```go
+func (s *Client) DeleteImage(tenantId int, imageId int) error
+```
+
+##### Example
+```go
+err := client.DeleteImage(1,1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Image deleted")
+}
+```
 
 ### Jobs
 ### OperationStatus
@@ -1967,7 +2054,7 @@ func (s *Client) UpdatePhase(phase *Phase) (*Phase, error)
 ```go
 
 ```
-#### DeletePlan
+#### DeletePhase
 
 ```go
 func (s *Client) DeletePhase(phaseProjectID int, phaseId int) error
