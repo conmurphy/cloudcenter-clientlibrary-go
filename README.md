@@ -1493,6 +1493,11 @@ if err != nil {
 
 ### Environments
 
+- [GetEnvironments](#getenvironment)
+- [GetEnvironment](#getenvironment)
+- [AddEnvironment](#addenvironment)
+- [UpdateEnvironment](#updateenvironment)
+- [DeleteEnvironment](#deleteenvironment)
 ```go
 type EnvironmentAPIResponse struct {
 	Resource      *string       
@@ -1579,7 +1584,9 @@ if err != nil {
 	fmt.Println(err)
 } else {
 	for _, environment := range environments {
-		fmt.Println("Id: " + environment.Id + ", Name: " + environment.Name)
+		environmentId := *environment.Id
+		environmentName := *environment.Name
+		fmt.Println("Environment Id: " + environmentId + ", Name: " + environmentName)
 	}
 }
 ```
@@ -1598,10 +1605,81 @@ environment, err := client.GetEnvironment(1)
 if err != nil {
 	fmt.Println(err)
 } else {
-	fmt.Println("Id: " + environment.Id + ", Name: " + environment.Name)
+	environmentId := *environment.Id
+	environmentName := *environment.Name
+	fmt.Println("Environment Id: " + environmentId + ", Name: " + environmentName)
 }
 ```
 
+#### AddEnvironment
+
+```go
+func (s *Client) AddEnvironment(environment *Environment) (*Environment, error)
+```
+
+##### __Required Fields__
+* Name
+
+##### Example
+```go
+newEnvironment := cloudcenter.Environment{
+	Name: cloudcenter.String("Client Library environment"),
+}
+
+environment, err := client.AddEnvironment(&newEnvironment)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	environmentId := *environment.Id
+	environmentResource := *environment.Resource
+	fmt.Println("Environment Id: " + environmentId + ", Resource: " + environmentResource)
+}
+```
+#### UpdateEnvironment
+
+```go
+func (s *Client) UpdateEnvironment(environment *Environment) (*Environment, error)
+```
+
+##### __Required Fields__
+* Id
+* Name
+
+
+##### Example
+```go
+newEnvironment := cloudcenter.Environment{
+	Id: cloudcenter.String("5"),
+	Name: cloudcenter.String("Client Library environment"),
+}
+
+environment, err := client.UpdateEnvironment(&newEnvironment)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	environmentId := *environment.Id
+	environmentResource := *environment.Resource
+	fmt.Println("Environment Id: " + environmentId + ", Resource: " + environmentResource)
+}
+```
+#### DeleteEnvironment
+
+```go
+func (s *Client) DeleteEnvironment(environmentId int) error
+```
+
+##### Example
+```go
+err := client.DeleteGroup(4)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Environment deleted")
+}
+```
 ### Groups
 
 - [GetGroups](#getgroups)
