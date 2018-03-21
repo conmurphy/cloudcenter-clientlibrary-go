@@ -1,10 +1,15 @@
 package cloudcenter
 
-import "fmt"
-import "net/http"
-import "encoding/json"
-import "strconv"
-import "bytes"
+import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"net/http"
+	"strconv"
+
+	validator "gopkg.in/validator.v2"
+)
 
 type CloudImageMappingAPIResponse struct {
 	Resource           *string             `json:"resource,omitempty"`
@@ -19,12 +24,12 @@ type CloudImageMapping struct {
 	Id                   *string     `json:"id,omitempty"`
 	Resource             *string     `json:"resource,omitempty"`
 	Perms                *[]string   `json:"perms,omitempty"`
-	TenantId             *string     `json:"tenantId,omitempty"`
-	CloudId              *string     `json:"cloudId,omitempty"`
-	CloudRegionId        *string     `json:"cloudRegionId,omitempty"`
-	RegionId             *string     `json:"regionId,omitempty"`
+	TenantId             *string     `json:"tenantId,omitempty" validate:"nonzero"`
+	CloudId              *string     `json:"cloudId,omitempty" validate:"nonzero"`
+	CloudRegionId        *string     `json:"cloudRegionId,omitempty" validate:"nonzero"`
+	RegionId             *string     `json:"regionId,omitempty" validate:"nonzero"`
 	CloudImageId         *string     `json:"cloudImageId,omitempty"`
-	CloudProviderImageId *string     `json:"cloudProviderImageId,omitempty"`
+	CloudProviderImageId *string     `json:"cloudProviderImageId,omitempty" validate:"nonzero"`
 	LaunchUserName       *string     `json:"launchUserName,omitempty"`
 	ImageId              *string     `json:"imageId,omitempty"`
 	GrantAndRevoke       *bool       `json:"grantAndRevoke,omitempty"`
@@ -96,6 +101,10 @@ func (s *Client) AddCloudImageMapping(cloudImage *CloudImageMapping) (*CloudImag
 
 	var data CloudImageMapping
 
+	if errs := validator.Validate(cloudImage); errs != nil {
+		return nil, errs
+	}
+
 	cloudImageTenantId := *cloudImage.TenantId
 	cloudImageCloudId := *cloudImage.CloudId
 	cloudImageRegionId := *cloudImage.RegionId
@@ -132,6 +141,14 @@ func (s *Client) AddCloudImageMapping(cloudImage *CloudImageMapping) (*CloudImag
 func (s *Client) UpdateCloudImageMapping(cloudImage *CloudImageMapping) (*CloudImageMapping, error) {
 
 	var data CloudImageMapping
+
+	if errs := validator.Validate(cloudImage); errs != nil {
+		return nil, errs
+	}
+
+	if nonzero(cloudImage.Id) {
+		return nil, errors.New("CloudImage.Id is missing")
+	}
 
 	cloudImageTenantId := *cloudImage.TenantId
 	cloudImageCloudId := *cloudImage.CloudId

@@ -1,12 +1,15 @@
 package cloudcenter
 
-import "fmt"
-import "net/http"
+import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"net/http"
+	"strconv"
 
-import "encoding/json"
-import "strconv"
-import "bytes"
-import "errors"
+	validator "gopkg.in/validator.v2"
+)
 
 type CloudAccountAPIResponse struct {
 	Resource      *string        `json:"resource,omitempty"`
@@ -22,18 +25,18 @@ type CloudAccount struct {
 	Resource           *string            `json:"resource,omitempty"`
 	Perms              *[]string          `json:"perms,omitempty"`
 	DisplayName        *string            `json:"displayName,omitempty"`
-	CloudId            *string            `json:"cloudId,omitempty"`
-	UserId             *string            `json:"userId,omitempty"`
-	AccountId          *string            `json:"accountId,omitempty"`
-	AccountName        *string            `json:"accountName,omitempty"`
-	AccountPassword    *string            `json:"accountPassword,omitempty"`
+	CloudId            *string            `json:"cloudId,omitempty" validate:"nonzero"`
+	UserId             *string            `json:"userId,omitempty" validate:"nonzero"`
+	AccountId          *string            `json:"accountId,omitempty" validate:"nonzero"`
+	AccountName        *string            `json:"accountName,omitempty" validate:"nonzero"`
+	AccountPassword    *string            `json:"accountPassword,omitempty" validate:"nonzero"`
 	AccountDescription *string            `json:"accountDescription,omitempty"`
 	ManageCost         *bool              `json:"manageCost,omitempty"`
 	PublicVisible      *bool              `json:"publicVisible,omitempty"`
 	AllowedUsers       *[]int64           `json:"allowedUsers,omitempty"`
 	AccessPermission   *string            `json:"accessPermission,omitempty"`
 	AccountProperties  *[]AccountProperty `json:"accountProperties,omitempty"`
-	TenantId           *string            `json:"tenantId,omitempty"`
+	TenantId           *string            `json:"tenantId,omitempty" validate:"nonzero"`
 }
 
 type AccountProperty struct {
@@ -114,6 +117,10 @@ func (s *Client) GetCloudAccountByName(tenantId int, cloudId int, displayName st
 
 func (s *Client) AddCloudAccountSync(cloudAccount *CloudAccount) (*CloudAccount, error) {
 
+	if errs := validator.Validate(cloudAccount); errs != nil {
+		return nil, errs
+	}
+
 	cloudAccountTenantId := *cloudAccount.TenantId
 	cloudAccountCloudId := *cloudAccount.CloudId
 	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + cloudAccountTenantId + "/clouds/" + cloudAccountCloudId + "/accounts")
@@ -183,6 +190,10 @@ func (s *Client) AddCloudAccountAsync(cloudAccount *CloudAccount) (*OperationSta
 
 	var data OperationStatus
 
+	if errs := validator.Validate(cloudAccount); errs != nil {
+		return nil, errs
+	}
+
 	cloudAccountTenantId := *cloudAccount.TenantId
 	cloudAccountCloudId := *cloudAccount.CloudId
 	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + cloudAccountTenantId + "/clouds/" + cloudAccountCloudId + "/accounts")
@@ -215,6 +226,14 @@ func (s *Client) AddCloudAccountAsync(cloudAccount *CloudAccount) (*OperationSta
 }
 
 func (s *Client) UpdateCloudAccountSync(cloudAccount *CloudAccount) (*CloudAccount, error) {
+
+	if errs := validator.Validate(cloudAccount); errs != nil {
+		return nil, errs
+	}
+
+	if nonzero(cloudAccount.Id) {
+		return nil, errors.New("CloudAccount.Id is missing")
+	}
 
 	cloudAccountTenantId := *cloudAccount.TenantId
 	cloudAccountCloudId := *cloudAccount.CloudId
@@ -285,6 +304,14 @@ func (s *Client) UpdateCloudAccountSync(cloudAccount *CloudAccount) (*CloudAccou
 func (s *Client) UpdateCloudAccountAsync(cloudAccount *CloudAccount) (*OperationStatus, error) {
 
 	var data OperationStatus
+
+	if errs := validator.Validate(cloudAccount); errs != nil {
+		return nil, errs
+	}
+
+	if nonzero(cloudAccount.Id) {
+		return nil, errors.New("CloudAccount.Id is missing")
+	}
 
 	cloudAccountTenantId := *cloudAccount.TenantId
 	cloudAccountCloudId := *cloudAccount.CloudId

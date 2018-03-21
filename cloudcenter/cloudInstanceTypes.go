@@ -1,10 +1,15 @@
 package cloudcenter
 
-import "fmt"
-import "net/http"
-import "encoding/json"
-import "strconv"
-import "bytes"
+import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"net/http"
+	"strconv"
+
+	validator "gopkg.in/validator.v2"
+)
 
 type CloudInstanceTypeAPIResponse struct {
 	Resource           *string             `json:"resource,omitempty"`
@@ -19,21 +24,21 @@ type CloudInstanceType struct {
 	Id                        *string   `json:"id,omitempty"`
 	Resource                  *string   `json:"resource,omitempty"`
 	Perms                     *[]string `json:"perms,omitempty"`
-	Name                      *string   `json:"name,omitempty"`
+	Name                      *string   `json:"name,omitempty" validate:"nonzero"`
 	Description               *string   `json:"description,omitempty"`
-	Type                      *string   `json:"type,omitempty"`
-	TenantId                  *string   `json:"tenantId,omitempty"`
-	CloudId                   *string   `json:"cloudId,omitempty"`
-	RegionId                  *string   `json:"regionId,omitempty"`
+	Type                      *string   `json:"type,omitempty" validate:"nonzero"`
+	TenantId                  *string   `json:"tenantId,omitempty" validate:"nonzero"`
+	CloudId                   *string   `json:"cloudId,omitempty" validate:"nonzero"`
+	RegionId                  *string   `json:"regionId,omitempty" validate:"nonzero"`
 	CostPerHour               *float64  `json:"costPerHour,omitempty"`
-	MemorySize                *int64    `json:"memorySize,omitempty"`
-	NumOfCPUs                 *int64    `json:"numOfCpus,omitempty"`
-	NumOfNICs                 *int64    `json:"numOfNics,omitempty"`
+	MemorySize                *int64    `json:"memorySize,omitempty" validate:"nonzero"`
+	NumOfCPUs                 *int64    `json:"numOfCpus,omitempty" validate:"nonzero"`
+	NumOfNICs                 *int64    `json:"numOfNics,omitempty" validate:"nonzero"`
 	LocalStorageSize          *int64    `json:"localStorageSize,omitempty"`
 	SupportsSSD               *bool     `json:"supportsSsd,omitempty"`
 	SupportsCUDA              *bool     `json:"supportsCuda,omitempty"`
-	Supports32Bit             *bool     `json:"supports32Bit,omitempty"`
-	Supports64Bit             *bool     `json:"supports64Bit,omitempty"`
+	Supports32Bit             *bool     `json:"supports32Bit,omitempty" validate:"nonzero"`
+	Supports64Bit             *bool     `json:"supports64Bit,omitempty" validate:"nonzero"`
 	LocalStorageCount         *float64  `json:"localStorageCount,omitempty"`
 	SupportsHardwareProvision *bool     `json:"supportsHardwareProvision,omitempty"`
 }
@@ -89,6 +94,10 @@ func (s *Client) AddCloudInstanceType(cloudInstanceType *CloudInstanceType) (*Cl
 
 	var data CloudInstanceType
 
+	if errs := validator.Validate(cloudInstanceType); errs != nil {
+		return nil, errs
+	}
+
 	cloudInstanceTypeTenantId := *cloudInstanceType.TenantId
 	cloudInstanceTypeCloudId := *cloudInstanceType.CloudId
 	cloudInstanceTypeRegionId := *cloudInstanceType.RegionId
@@ -125,6 +134,14 @@ func (s *Client) AddCloudInstanceType(cloudInstanceType *CloudInstanceType) (*Cl
 func (s *Client) UpdateCloudInstanceType(cloudInstanceType *CloudInstanceType) (*CloudInstanceType, error) {
 
 	var data CloudInstanceType
+
+	if errs := validator.Validate(cloudInstanceType); errs != nil {
+		return nil, errs
+	}
+
+	if nonzero(cloudInstanceType.Id) {
+		return nil, errors.New("CloudInstanceType.Id is missing")
+	}
 
 	cloudInstanceTypeTenantId := *cloudInstanceType.TenantId
 	cloudInstanceTypeCloudId := *cloudInstanceType.CloudId
