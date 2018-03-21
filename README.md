@@ -1604,6 +1604,12 @@ if err != nil {
 
 ### Groups
 
+- [GetGroups](#getgroups)
+- [GetGroup](#getgroup)
+- [AddGroup](#addgroup)
+- [UpdateGroup](#updategroup)
+- [DeleteGroup](#deletegroup)
+
 ```go
 type GroupAPIResponse struct {
 	Resource      *string 
@@ -1646,10 +1652,9 @@ if err != nil {
 	fmt.Println(err)
 } else {
 	for _, group := range groups {
-		fmt.Println("Id: " + group.Id + ", Name: " + group.Name)
-		for _, user := range group.Users {
-			fmt.Println("Id: " + user.Id + ", Name: " + user.Username)
-		}
+		groupId := *group.Id
+		groupName := *group.Name
+		fmt.Println("Group Id: " + groupId + ", Name: " + groupName)
 	}
 }
 ```
@@ -1668,20 +1673,93 @@ group, err := client.GetGroup(1, 1)
 if err != nil {
 	fmt.Println(err)
 } else {
-	fmt.Println("Id: " + group.Id + ", Name: " + group.Name)
-	for _, user := range group.Users {
-		fmt.Println("Id: " + user.Id + ", Name: " + user.Username)
-	}
+	groupId := *group.Id
+	groupName := *group.Name
+	fmt.Println("Group Id: " + groupId + ", Name: " + groupName)
+}
+```
+
+#### AddGroup
+
+```go
+func (s *Client) AddGroup(group *Group) (*Group, error)
+```
+
+##### __Required Fields__
+* TenantId 
+* Name
+
+##### Example
+```go
+newGroup := cloudcenter.Group{
+	TenantId: cloudcenter.String("1"),
+	Name:     cloudcenter.String("New Client Library group"),
+}
+
+group, err := client.AddGroup(&newGroup)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	groupId := *group.Id
+	groupName := *group.Name
+	fmt.Println("Group Id: " + groupId + ", Name: " + groupName)
+}
+```
+#### UpdateGroup
+
+```go
+func (s *Client) UpdateGroup(group *Group) (*Group, error)
+```
+
+##### __Required Fields__
+* Id
+* TenantId 
+* Name
+
+##### Example
+```go
+newGroup := cloudcenter.Group{
+	Id:       cloudcenter.String("4"),
+	TenantId: cloudcenter.String("1"),
+	Name:     cloudcenter.String("New Client Library group"),
+}
+
+group, err := client.UpdateGroup(&newGroup)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	groupId := *group.Id
+	groupName := *group.Name
+	fmt.Println("Group Id: " + groupId + ", Name: " + groupName)
+}
+
+```
+#### DeleteGroup
+
+```go
+func (s *Client) DeleteGroup(tenantId int, groupId int) error
+```
+
+##### Example
+```go
+err := client.DeleteGroup(1,1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Group deleted")
 }
 ```
 
 ### Images
 
 - [GetImages](#getimages)
-- [GetImage](#getimagee)
-- [AddImage](#addimagee)
-- [UpdateImage](#updateimagee)
-- [DeleteImagee](#deleteimagee)
+- [GetImage](#getimage)
+- [AddImage](#addimage)
+- [UpdateImage](#updateimage)
+- [DeleteImage](#deleteimage)
 
 ```go
 type ImageAPIResponse struct {
@@ -1859,6 +1937,7 @@ func (s *Client) UpdateImage(image *Image) (*Image, error)
 ```
 
 ##### __Required Fields__
+* Id
 * TenantId 
 * Name
 * ImageType
