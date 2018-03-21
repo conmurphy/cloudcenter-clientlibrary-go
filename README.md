@@ -1929,6 +1929,12 @@ if err != nil {
 
 ### Plans
 
+- [GetPlans](#getplans)
+- [GetPlan](#getplan)
+- [AddPlan](#addplan)
+- [UpdatePlam](#updateplan)
+- [DeletePlan](#deleteplan)
+
 ```go
 type PlanAPIResponse struct {
 	Resource      *string 
@@ -2007,6 +2013,84 @@ if err != nil {
 	fmt.Println("Id: " + plan.Id + ", Name: " + plan.Name)
 }
 ```
+
+#### AddPlan
+
+```go
+func (s *Client) AddPlan(plan *Plan) (*Plan, error)
+```
+
+##### __Required Fields__
+* TenantId
+* Name
+* Type
+
+##### Example
+```go
+newPlan := cloudcenter.Plan{
+	TenantId: cloudcenter.String("1"),
+	Name:     cloudcenter.String("client library plan"),
+	Type: cloudcenter.String("UNLIMITED_PLAN"),
+}
+
+plan, err := client.AddPlan(&newPlan)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	planId := *plan.Id
+	planDisabled := *plan.Disabled
+	fmt.Println("Plan Id: " + planId + ", Disabled: " + strconv.FormatBool(planDisabled))
+}
+```
+#### UpdatePlan
+
+```go
+func (s *Client) UpdatePlan(plan *Plan) (*Plan, error)
+```
+
+##### __Required Fields__
+* Id
+* TenantId
+* Name
+* Type
+
+##### Example
+```go
+newPlan := cloudcenter.Plan{
+	Id: cloudcenter.String("2"),
+	TenantId: cloudcenter.String("1"),
+	Name:     cloudcenter.String("client library plan"),
+	Type: cloudcenter.String("UNLIMITED_PLAN"),
+}
+
+plan, err := client.UpdatePlan(&newPlan)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	planId := *plan.Id
+	planDisabled := *plan.Disabled
+	fmt.Println("Plan Id: " + planId + ", Disabled: " + strconv.FormatBool(planDisabled))
+}
+```
+#### DeletePlan
+
+```go
+func (s *Client) DeletePlan(tenantId int, planId int) error
+```
+
+##### Example
+```go
+err := client.DeletePlan(12)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Plan deleted")
+}
+```
+
 
 ### Projects
 
