@@ -1,11 +1,15 @@
 package cloudcenter
 
-import "fmt"
-import "net/http"
-import "strconv"
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"net/http"
+	"strconv"
 
-import "bytes"
+	validator "gopkg.in/validator.v2"
+)
 
 type CloudRegionAPIResponse struct {
 	Resource      *string       `json:"resource,omitempty"`
@@ -18,13 +22,13 @@ type CloudRegionAPIResponse struct {
 
 type CloudRegion struct {
 	Id                     *string           `json:"id,omitempty"`
-	TenantId               *string           `json:"tenantId,omitempty"`
-	CloudId                *string           `json:"cloudId,omitempty"`
+	TenantId               *string           `json:"tenantId,omitempty" validate:"nonzero"`
+	CloudId                *string           `json:"cloudId,omitempty" validate:"nonzero"`
 	CloudRegionId          *string           `json:"cloudRegionId,omitempty"`
 	ImportRegion           *ImportRegion     `json:"importRegion,omitempty"`
 	Resource               *string           `json:"resource,omitempty"`
 	Perms                  *[]string         `json:"perms,omitempty"`
-	DisplayName            *string           `json:"displayName,omitempty"`
+	DisplayName            *string           `json:"displayName,omitempty" validate:"nonzero`
 	RegionName             *string           `json:"regionName,omitempty"`
 	Description            *string           `json:"description,omitempty"`
 	Gateway                *Gateway          `json:"gateway,omitempty"`
@@ -127,6 +131,14 @@ func (s *Client) AddCloudRegion(cloudRegion *CloudRegion) (*CloudRegion, error) 
 
 	var data CloudRegion
 
+	if errs := validator.Validate(cloudRegion); errs != nil {
+		return nil, errs
+	}
+
+	if nonzero(cloudRegion.RegionName) {
+		return nil, errors.New("CloudRegion.RegionName is missing")
+	}
+
 	cloudRegionTenantId := *cloudRegion.TenantId
 	cloudRegionCloudId := *cloudRegion.CloudId
 	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + cloudRegionTenantId + "/clouds/" + cloudRegionCloudId + "/regions")
@@ -163,12 +175,19 @@ func (s *Client) UpdateCloudRegion(cloudRegion *CloudRegion) (*CloudRegion, erro
 
 	var data CloudRegion
 
+	if errs := validator.Validate(cloudRegion); errs != nil {
+		return nil, errs
+	}
+
+	if nonzero(cloudRegion.Id) {
+		return nil, errors.New("CloudRegionRole.Id is missing")
+	}
+
 	cloudRegionTenantId := *cloudRegion.TenantId
 	cloudRegionCloudId := *cloudRegion.CloudId
 	cloudRegionId := *cloudRegion.Id
 	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + cloudRegionTenantId + "/clouds/" + cloudRegionCloudId + "/regions/" + cloudRegionId)
 
-	fmt.Printf("%v", cloudRegion.Gateway)
 	j, err := json.Marshal(cloudRegion)
 
 	if err != nil {
