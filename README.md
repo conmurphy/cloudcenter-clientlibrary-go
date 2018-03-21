@@ -1278,6 +1278,12 @@ if err != nil {
 
 ### CloudStorageTypes
 
+- [GetCloudStorageTypes](#getcloudstoragetypes)
+- [GetCloudStorageType](#getcloudstoragetype)
+- [AddCloudStorageType](#addcloudstoragetype)
+- [UpdateCloudStorageType](#updatecloudstoragetype)
+- [DeleteCloudStorageType](#deletecloudstoragetype)
+
 ```go
 type CloudStorageTypeAPIResponse struct {
 	Resource          *string            
@@ -1324,7 +1330,9 @@ if err != nil {
 	fmt.Println(err)
 } else {
 	for _, cloudStorageType := range cloudStorageTypes {
-		fmt.Println("Id: " + cloudStorageType.Id + ", Resource: " + cloudStorageType.Resource)
+		cloudStorageTypeId := *cloudStorageType.Id
+		cloudStorageTypeResource := *cloudStorageType.Resource
+		fmt.Println("Id: " + cloudStorageTypeId + ", Resource: " + cloudStorageTypeResource)
 	}
 }
 ```
@@ -1343,11 +1351,107 @@ cloudStorageType, err := client.GetCloudStorageType(1, 1, 1, 1)
 if err != nil {
 	fmt.Println(err)
 } else {
-	fmt.Println("Id: " + cloudStorageType.Id + ", Name: " + cloudStorageType.Name)
+	cloudStorageTypeId := *cloudStorageType.Id
+	cloudStorageTypeResource := *cloudStorageType.Resource
+	fmt.Println("Id: " + cloudStorageTypeId + ", Resource: " + cloudStorageTypeResource)
+}
+```
+
+#### AddCloudStorageType
+
+```go
+func (s *Client) AddCloudStorageType(cloudStorageType *CloudStorageType) (*CloudStorageType, error)
+```
+
+##### __Required Fields__
+* TenantId
+* CloudId
+* TegionId
+* Name
+* Type
+
+
+##### Example
+```go
+newCloudStorageType := cloudcenter.CloudStorageType{
+	TenantId: cloudcenter.String("1"),
+	CloudId:  cloudcenter.String("1"),
+	RegionId: cloudcenter.String("1"),
+	Type:     cloudcenter.String("st3"),
+	Name:     cloudcenter.String("Storage Type 01"),
+}
+
+cloudStorageType, err := client.AddCloudStorageType(&newCloudStorageType)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	cloudStorageTypeId := *cloudStorageType.Id
+	cloudStorageTypeName := *cloudStorageType.Name
+	fmt.Println("Id: " + cloudStorageTypeId + ", Name: " + cloudStorageTypeName)
+}
+```
+
+#### UpdateCloudStorageType
+
+```go
+func (s *Client) UpdateCloudStorageType(cloudStorageType *CloudStorageType) (*CloudStorageType, error)
+```
+
+##### __Required Fields__
+* Id
+* TenantId
+* CloudId
+* TegionId
+* Name
+* Type
+
+##### Example
+```go
+newCloudStorageType := cloudcenter.CloudStorageType{
+	Id:       cloudcenter.String("1"),
+	TenantId: cloudcenter.String("1"),
+	CloudId:  cloudcenter.String("1"),
+	RegionId: cloudcenter.String("1"),
+	Type:     cloudcenter.String("st3"),
+	Name:     cloudcenter.String("Updated storage Type 01"),
+}
+
+cloudStorageType, err := client.UpdateCloudStorageType(&newCloudStorageType)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	cloudStorageTypeId := *cloudStorageType.Id
+	cloudStorageTypeName := *cloudStorageType.Name
+	fmt.Println("Id: " + cloudStorageTypeId + ", Name: " + cloudStorageTypeName)
+}
+```
+
+#### DeleteCloudStorageType
+
+```go
+func (s *Client) DeleteCloudStorageType(tenantId int, cloudId int, regionId int, cloudStorageTypeId int) error
+```
+
+##### Example
+```go
+err := client.DeleteCloudStorageType(1,1,1,1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Cloud storage type deleted")
 }
 ```
 
 ### Clouds
+
+- [GetClouds](#getclouds)
+- [GetCloud](#getcloud)
+- [AddCloud](#addcloud)
+- [UpdateCloud](#updatecloud)
+- [DeleteCloud](#deletecloud)
 
 ```go
 type CloudAPIResponse struct {
@@ -1400,7 +1504,9 @@ if err != nil {
 	fmt.Println(err)
 } else {
 	for _, cloud := range clouds {
-		fmt.Println("Id: " + cloud.Id + ", Name: " + cloud.Name)
+		cloudId := *cloud.Id
+		cloudName := *cloud.Name
+		fmt.Println("Cloud Id: " + cloudId + ", Name: " + cloudName)
 	}
 }
 ```
@@ -1419,7 +1525,89 @@ cloud, err := client.GetCloud(1, 1)
 if err != nil {
 	fmt.Println(err)
 } else {
-	fmt.Println("Id: " + cloud.Id + ", Name: " + cloud.Name)
+	cloudId := *cloud.Id
+	cloudName := *cloud.Name
+	fmt.Println("Cloud Id: " + cloudId + ", Name: " + cloudName)
+}
+```
+
+#### AddCloud
+
+```go
+func (s *Client) AddContract(contract *Contract) (*Contract, error)
+```
+
+##### __Required Fields__
+* TenantId
+* Name
+* CloudFamily
+
+
+##### Example
+```go
+newCloud := cloudcenter.Cloud{
+	TenantId:    cloudcenter.String("1"),
+	Name:        cloudcenter.String("ClientLibraryCloud"),
+	CloudFamily: cloudcenter.String("Amazon"),
+}
+
+cloud, err := client.AddCloud(&newCloud)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	cloudId := *cloud.Id
+	cloudName := *cloud.Name
+	fmt.Println("Cloud Id: " + cloudId + ", Name: " + cloudName)
+}
+```
+
+#### UpdateCloud
+
+```go
+func (s *Client) UpdateContract(contract *Contract) (*Contract, error)
+```
+
+##### __Required Fields__
+* Id
+* TenantId
+* Name
+* CloudFamily
+
+##### Example
+```go
+newCloud := cloudcenter.Cloud{
+	Id:          cloudcenter.String("3"),
+	TenantId:    cloudcenter.String("1"),
+	Name:        cloudcenter.String("ClientLibraryCloud"),
+	CloudFamily: cloudcenter.String("Amazon"),
+}
+
+cloud, err := client.UpdateCloud(&newCloud)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	cloudId := *cloud.Id
+	cloudName := *cloud.Name
+	fmt.Println("Cloud Id: " + cloudId + ", Name: " + cloudName)
+}
+```
+
+#### DeleteCloud
+
+```go
+func (s *Client) DeleteCloud(tenantId int, cloudId int) error
+```
+
+##### Example
+```go
+err := client.DeleteCloud(1,1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Cloud deleted")
 }
 ```
 
