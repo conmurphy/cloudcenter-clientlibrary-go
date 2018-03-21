@@ -1003,6 +1003,12 @@ if err != nil {
 
 ### CloudImageMapping
 
+- [GetCloudImageMappings](#getcloudimagemappings)
+- [GetCloudImageMapping](#getcloudimagemapping)
+- [AddCloudImageMapping](#addcloudimagemapping)
+- [UpdateCloudImageMapping](#updatecloudimagemapping)
+- [DeleteCloudImageMapping](#deletecloudimagemapping)
+
 ```go
 type CloudImageMappingAPIResponse struct {
 	Resource           *string             
@@ -1071,6 +1077,52 @@ if err != nil {
 	fmt.Println("Id: " + cloudImage.Id + ", Resource: " + cloudImage.Resource)
 }
 ```
+
+#### AddCloudImageMapping
+
+```go
+func (s *Client) AddCloudImageMapping(cloudImage *CloudImageMapping) (*CloudImageMapping, error)
+```
+
+##### __Required Fields__
+*
+
+
+##### Example
+```go
+
+```
+
+#### UpdateCloudImageMapping
+
+```go
+func (s *Client) UpdateCloudImageMapping(cloudImage *CloudImageMapping) (*CloudImageMapping, error)
+```
+
+##### __Required Fields__
+* Id
+
+##### Example
+```go
+```
+
+#### DeleteCloudImageMapping
+
+```go
+func (s *Client) DeleteCloudImageMapping(tenantId int, cloudId int, regionId int, imageId int) error
+```
+
+##### Example
+```go
+err := client.DeleteCloudInstanceType(1,1,1,1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Cloud instance type deleted")
+}
+```
+
 
 ### CloudInstanceTypes
 
