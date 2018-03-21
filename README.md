@@ -1074,6 +1074,12 @@ if err != nil {
 
 ### CloudInstanceTypes
 
+- [GetCloudInstanceTypes](#getcloudinstancetype)
+- [GetCloudInstanceType](#getcloudinstancetype)
+- [AddCloudInstanceType](#addcloudinstancetype)
+- [UpdateCloudInstanceType](#updatecloudinstancetype)
+- [DeleteCloudInstanceType](#deletecloudinstancetype)
+
 ```go
 type CloudInstanceTypeAPIResponse struct {
 	Resource           *string             
@@ -1145,6 +1151,114 @@ if err != nil {
 	fmt.Println(err)
 } else {
 	fmt.Println("Id: " + cloudInstanceType.Id + ", Resource: " + cloudInstanceType.Resource)
+}
+```
+
+#### AddCloudInstanceType
+
+```go
+func (s *Client) AddCloudInstanceType(cloudInstanceType *CloudInstanceType) (*CloudInstanceType, error)
+```
+
+##### __Required Fields__
+* TenantId
+* CloudId
+* RegionId
+* Name
+* NumOfCPUs
+* NumOfNICs
+* MemorySize
+* Supports32Bit
+* Supports64Bit
+* Type
+
+
+##### Example
+```go
+newCloudInstanceType := cloudcenter.CloudInstanceType{
+	TenantId:      cloudcenter.String("1"),
+	CloudId:       cloudcenter.String("1"),
+	RegionId:      cloudcenter.String("1"),
+	Name:          cloudcenter.String("m1.medium.m1"),
+	NumOfCPUs:     cloudcenter.Int64(1),
+	NumOfNICs:     cloudcenter.Int64(2),
+	MemorySize:    cloudcenter.Int64(1024),
+	Supports32Bit: cloudcenter.Bool(true),
+	Supports64Bit: cloudcenter.Bool(true),
+	Type:          cloudcenter.String("m1.medium.db"),
+}
+
+cloudInstanceType, err := client.AddCloudInstanceType(&newCloudInstanceType)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	cloudInstanceTypeId := *cloudInstanceType.Id
+	cloudInstanceTypeName := *cloudInstanceType.Name
+	fmt.Println("Id: " + cloudInstanceTypeId + ", Name: " + cloudInstanceTypeName)
+}
+```
+
+#### UpdateCloudInstanceType
+
+```go
+func (s *Client) UpdateCloudInstanceType(cloudInstanceType *CloudInstanceType) (*CloudInstanceType, error)
+```
+
+##### __Required Fields__
+* Id
+* TenantId
+* CloudId
+* RegionId
+* Name
+* NumOfCPUs
+* NumOfNICs
+* MemorySize
+* Supports32Bit
+* Supports64Bit
+* Type
+
+##### Example
+```go
+newCloudInstanceType := cloudcenter.CloudInstanceType{
+	Id:      cloudcenter.String("5"),
+	TenantId:      cloudcenter.String("1"),
+	CloudId:       cloudcenter.String("1"),
+	RegionId:      cloudcenter.String("1"),
+	Name:          cloudcenter.String("m1.medium.m1"),
+	NumOfCPUs:     cloudcenter.Int64(1),
+	NumOfNICs:     cloudcenter.Int64(2),
+	MemorySize:    cloudcenter.Int64(1024),
+	Supports32Bit: cloudcenter.Bool(true),
+	Supports64Bit: cloudcenter.Bool(true),
+	Type:          cloudcenter.String("m1.medium.db"),
+}
+
+cloudInstanceType, err := client.UpdateCloudInstanceType(&newCloudInstanceType)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	cloudInstanceTypeId := *cloudInstanceType.Id
+	cloudInstanceTypeName := *cloudInstanceType.Name
+	fmt.Println("Id: " + cloudInstanceTypeId + ", Name: " + cloudInstanceTypeName)
+}
+```
+
+#### DeleteCloudInstanceType
+
+```go
+func (s *Client) DeleteCloudInstanceType(tenantId int, cloudId int, regionId int, instanceId int) error
+```
+
+##### Example
+```go
+err := client.DeleteCloudInstanceType(1,1,1,1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Cloud instance type deleted")
 }
 ```
 
@@ -1286,7 +1400,6 @@ if err != nil {
 	fmt.Println("Cloud Region Id: " + cloudRegionId + ", DisplayName: " + cloudRegionDisplayName)
 }
 ```
-
 
 #### AddCloudRegion
 
