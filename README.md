@@ -4631,8 +4631,6 @@ if err != nil {
 
 ### SuspensionPolicies
 
-### ActivationProfiles
-
 - [GetActivationProfiles](#getactivationprofiles)
 - [GetActivationProfile](#getactivationprofile)
 - [AddActivationProfile](#addactivationprofile)
@@ -4752,11 +4750,39 @@ func (s *Client) AddSuspensionPolicy(suspensionPolicy *SuspensionPolicy) (*Suspe
 ```
 
 ##### __Required Fields__
-* 
+* Name
+* Enabled
+* Schedules 
 
 ##### Example
 ```go
+var schedules []cloudcenter.Schedule
 
+newSchedule := cloudcenter.Schedule{
+	Type:      cloudcenter.String("1"),
+	StartTime: cloudcenter.String("12:00"),
+	EndTime:   cloudcenter.String("15:00"),
+	Repeats:   cloudcenter.String("1"),
+	Days:      &[]string{"WED"},
+}
+
+schedules = append(schedules, newSchedule)
+
+newSuspensionPolicy := cloudcenter.SuspensionPolicy{
+	Name:      cloudcenter.String("ClientLibrarySuspenion"),
+	Enabled:   cloudcenter.Bool(false),
+	Schedules: &schedules,
+}
+
+suspensionPolicy, err := client.AddSuspensionPolicy(&newSuspensionPolicy)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	suspensionPolicyId := *suspensionPolicy.Id
+	suspensionPolicyName := *suspensionPolicy.Name
+	fmt.Println("Id: " + suspensionPolicyId + ", Name: " + suspensionPolicyName)
+}
 ```
 
 #### UpdateSuspensionPolicy
@@ -4767,10 +4793,40 @@ func (s *Client) UpdateSuspensionPolicy(suspensionPolicy *SuspensionPolicy) (*Su
 
 ##### __Required Fields__
 * Id
+* Name
+* Enabled
+* Schedules 
 
 ##### Example
 ```go
+var schedules []cloudcenter.Schedule
 
+newSchedule := cloudcenter.Schedule{
+	Type:      cloudcenter.String("1"),
+	StartTime: cloudcenter.String("12:00"),
+	EndTime:   cloudcenter.String("15:00"),
+	Repeats:   cloudcenter.String("1"),
+	Days:      &[]string{"WED"},
+}
+
+schedules = append(schedules, newSchedule)
+
+newSuspensionPolicy := cloudcenter.SuspensionPolicy{
+	Id:        cloudcenter.String("3"),
+	Name:      cloudcenter.String("ClientLibrarySuspenion"),
+	Enabled:   cloudcenter.Bool(false),
+	Schedules: &schedules,
+}
+
+suspensionPolicy, err := client.UpdateSuspensionPolicy(&newSuspensionPolicy)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	suspensionPolicyId := *suspensionPolicy.Id
+	suspensionPolicyName := *suspensionPolicy.Name
+	fmt.Println("Id: " + suspensionPolicyId + ", Name: " + suspensionPolicyName)
+}
 ```
 
 #### DeleteSuspensionPolicy
