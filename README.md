@@ -11,6 +11,7 @@ Table of Contents
 
   * [Cloudcenter Go Client Library](#cloudcenter-go-client-library)
       * [Quick Start](#quick-start)
+      * [Quick Start - Creation from JSON file](#quick-start-creation-from-json-file)
       * [Helper Functions](#helper-functions)
          * [Without helper function](#without-helper-function)
          * [With helper function](#with-helper-function)
