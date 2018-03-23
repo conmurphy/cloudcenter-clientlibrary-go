@@ -622,6 +622,12 @@ if err != nil {
 
 ### Apps
 
+- [GetApps](#getapps)
+- [GetApp](#getapp)
+- [AddApp](#addapp)
+- [UpdateApp](#updateapp)
+- [DeleteApp](#deleteapp)
+
 ```go
 type AppAPIResponse struct {
 	Apps []App 
@@ -789,7 +795,9 @@ if err != nil {
 	fmt.Println(err)
 } else {
 	for _, app := range apps {
-		fmt.Println("Id: " + app.Id + ", Name: " + app.Name)
+		appId := *app.Id
+		appName := *app.Name
+		fmt.Println("Id: " + appId + ", Name: " + appName)
 	}
 }
 ```
@@ -808,10 +816,72 @@ app, err := client.GetApp(760)
 if err != nil {
 	fmt.Println(err)
 } else {
-	fmt.Println("Id: " + app.Id + ", Name: " + app.Name)
+	appId := *app.Id
+	appName := *app.Name
+	fmt.Println("Id: " + appId + ", Name: " + appName)
 }
 ```
 
+#### ImportApp
+
+```go
+func (s *Client) ImportApp(filename string) error
+```
+
+##### __Required Fields__
+* 
+
+
+##### Example
+```go
+
+```
+
+#### UpdateApp
+
+```go
+func (s *Client) UpdateApp(app *App) error
+```
+
+##### __Required Fields__
+* Id
+* Name
+* Version - This should be an existing version
+
+
+##### Example
+```go
+newApp := cloudcenter.App{
+	Id:      cloudcenter.String("766"),
+	Name:    cloudcenter.String("Ubuntu 14.04"),
+	Version: cloudcenter.String("1"),
+}
+
+err := client.UpdateApp(&newApp)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("App updated")
+}
+```
+
+#### DeleteApp
+
+```go
+func (s *Client) DeleteApp(appId int) error
+```
+
+##### Example
+```go
+err := client.DeleteApp(1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("App deleted")
+}
+```
 
 ### Bundles
 
@@ -913,7 +983,6 @@ if err != nil {
 	fmt.Println("Id: " + bundleId + ", Name: " + bundleName)
 }
 ```
-
 
 #### AddBundle
 
