@@ -330,6 +330,10 @@ if err != nil {
 
 - [GetActions](#getactions)
 - [GetAction](#getaction)
+- [AddAction](#addaction)
+- [UpdateAction](#updateaction)
+- [DeleteAction](#deleteaction)
+
 
 ```go
 type ActionAPIResponse struct {
@@ -421,9 +425,9 @@ if err != nil {
 	fmt.Println(err)
 } else {
 	for _, action := range actions {
-
-		fmt.Println("Id: " + action.Id + ", Name: " + action.Name)
-
+		actionId := *action.Id
+		actionName := *action.Name
+		fmt.Println("Id: " + actionId + ", Name: " + actionName)
 	}
 }
 ```
@@ -442,7 +446,263 @@ action, err := client.GetAction(1)
 if err != nil {
 	fmt.Println(err)
 } else {
-	fmt.Println("Id: " + action.Id + ", Name: " + action.Name)
+	actionId := *action.Id
+	actionName := *action.Name
+	fmt.Println("Id: " + actionId + ", Name: " + actionName)
+}
+```
+
+#### AddAction
+
+```go
+func (s *Client) AddAction(action *Action) (*Action, error)
+```
+
+##### __Required Fields__
+* Name
+* ActionType 
+* ActionParameters
+* ActionResourceMappings
+
+
+##### Example
+```go
+var actionParameters []cloudcenter.ActionParameter
+
+newActionParameter := cloudcenter.ActionParameter{
+	ParamName:   cloudcenter.String("bundlePath"),
+	ParamValue:  cloudcenter.String("http://env.cliqrtech.com/Backup.zip"),
+	CustomParam: cloudcenter.Bool(false),
+	Required:    cloudcenter.Bool(true),
+	Preference:  cloudcenter.String("VISIBLE_UNLOCKED"),
+}
+
+actionParameters = append(actionParameters, newActionParameter)
+
+newActionParameter = cloudcenter.ActionParameter{
+	ParamName:   cloudcenter.String("script"),
+	ParamValue:  cloudcenter.String("backup.sh"),
+	CustomParam: cloudcenter.Bool(false),
+	Required:    cloudcenter.Bool(true),
+	Preference:  cloudcenter.String("VISIBLE_UNLOCKED"),
+}
+
+actionParameters = append(actionParameters, newActionParameter)
+
+newActionParameter = cloudcenter.ActionParameter{
+	ParamName:   cloudcenter.String("downloadFromBundle"),
+	ParamValue:  cloudcenter.String("true"),
+	CustomParam: cloudcenter.Bool(false),
+	Required:    cloudcenter.Bool(true),
+	Preference:  cloudcenter.String("VISIBLE_UNLOCKED"),
+}
+
+actionParameters = append(actionParameters, newActionParameter)
+
+newActionParameter = cloudcenter.ActionParameter{
+	ParamName:   cloudcenter.String("executeOnContainer"),
+	ParamValue:  cloudcenter.String(""),
+	CustomParam: cloudcenter.Bool(false),
+	Required:    cloudcenter.Bool(true),
+	Preference:  cloudcenter.String("VISIBLE_UNLOCKED"),
+}
+
+actionParameters = append(actionParameters, newActionParameter)
+
+newActionParameter = cloudcenter.ActionParameter{
+	ParamName:   cloudcenter.String("rebootInstance"),
+	ParamValue:  cloudcenter.String("false"),
+	CustomParam: cloudcenter.Bool(false),
+	Required:    cloudcenter.Bool(true),
+	Preference:  cloudcenter.String("VISIBLE_UNLOCKED"),
+}
+
+actionParameters = append(actionParameters, newActionParameter)
+
+newActionParameter = cloudcenter.ActionParameter{
+	ParamName:   cloudcenter.String("refreshInstanceInfo"),
+	ParamValue:  cloudcenter.String("true"),
+	CustomParam: cloudcenter.Bool(false),
+	Required:    cloudcenter.Bool(true),
+	Preference:  cloudcenter.String("VISIBLE_UNLOCKED"),
+}
+
+actionParameters = append(actionParameters, newActionParameter)
+
+vmResource := cloudcenter.VmResource{
+	Type:          cloudcenter.String("DEPLOYMENT_VM"),
+	CloudRegions:  &[]string{"1"},
+	CloudAccounts: &[]string{"1"},
+}
+
+var actionResourceFilters []cloudcenter.ActionResourceFilter
+
+newActionResourceFilter := cloudcenter.ActionResourceFilter{
+	VmResource: &vmResource,
+}
+
+actionResourceFilters = append(actionResourceFilters, newActionResourceFilter)
+
+var actionResourceMappings []cloudcenter.ActionResourceMapping
+
+newActionResourceMapping := cloudcenter.ActionResourceMapping{
+	Type: cloudcenter.String("VIRTUAL_MACHINE"),
+	ActionResourceFilters: &actionResourceFilters,
+}
+
+actionResourceMappings = append(actionResourceMappings, newActionResourceMapping)
+
+newAction := cloudcenter.Action{
+	Name:                   cloudcenter.String("ClientLibraryAction"),
+	ActionType:             cloudcenter.String("EXECUTE_COMMAND"),
+	ActionParameters:       &actionParameters,
+	ActionResourceMappings: &actionResourceMappings,
+}
+
+action, err := client.AddAction(&newAction)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	actionId := *action.Id
+	actionName := *action.Name
+	fmt.Println("Id: " + actionId + ", Name: " + actionName)
+}
+```
+
+#### UpdateAction
+
+```go
+func (s *Client) UpdateAction(action *Action) (*Action, error)
+```
+
+##### __Required Fields__
+* Id
+* Name
+* ActionType 
+* ActionParameters
+* ActionResourceMappings
+
+##### Example
+```go
+var actionParameters []cloudcenter.ActionParameter
+
+newActionParameter := cloudcenter.ActionParameter{
+	ParamName:   cloudcenter.String("bundlePath"),
+	ParamValue:  cloudcenter.String("http://env.cliqrtech.com/Backup.zip"),
+	CustomParam: cloudcenter.Bool(false),
+	Required:    cloudcenter.Bool(true),
+	Preference:  cloudcenter.String("VISIBLE_UNLOCKED"),
+}
+
+actionParameters = append(actionParameters, newActionParameter)
+
+newActionParameter = cloudcenter.ActionParameter{
+	ParamName:   cloudcenter.String("script"),
+	ParamValue:  cloudcenter.String("backup.sh"),
+	CustomParam: cloudcenter.Bool(false),
+	Required:    cloudcenter.Bool(true),
+	Preference:  cloudcenter.String("VISIBLE_UNLOCKED"),
+}
+
+actionParameters = append(actionParameters, newActionParameter)
+
+newActionParameter = cloudcenter.ActionParameter{
+	ParamName:   cloudcenter.String("downloadFromBundle"),
+	ParamValue:  cloudcenter.String("true"),
+	CustomParam: cloudcenter.Bool(false),
+	Required:    cloudcenter.Bool(true),
+	Preference:  cloudcenter.String("VISIBLE_UNLOCKED"),
+}
+
+actionParameters = append(actionParameters, newActionParameter)
+
+newActionParameter = cloudcenter.ActionParameter{
+	ParamName:   cloudcenter.String("executeOnContainer"),
+	ParamValue:  cloudcenter.String(""),
+	CustomParam: cloudcenter.Bool(false),
+	Required:    cloudcenter.Bool(true),
+	Preference:  cloudcenter.String("VISIBLE_UNLOCKED"),
+}
+
+actionParameters = append(actionParameters, newActionParameter)
+
+newActionParameter = cloudcenter.ActionParameter{
+	ParamName:   cloudcenter.String("rebootInstance"),
+	ParamValue:  cloudcenter.String("false"),
+	CustomParam: cloudcenter.Bool(false),
+	Required:    cloudcenter.Bool(true),
+	Preference:  cloudcenter.String("VISIBLE_UNLOCKED"),
+}
+
+actionParameters = append(actionParameters, newActionParameter)
+
+newActionParameter = cloudcenter.ActionParameter{
+	ParamName:   cloudcenter.String("refreshInstanceInfo"),
+	ParamValue:  cloudcenter.String("true"),
+	CustomParam: cloudcenter.Bool(false),
+	Required:    cloudcenter.Bool(true),
+	Preference:  cloudcenter.String("VISIBLE_UNLOCKED"),
+}
+
+actionParameters = append(actionParameters, newActionParameter)
+
+vmResource := cloudcenter.VmResource{
+	Type:          cloudcenter.String("DEPLOYMENT_VM"),
+	CloudRegions:  &[]string{"1"},
+	CloudAccounts: &[]string{"1"},
+}
+
+var actionResourceFilters []cloudcenter.ActionResourceFilter
+
+newActionResourceFilter := cloudcenter.ActionResourceFilter{
+	VmResource: &vmResource,
+}
+
+actionResourceFilters = append(actionResourceFilters, newActionResourceFilter)
+
+var actionResourceMappings []cloudcenter.ActionResourceMapping
+
+newActionResourceMapping := cloudcenter.ActionResourceMapping{
+	Type: cloudcenter.String("VIRTUAL_MACHINE"),
+	ActionResourceFilters: &actionResourceFilters,
+}
+
+actionResourceMappings = append(actionResourceMappings, newActionResourceMapping)
+
+newAction := cloudcenter.Action{
+	Id:                   cloudcenter.String("14"),
+	Name:                   cloudcenter.String("ClientLibraryAction"),
+	ActionType:             cloudcenter.String("EXECUTE_COMMAND"),
+	ActionParameters:       &actionParameters,
+	ActionResourceMappings: &actionResourceMappings,
+}
+
+action, err := client.UpdateAction(&newAction)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	actionId := *action.Id
+	actionName := *action.Name
+	fmt.Println("Id: " + actionId + ", Name: " + actionName)
+}
+```
+
+#### DeleteAction
+
+```go
+func (s *Client) DeleteAction(actionId int) error
+```
+
+##### Example
+```go
+err := client.DeleteAction(1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Action deleted")
 }
 ```
 
@@ -450,6 +710,9 @@ if err != nil {
 
 - [GetActivationProfiles](#getactivationprofiles)
 - [GetActivationProfile](#getactivationprofile)
+- [AddActivationProfile](#addactivationprofile)
+- [UpdateActivationProfile](#updateactivationprofile)
+- [DeleteActivationProfile](#deleteactivationprofile)
 
 ```go
 type ActivationProfile struct {
@@ -490,9 +753,9 @@ if err != nil {
 	fmt.Println(err)
 } else {
 	for _, activationProfile := range activationProfiles {
-
-		fmt.Println("Id: " + activationProfile.Id + ", Name: " + activationProfile.Name)
-
+		activationProfileId := *activationProfile.Id 
+		activationProfileName := *activationProfile.Name
+		fmt.Println("Id: " + activationProfileId + ", Name: " + activationProfileName)
 	}
 }
 ```
@@ -511,7 +774,96 @@ activationProfile, err := client.GetActivationProfile(1, 1)
 if err != nil {
 	fmt.Println(err)
 } else {
-	fmt.Println("Id: " + activationProfile.Id + ", Name: " + activationProfile.Name)
+	activationProfileId := *activationProfile.Id 
+	activationProfileName := *activationProfile.Name
+	fmt.Println("Id: " + activationProfileId + ", Name: " + activationProfileName)
+}
+```
+
+#### AddActivationProfile
+
+```go
+func (s *Client) AddActivationProfile(activationProfile *ActivationProfile) (*ActivationProfile, error)
+```
+
+##### __Required Fields__
+* TenantId
+* Name
+
+##### Example
+```go
+newActivationProfile := cloudcenter.ActivationProfile{
+	TenantId: cloudcenter.Int64(1),
+	Name:     cloudcenter.String("Client Library activation profile"),
+	Description:     "Client Library activation profile description",
+	PlanId:          "1",
+	BundleId:        "1",
+	ContractId:      "1",
+	DepEnvId:        "1",
+	ActivateRegions: activateRegions,
+}
+
+activationProfile, err := client.AddActivationProfile(&newActivationProfile)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	activationProfileId := *activationProfile.Id
+	activationProfileName := *activationProfile.Name
+	fmt.Println("Activation Profile Id: " + activationProfileId + ", Name: " + activationProfileName)
+}
+```
+
+#### UpdateActivationProfile
+
+```go
+func (s *Client) UpdateActivationProfile(activationProfile *ActivationProfile) (*ActivationProfile, error)
+```
+
+##### __Required Fields__
+* Id
+* TenantId
+* Name
+
+##### Example
+```go
+newActivationProfile := cloudcenter.ActivationProfile{
+	Id:       cloudcenter.String("1"),
+	TenantId: cloudcenter.Int64(1),
+	Name:     cloudcenter.String("Client Library activation profile"),
+	Description:     "Client Library activation profile description",
+	PlanId:          "1",
+	BundleId:        "1",
+	ContractId:      "1",
+	DepEnvId:        "1",
+	ActivateRegions: activateRegions,
+}
+
+activationProfile, err := client.UpdateActivationProfile(&newActivationProfile)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	activationProfileId := *activationProfile.Id
+	activationProfileName := *activationProfile.Name
+	fmt.Println("Activation Profile Id: " + activationProfileId + ", Name: " + activationProfileName)
+}
+```
+
+#### DeleteActivationProfile
+
+```go
+func (s *Client) DeleteActivationProfile(tenantId int, activationProfileId int) error
+```
+
+##### Example
+```go
+err := client.DeleteActivationProfile(1,1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Activation profile deleted")
 }
 ```
 
@@ -632,12 +984,36 @@ func (s *Client) AddAgingPolicy(agingPolicy *AgingPolicy) (*AgingPolicy, error)
 ```
 
 ##### __Required Fields__
-* 
+* Name
+* Enabled
+* Type
+* Limit
+
 
 
 ##### Example
 ```go
+limit := cloudcenter.Limit{
+	Unit:   cloudcenter.String("DAYS"),
+	Amount: cloudcenter.Float64(1),
+}
 
+newAgingPolicy := cloudcenter.AgingPolicy{
+	Name:    cloudcenter.String("Client Library AP"),
+	Enabled: cloudcenter.Bool(true),
+	Type:    cloudcenter.String("TIME"),
+	Limit:   &limit,
+}
+
+agingPolicy, err := client.AddAgingPolicy(&newAgingPolicy)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	agingPolicyId := *agingPolicy.Id
+	agingPolicyName := *agingPolicy.Name
+	fmt.Println("Id: " + agingPolicyId + ", Name: " + agingPolicyName)
+}
 ```
 
 #### UpdateAgingPolicy
@@ -648,11 +1024,36 @@ func (s *Client) UpdateAgingPolicy(agingPolicy *AgingPolicy) (*AgingPolicy, erro
 
 ##### __Required Fields__
 * Id
+* Name
+* Enabled
+* Type
+* Limit
 
 
 ##### Example
 ```go
+limit := cloudcenter.Limit{
+	Unit:   cloudcenter.String("DAYS"),
+	Amount: cloudcenter.Float64(1),
+}
 
+newAgingPolicy := cloudcenter.AgingPolicy{
+	Id:    cloudcenter.String("2"),
+	Name:    cloudcenter.String("Client Library AP"),
+	Enabled: cloudcenter.Bool(true),
+	Type:    cloudcenter.String("TIME"),
+	Limit:   &limit,
+}
+
+agingPolicy, err := client.UpdateAgingPolicy(&newAgingPolicy)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	agingPolicyId := *agingPolicy.Id
+	agingPolicyName := *agingPolicy.Name
+	fmt.Println("Id: " + agingPolicyId + ", Name: " + agingPolicyName)
+}
 ```
 
 #### DeleteAgingPolicy
