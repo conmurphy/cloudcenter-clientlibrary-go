@@ -257,6 +257,9 @@ Two options have been implemented in this library for each async API (AddCloudAc
 
 - [GetActionPolicies](#getactionpolicies)
 - [GetActionPolicy](#getactionpolicy)
+- [AddActionPolicy](#addactionpolicy)
+- [UpdateActionPolicy](#updateactionpolicy)
+- [DeleteActionPolicy](#deleteactionpolicy)
 
 ```go
 type ActionPolicyAPIResponse struct {
@@ -323,6 +326,168 @@ if err != nil {
 	fmt.Println(err)
 } else {
 	fmt.Println("Id: " + actionPolicy.Id + ", Name: " + actionPolicy.Name)
+}
+```
+
+#### AddActionPolicy
+
+```go
+func (s *Client) AddActionPolicy(actionPolicy *ActionPolicy) (*ActionPolicy, error)
+```
+
+##### __Required Fields__
+* Name
+* EntityType
+* EventName
+* Actions
+
+
+##### Example
+```go
+var actionInputs []cloudcenter.ActionInput
+
+newActionInputs := cloudcenter.ActionInput{
+	Name:  cloudcenter.String("toAddr"),
+	Value: cloudcenter.String("%myEmail%"),
+}
+
+actionInputs = append(actionInputs, newActionInputs)
+
+newActionInputs = cloudcenter.ActionInput{
+	Name:  cloudcenter.String("bcc"),
+	Value: cloudcenter.String(""),
+}
+
+actionInputs = append(actionInputs, newActionInputs)
+
+newActionInputs = cloudcenter.ActionInput{
+	Name:  cloudcenter.String("subject"),
+	Value: cloudcenter.String("Deployment %jobName% for the application %appName% has reached maximum cluster size limit"),
+}
+
+actionInputs = append(actionInputs, newActionInputs)
+
+newActionInputs = cloudcenter.ActionInput{
+	Name:  cloudcenter.String("body"),
+	Value: cloudcenter.String("Hello %firstName%\nDeployment %jobName% for the application %appName% has reached the maximum cluster size limit of %maxAppClusterSize% on %MaxClusterSizeReachedAt%. Click here %jobUrl% to view the status of the deployment.\nYour %vendorName% Team"),
+}
+
+actionInputs = append(actionInputs, newActionInputs)
+
+var actions []cloudcenter.Actions
+
+newAction := cloudcenter.Actions{
+	ActionType:   cloudcenter.String("EMAIL"),
+	ActionInputs: &actionInputs,
+	}
+
+actions = append(actions, newAction)
+
+newActionPolicy := cloudcenter.ActionPolicy{
+	Name:       cloudcenter.String("Client library action policy"),
+	EntityType: cloudcenter.String("Application Deployment"),
+	EventName:  cloudcenter.String("max_cluster_size_reached"),
+	Actions:    &actions,
+}
+
+actionPolicy, err := client.AddActionPolicy(&newActionPolicy)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	actionPolicyId := *actionPolicy.Id
+	actionPolicyName := *actionPolicy.Name
+	fmt.Println("Id: " + actionPolicyId + ", Name: " + actionPolicyName)
+}
+```
+
+#### UpdateActionPolicy
+
+```go
+func (s *Client) UpdateActionPolicy(actionPolicy *ActionPolicy) (*ActionPolicy, error)
+```
+
+##### __Required Fields__
+* Id
+* Name
+* EntityType
+* EventName
+* Actions
+
+##### Example
+```go
+var actionInputs []cloudcenter.ActionInput
+
+newActionInputs := cloudcenter.ActionInput{
+	Name:  cloudcenter.String("toAddr"),
+	Value: cloudcenter.String("%myEmail%"),
+}
+
+actionInputs = append(actionInputs, newActionInputs)
+
+newActionInputs = cloudcenter.ActionInput{
+	Name:  cloudcenter.String("bcc"),
+	Value: cloudcenter.String(""),
+}
+
+actionInputs = append(actionInputs, newActionInputs)
+
+newActionInputs = cloudcenter.ActionInput{
+	Name:  cloudcenter.String("subject"),
+	Value: cloudcenter.String("Deployment %jobName% for the application %appName% has reached maximum cluster size limit"),
+}
+
+actionInputs = append(actionInputs, newActionInputs)
+
+newActionInputs = cloudcenter.ActionInput{
+	Name:  cloudcenter.String("body"),
+	Value: cloudcenter.String("Hello %firstName%\nDeployment %jobName% for the application %appName% has reached the maximum cluster size limit of %maxAppClusterSize% on %MaxClusterSizeReachedAt%. Click here %jobUrl% to view the status of the deployment.\nYour %vendorName% Team"),
+}
+
+actionInputs = append(actionInputs, newActionInputs)
+
+var actions []cloudcenter.Actions
+
+newAction := cloudcenter.Actions{
+	ActionType:   cloudcenter.String("EMAIL"),
+	ActionInputs: &actionInputs,
+	}
+
+actions = append(actions, newAction)
+
+newActionPolicy := cloudcenter.ActionPolicy{
+	Id:       cloudcenter.String("2"),
+	Name:       cloudcenter.String("Client library action policy"),
+	EntityType: cloudcenter.String("Application Deployment"),
+	EventName:  cloudcenter.String("max_cluster_size_reached"),
+	Actions:    &actions,
+}
+
+actionPolicy, err := client.UpdateActionPolicy(&newActionPolicy)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	actionPolicyId := *actionPolicy.Id
+	actionPolicyName := *actionPolicy.Name
+	fmt.Println("Id: " + actionPolicyId + ", Name: " + actionPolicyName)
+}
+```
+
+#### DeleteActionPolicy
+
+```go
+func (s *Client) DeleteActionPolicy(actionPolicyId int) error
+```
+
+##### Example
+```go
+err := client.DeleteActionPolicy(1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Action policy deleted")
 }
 ```
 
@@ -2734,7 +2899,7 @@ if err != nil {
 #### AddCloud
 
 ```go
-func (s *Client) AddContract(contract *Contract) (*Contract, error)
+func (s *Client) AddCloud(cloud *Cloud) (*Cloud, error)
 ```
 
 ##### __Required Fields__
@@ -2765,7 +2930,7 @@ if err != nil {
 #### UpdateCloud
 
 ```go
-func (s *Client) UpdateContract(contract *Contract) (*Contract, error)
+func (s *Client) UpdateCloud(cloud *Cloud) (*Cloud, error)
 ```
 
 ##### __Required Fields__
