@@ -1,10 +1,15 @@
 package cloudcenter
 
-import "fmt"
-import "net/http"
-import "strconv"
-import "encoding/json"
-import "bytes"
+import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"net/http"
+	"strconv"
+
+	validator "gopkg.in/validator.v2"
+)
 
 //import "bytes"
 
@@ -21,11 +26,11 @@ type ActionPolicy struct {
 	Id          *string    `json:"id,omitempty"`
 	Resource    *string    `json:"resource,omitempty"`
 	Perms       *[]string  `json:"perms,omitempty"`
-	Name        *string    `json:"name,omitempty"`
+	Name        *string    `json:"name,omitempty" validate:"nonzero"`
 	Description *string    `json:"description,omitempty"`
-	EntityType  *string    `json:"entityType,omitempty"`
-	EventName   *string    `json:"eventName,omitempty"`
-	Actions     *[]Actions `json:"actions,omitempty"`
+	EntityType  *string    `json:"entityType,omitempty" validate:"nonzero"`
+	EventName   *string    `json:"eventName,omitempty" validate:"nonzero"`
+	Actions     *[]Actions `json:"actions,omitempty" validate:"nonzero"`
 	UserId      *string    `json:"userId,omitempty"`
 	Enabled     *bool      `json:"enabled,omitempty"`
 	AutoEnable  *bool      `json:"autoEnable,omitempty"`
@@ -100,6 +105,10 @@ func (s *Client) AddActionPolicy(actionPolicy *ActionPolicy) (*ActionPolicy, err
 
 	var data ActionPolicy
 
+	if errs := validator.Validate(actionPolicy); errs != nil {
+		return nil, errs
+	}
+
 	url := fmt.Sprintf(s.BaseURL + "/v1/actionpolicies")
 
 	j, err := json.Marshal(actionPolicy)
@@ -133,6 +142,14 @@ func (s *Client) AddActionPolicy(actionPolicy *ActionPolicy) (*ActionPolicy, err
 func (s *Client) UpdateActionPolicy(actionPolicy *ActionPolicy) (*ActionPolicy, error) {
 
 	var data ActionPolicy
+
+	if errs := validator.Validate(actionPolicy); errs != nil {
+		return nil, errs
+	}
+
+	if nonzero(actionPolicy.Id) {
+		return nil, errors.New("ActionPolicy.Id is missing")
+	}
 
 	actionPolicyId := *actionPolicy.Id
 	url := fmt.Sprintf(s.BaseURL + "/v1/actionpolicies/" + actionPolicyId)

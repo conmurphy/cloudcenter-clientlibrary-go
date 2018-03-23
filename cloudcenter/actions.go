@@ -1,10 +1,15 @@
 package cloudcenter
 
-import "fmt"
-import "net/http"
-import "strconv"
-import "encoding/json"
-import "bytes"
+import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"net/http"
+	"strconv"
+
+	validator "gopkg.in/validator.v2"
+)
 
 //import "bytes"
 
@@ -21,9 +26,9 @@ type Action struct {
 	Id                     *string                  `json:"id,omitempty"`
 	Resource               *string                  `json:"resource,omitempty"`
 	Perms                  *[]string                `json:"perms,omitempty"`
-	Name                   *string                  `json:"name,omitempty"`
+	Name                   *string                  `json:"name,omitempty" validate:"nonzero"`
 	Description            *string                  `json:"description,omitempty"`
-	ActionType             *string                  `json:"actionType,omitempty"`
+	ActionType             *string                  `json:"actionType,omitempty" validate:"nonzero"`
 	LastUpdatedTime        *string                  `json:"lastUpdatedTime,omitempty"`
 	TimeOut                *float64                 `json:"timeOut,omitempty"`
 	Enabled                *bool                    `json:"enabled,omitempty"`
@@ -33,8 +38,8 @@ type Action struct {
 	BulkOperationSupported *bool                    `json:"bulkOperationSupported,omitempty"`
 	IsAvailableToUser      *bool                    `json:"isAvailableToUser,omitempty"`
 	Owner                  *int64                   `json:"owner,omitempty"`
-	ActionParameters       *[]ActionParameter       `json:"actionParameters,omitempty"`
-	ActionResourceMappings *[]ActionResourceMapping `json:"actionResourceMappings,omitempty"`
+	ActionParameters       *[]ActionParameter       `json:"actionParameters,omitempty" validate:"nonzero"`
+	ActionResourceMappings *[]ActionResourceMapping `json:"actionResourceMappings,omitempty" validate:"nonzero"`
 	ActionCustomParamSpecs *[]ActionCustomParamSpec `json:"actionCustomParamSpecs,omitempty"`
 }
 
@@ -47,8 +52,8 @@ type ActionParameter struct {
 }
 
 type ActionResourceMapping struct {
-	Type                  *string                 `json:"type,omitempty"`
-	ActionResourceFilters *[]ActionResourceFilter `json:"actionResourceFilters,omitempty"`
+	Type                  *string                 `json:"type,omitempty" `
+	ActionResourceFilters *[]ActionResourceFilter `json:"actionResourceFilters,omitempty" `
 }
 
 type ActionResourceFilter struct {
@@ -159,6 +164,10 @@ func (s *Client) AddAction(action *Action) (*Action, error) {
 
 	var data Action
 
+	if errs := validator.Validate(action); errs != nil {
+		return nil, errs
+	}
+
 	url := fmt.Sprintf(s.BaseURL + "/v1/actions")
 
 	j, err := json.Marshal(action)
@@ -192,6 +201,14 @@ func (s *Client) AddAction(action *Action) (*Action, error) {
 func (s *Client) UpdateAction(action *Action) (*Action, error) {
 
 	var data Action
+
+	if errs := validator.Validate(action); errs != nil {
+		return nil, errs
+	}
+
+	if nonzero(action.Id) {
+		return nil, errors.New("Action.Id is missing")
+	}
 
 	actionId := *action.Id
 	url := fmt.Sprintf(s.BaseURL + "/v1/actions/" + actionId)

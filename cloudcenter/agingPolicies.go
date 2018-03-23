@@ -1,10 +1,15 @@
 package cloudcenter
 
-import "fmt"
-import "net/http"
-import "strconv"
-import "encoding/json"
-import "bytes"
+import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"net/http"
+	"strconv"
+
+	validator "gopkg.in/validator.v2"
+)
 
 //import "bytes"
 
@@ -21,11 +26,11 @@ type AgingPolicy struct {
 	Id                             *string                `json:"id,omitempty"`
 	Resource                       *string                `json:"resource,omitempty"`
 	Perms                          *[]string              `json:"perms,omitempty"`
-	Name                           *string                `json:"name,omitempty"`
+	Name                           *string                `json:"name,omitempty" validate:"nonzero"`
 	Description                    *string                `json:"description,omitempty"`
-	Enabled                        *bool                  `json:"enabled,omitempty"`
-	Type                           *string                `json:"type,omitempty"`
-	Limit                          *Limit                 `json:"limit,omitempty"`
+	Enabled                        *bool                  `json:"enabled,omitempty" validate:"nonzero"`
+	Type                           *string                `json:"type,omitempty" validate:"nonzero"`
+	Limit                          *Limit                 `json:"limit,omitempty" validate:"nonzero"`
 	TerminateWhenPolicyEnds        *bool                  `json:"terminateWhenPolicyEnds,omitempty"`
 	AllowGracePeriodForTermination *bool                  `json:"allowGracePeriodForTermination,omitempty"`
 	GraceLimit                     *GraceLimit            `json:"graceLimit,omitempty"`
@@ -140,6 +145,10 @@ func (s *Client) AddAgingPolicy(agingPolicy *AgingPolicy) (*AgingPolicy, error) 
 
 	var data AgingPolicy
 
+	if errs := validator.Validate(agingPolicy); errs != nil {
+		return nil, errs
+	}
+
 	url := fmt.Sprintf(s.BaseURL + "/v2/agingPolicies")
 
 	j, err := json.Marshal(agingPolicy)
@@ -173,6 +182,14 @@ func (s *Client) AddAgingPolicy(agingPolicy *AgingPolicy) (*AgingPolicy, error) 
 func (s *Client) UpdateAgingPolicy(agingPolicy *AgingPolicy) (*AgingPolicy, error) {
 
 	var data AgingPolicy
+
+	if errs := validator.Validate(agingPolicy); errs != nil {
+		return nil, errs
+	}
+
+	if nonzero(agingPolicy.Id) {
+		return nil, errors.New("AgingPolicy.Id is missing")
+	}
 
 	agingPolicyId := *agingPolicy.Id
 	url := fmt.Sprintf(s.BaseURL + "/v2/agingPolicies/" + agingPolicyId)

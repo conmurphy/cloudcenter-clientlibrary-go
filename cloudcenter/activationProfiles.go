@@ -1,10 +1,15 @@
 package cloudcenter
 
-import "fmt"
-import "net/http"
-import "strconv"
-import "encoding/json"
-import "bytes"
+import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"net/http"
+	"strconv"
+
+	validator "gopkg.in/validator.v2"
+)
 
 type ActivationProfileAPIResponse struct {
 	Resource           *string             `json:"resource"`
@@ -17,10 +22,10 @@ type ActivationProfileAPIResponse struct {
 
 type ActivationProfile struct {
 	Id                  *string           `json:"id,omitempty"`
-	Name                *string           `json:"name,omitempty"`
+	Name                *string           `json:"name,omitempty" validate:"nonzero"`
 	Description         *string           `json:"description,omitempty"`
 	Resource            *string           `json:"resource"`
-	TenantId            *int64            `json:"tenantId,omitempty"`
+	TenantId            *int64            `json:"tenantId,omitempty" validate:"nonzero"`
 	PlanId              *string           `json:"planId,omitempty"`
 	BundleId            *string           `json:"bundleId,omitempty"`
 	ContractId          *string           `json:"contractId,omitempty"`
@@ -86,6 +91,10 @@ func (s *Client) AddActivationProfile(activationProfile *ActivationProfile) (*Ac
 
 	var data ActivationProfile
 
+	if errs := validator.Validate(activationProfile); errs != nil {
+		return nil, errs
+	}
+
 	activationProfileTenantId := int(*activationProfile.TenantId)
 
 	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + strconv.Itoa(activationProfileTenantId) + "/activationProfiles")
@@ -121,6 +130,14 @@ func (s *Client) AddActivationProfile(activationProfile *ActivationProfile) (*Ac
 func (s *Client) UpdateActivationProfile(activationProfile *ActivationProfile) (*ActivationProfile, error) {
 
 	var data ActivationProfile
+
+	if errs := validator.Validate(activationProfile); errs != nil {
+		return nil, errs
+	}
+
+	if nonzero(activationProfile.Id) {
+		return nil, errors.New("ActivationProfile.Id is missing")
+	}
 
 	activationProfileTenantId := int(*activationProfile.TenantId)
 	activationProfileId := *activationProfile.Id
