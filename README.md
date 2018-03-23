@@ -519,6 +519,9 @@ if err != nil {
 
 - [GetAgingPolicies](#getagingpolicies)
 - [GetAgingPolicy](#getagingpolicy)
+- [AddAgingPolicy](#addagingpolicy)
+- [UpdateAgingPolicy](#updateagingpolicy)
+- [DeleteAgingPolicy](#deleteagingpolicy)
 
 ```go
 type AgingPolicy struct {
@@ -595,9 +598,9 @@ if err != nil {
 	fmt.Println(err)
 } else {
 	for _, agingPolicy := range agingPolicies {
-
-		fmt.Println("Id: " + agingPolicy.Id + ", Name: " + agingPolicy.Name)
-
+		agingPolicyId := *agingPolicy.Id 
+		agingPolicyName := *agingPolicy.Name 
+		fmt.Println("Id: " + agingPolicyId + ", Name: " + agingPolicyName)
 	}
 }
 ```
@@ -616,7 +619,56 @@ agingPolicy, err := client.GetAgingPolicies()
 if err != nil {
 	fmt.Println(err)
 } else {
-	fmt.Println("Id: " + agingPolicy.Id + ", Name: " + agingPolicy.Name)
+	agingPolicyId := *agingPolicy.Id 
+	agingPolicyName := *agingPolicy.Name 
+	fmt.Println("Id: " + agingPolicyId + ", Name: " + agingPolicyName)
+}
+```
+
+#### AddAgingPolicy
+
+```go
+func (s *Client) AddAgingPolicy(agingPolicy *AgingPolicy) (*AgingPolicy, error)
+```
+
+##### __Required Fields__
+* 
+
+
+##### Example
+```go
+
+```
+
+#### UpdateAgingPolicy
+
+```go
+func (s *Client) UpdateAgingPolicy(agingPolicy *AgingPolicy) (*AgingPolicy, error)
+```
+
+##### __Required Fields__
+* Id
+
+
+##### Example
+```go
+
+```
+
+#### DeleteAgingPolicy
+
+```go
+func (s *Client) DeleteAgingPolicy(agingPolicyId int) error
+```
+
+##### Example
+```go
+err := client.DeleteAgingPolicy(1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Aging policy deleted")
 }
 ```
 
