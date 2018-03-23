@@ -1,10 +1,15 @@
 package cloudcenter
 
-import "fmt"
-import "net/http"
-import "encoding/json"
-import "strconv"
-import "bytes"
+import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"net/http"
+	"strconv"
+
+	validator "gopkg.in/validator.v2"
+)
 
 //import "errors"
 
@@ -20,7 +25,7 @@ type App struct {
 	Description     *string           `json:"description,omitempty"`
 	ServiceTierId   *string           `json:"serviceTierId,omitempty"`
 	Versions        *[]string         `json:"versions,omitempty"`
-	Version         *string           `json:"version,omitempty"`
+	Version         *string           `json:"version,omitempty" validate:"nonzero"`
 	Executor        *string           `json:"executor,omitempty"`
 	Category        *string           `json:"category,omitempty"`
 	ServiceTiers    *[]App            `json:"serviceTiers,omitempty"`
@@ -196,6 +201,14 @@ func (s *Client) ImportApp(filename string) error {
 }
 
 func (s *Client) UpdateApp(app *App) error {
+
+	if errs := validator.Validate(app); errs != nil {
+		return errs
+	}
+
+	if nonzero(app.Id) {
+		return errors.New("App.Id is missing")
+	}
 
 	appId := *app.Id
 	appVersion := *app.Version

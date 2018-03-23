@@ -1,11 +1,15 @@
 package cloudcenter
 
-import "fmt"
-import "net/http"
-import "encoding/json"
-import "strconv"
-import "bytes"
-import "errors"
+import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"net/http"
+	"strconv"
+
+	validator "gopkg.in/validator.v2"
+)
 
 type BundleAPIResponse struct {
 	Resource      *string  `json:"resource"`
@@ -20,17 +24,17 @@ type Bundle struct {
 	Id               *string   `json:"id,omitempty"`
 	Resource         *string   `json:"resource,omitempty"`
 	Perms            *[]string `json:"perms,omitempty"`
-	Type             *string   `json:"type,omitempty"`
-	Name             *string   `json:"name,omitempty"`
+	Type             *string   `json:"type,omitempty" validate:"nonzero"`
+	Name             *string   `json:"name,omitempty" validate:"nonzero"`
 	Description      *string   `json:"description,omitempty"`
 	Limit            *float64  `json:"limit,omitempty"`
 	Price            *float64  `json:"price,omitempty"`
-	ExpirationDate   *float64  `json:"expirationDate,omitempty"`
+	ExpirationDate   *float64  `json:"expirationDate,omitempty" validate:"nonzero"`
 	ExpirationMonths *int64    `json:"expirationMonths,omitempty"`
 	Disabled         *bool     `json:"disabled,omitempty"`
 	ShowOnlyToAdmin  *bool     `json:"showOnlyToAdmin,omitempty"`
 	NumberOfUsers    *float64  `json:"numberOfUsers,omitempty"`
-	TenantId         *string   `json:"tenantId,omitempty"`
+	TenantId         *string   `json:"tenantId,omitempty" validate:"nonzero"`
 	PublishedAppIds  *[]string `json:"publishedAppIds,omitempty"`
 }
 
@@ -120,6 +124,10 @@ func (s *Client) AddBundle(bundle *Bundle) (*Bundle, error) {
 
 	var data Bundle
 
+	if errs := validator.Validate(bundle); errs != nil {
+		return nil, errs
+	}
+
 	bundleTenantId := *bundle.TenantId
 	url := fmt.Sprintf(s.BaseURL + "/v1/tenants/" + bundleTenantId + "/bundles")
 
@@ -154,6 +162,14 @@ func (s *Client) AddBundle(bundle *Bundle) (*Bundle, error) {
 func (s *Client) UpdateBundle(bundle *Bundle) (*Bundle, error) {
 
 	var data Bundle
+
+	if errs := validator.Validate(bundle); errs != nil {
+		return nil, errs
+	}
+
+	if nonzero(bundle.Id) {
+		return nil, errors.New("Bundle.Id is missing")
+	}
 
 	bundleTenantId := *bundle.TenantId
 	bundleId := *bundle.Id
