@@ -4631,11 +4631,11 @@ if err != nil {
 
 ### SuspensionPolicies
 
-- [GetActivationProfiles](#getactivationprofiles)
-- [GetActivationProfile](#getactivationprofile)
-- [AddActivationProfile](#addactivationprofile)
-- [UpdateActivationProfile](#updateactivationprofile)
-- [DeleteActivationProfile](#deleteactivationprofile)
+- [GetSuspensionPolicies](#getsuspensionpolicies)
+- [GetSuspensionPolicy](#getsuspensionpolicy)
+- [AddSuspensionPolicy](#addsuspensionpolicy)
+- [UpdateSuspensionPolicy](#updatesuspensionpolicy)
+- [DeleteSuspensionPolicy](#deletesuspensionpolicy)
 
 ```go
 type SuspensionPolicyAPIResponse struct {
