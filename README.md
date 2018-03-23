@@ -4984,7 +4984,6 @@ func (s *Client) AddUser(user *User) (*User, error)
 ##### Example
 
 ```golang
-
 newUser := cloudcenter.User {
 	FirstName:   cloudcenter.String("client"),
 	LastName:    cloudcenter.String("library"),
@@ -5001,7 +5000,9 @@ user, err := client.AddUser(&newUser)
 if err != nil {
 	fmt.Println(err)
 } else {
-	fmt.Println(”New user created. \n UserId: " + user.Id + ", User last name: " + user.LastName)
+	userId := *user.Id
+	username:= *user.Username
+	fmt.Println("UserId: " + userId + ", Username: " + username)
 }
 ```
 
@@ -5058,7 +5059,237 @@ if err != nil {
 	fmt.Println("User deleted")
 }
 ```
+
 ### VirtualMachines
+
+- [GetVirtualMachines](#getvirtualmachines)
+- [GetVirtualMachine](#getvirtualmachine)
+- [GetVirtualMachineCostSummary](#getvirtualmachinecostsummary)
+- [AddVirtualMachine](#addvirtualmachine)
+- [UpdateVirtualMachine](#updatevirtualmachine)
+- [DeleteVirtualMachine](#deletevirtualmachine)
+
+```go
+type VirtualMachineAPIResponse struct {
+	CostSummary *CostSummary 
+	Details     *Details     
+	Filters     *Filters     
+}
+```
+
+```go
+type CostSummary struct {
+	TotalNumberOfVMs          *int64   
+	TotalNumberOfRunningVMs   *int64   
+	TotalCloudCost            *float64 
+	EstimatedMonthlyCloudCost *float64 
+	TotalNodeHours            *float64 
+}
+```
+
+```go
+type Details struct {
+	Resource              *string                 
+	Size                  *int64                  
+	PageNumber            *int64                  
+	TotalElements         *int64                  
+	TotalPages            *int64                  
+	VirtualMachineDetails []VirtualMachineDetails 
+}
+```
+
+```go
+type VirtualMachineDetails struct {
+	Id                        *string           
+	Resource                  *string           
+	Perms                     *[]string         
+	Name                      *string           
+	Description               *string           
+	Enabled                   *bool             
+	Schedules                 *[]Schedule       
+	BlockoutPeriods           *[]BlockoutPeriod 
+	IsPolicyActiveOnResources *bool             
+	ResourcesMaps             *[]ResourcesMap   
+	Priority                  *float64          
+	Created                   *float64          
+	LastUpdated               *float64          
+	NodeId                    *string           
+	HostName                  *string           
+	NodeStartTime             *int64            
+	NodeEndTime               *int64            
+	NumberOfCPUs              *int64            
+	MemorySize                *int64            
+	StorageSize               *int64            
+	OSName                    *string           
+	CostPerHour               *float64          
+	Status                    *string           
+	ReviewNodeStatus          *bool             
+	CloudFamily               *string           
+	CloudId                   *string           
+	CloudName                 *string           
+	CloudAccountId            *string           
+	CloudAccountName          *string           
+	RegionId                  *string           
+	RegionName                *string           
+	RegionDisplayName         *string           
+	TenantId                  *string           
+	UserId                    *string           
+	FirstName                 *string           
+	LastName                  *string           
+	Email                     *string           
+	InstanceTypeId            *string           
+	InstanceTypeName          *string           
+	InstanceCost              *float64          
+	NICs                      *[]NIC            
+	Metatdata                 *[]Metadata       
+	NodeProperties            *[]NodeProperty   
+	JobStartTime              *float64          
+	CloudNameAndAccountName   *string           
+	AgentVersion              *string           
+	JobId                     *string           
+	JobName                   *string           
+	JobEndTime                *float64          
+	ParentJobId               *string           
+	ParentJobName             *string           
+	ParentJobStatus           *string           
+	BenchmarkId               *int64            
+	DeploymentEnvironmentId   *string           
+	DeploymentEnvironmentName *string           
+	AppId                     *string           
+	AppName                   *string           
+	AppVersion                *string           
+	AppLogoPath               *string           
+	ServiceId                 *string           
+	ServiceName               *string           
+	Tags                      *[]string         
+	PublicIpAddresses         *string           
+	PrivateIpAddresses        *string           
+	CloudCost                 *float64          
+	NodeHours                 *float64          
+	UserFavorite              *bool             
+	RecordTimestamp           *float64          
+	ImageId                   *string           
+	TerminateProtection       *bool             
+	ImportedTime              *float64          
+	Running                   *bool             
+	RunTime                   *float64          
+	AgingPolicy               *string           
+	ScalingPolicy             *string           
+	SecurityProfile           *string           
+	Storage                   *string           
+	StorageIP                 *string           
+	NodeStatus                *string           
+	Type                      *string           
+	Actions                   *[]Action         
+}
+```
+
+```go
+type Filters struct {
+	CloudFamilies          *[]Filter 
+	Groups                 *[]Filter 
+	Regions                *[]Filter 
+	CloudAccounts          *[]Filter 
+	UserNames              *[]Filter 
+	OSNames                *[]Filter 
+	MemorySizes            *[]Filter 
+	CPUses                 *[]Filter 
+	StorageSizes           *[]Filter 
+	AppNames               *[]Filter 
+	ServiceNames           *[]Filter 
+	DeploymentEnvironments *[]Filter 
+	Tags                   *[]Filter 
+	Statuses               *[]Filter 
+	NodeStatuses           *[]Filter 
+	ParentJobStatuses      *[]Filter 
+	CloudAndAccountNames   *[]Filter 
+}
+```
+
+```go
+type Filter struct {
+	DisplayName *string  
+	Field       *string  
+	Value       *float64 
+}
+```
+
+```go
+type NIC struct {
+	Name             *string 
+	PublicIpAddress  *string 
+	PrivateIpAddress *string 
+	Index            *int64  
+}
+```
+
+```go
+type NodeProperty struct {
+	Name  *string  
+	Value *float64 
+}
+```
+
+#### GetVirtualMachines
+
+```go
+func (s *Client) GetVirtualMachines() ([]VirtualMachineDetails, error)
+```
+
+##### Example
+
+```golang
+vms, err := client.GetVirtualMachines()
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	for _, vm := range vms {
+		vmId := *vm.Id
+		vmName := *vm.Name
+		fmt.Println("Id: " + vmId + ", Name: " + vmName)
+	}
+}
+```
+
+#### GetVirtualMachine
+
+```go
+func (s *Client) GetVirtualMachine(virtualMachineId int) (*VirtualMachineDetails, error)
+```
+
+##### Example
+
+```golang
+vm, err := client.GetVirtualMachine(14)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	vmId := *vm.Id
+	vmName := *vm.Name
+	fmt.Println("Id: " + vmId + ", Name: " + vmName)
+}
+```
+
+#### GetVirtualMachineCostSummary
+
+```go
+func (s *Client) GetVirtualMachineCostSummary() (*CostSummary, error)
+```
+
+##### Example
+
+```golang
+costSummary, err := client.GetVirtualMachineCostSummary()
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	totalNumberOfVMs := int(*costSummary.TotalNumberOfVMs)
+	fmt.Println("TotalNumberOfVMs: " + strconv.Itoa(totalNumberOfVMs))
+}
+```
 
 
 DISCLAIMER:
