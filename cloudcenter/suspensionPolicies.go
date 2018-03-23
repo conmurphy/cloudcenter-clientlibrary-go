@@ -1,10 +1,15 @@
 package cloudcenter
 
-import "fmt"
-import "net/http"
-import "strconv"
-import "encoding/json"
-import "bytes"
+import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"net/http"
+	"strconv"
+
+	validator "gopkg.in/validator.v2"
+)
 
 //import "bytes"
 
@@ -21,10 +26,10 @@ type SuspensionPolicy struct {
 	Id                        *string           `json:"id,omitempty"`
 	Resource                  *string           `json:"resource,omitempty"`
 	Perms                     *[]string         `json:"perms,omitempty"`
-	Name                      *string           `json:"name,omitempty"`
+	Name                      *string           `json:"name,omitempty" validate:"nonzero"`
 	Description               *string           `json:"description,omitempty"`
-	Enabled                   *bool             `json:"enabled,omitempty"`
-	Schedules                 *[]Schedule       `json:"schedules,omitempty"`
+	Enabled                   *bool             `json:"enabled,omitempty" validate:"nonzero"`
+	Schedules                 *[]Schedule       `json:"schedules,omitempty" validate:"nonzero"`
 	BlockoutPeriods           *[]BlockoutPeriod `json:"blockoutPeriods,omitempty"`
 	IsPolicyActiveOnResources *bool             `json:"isPolicyActiveOnResources,omitempty"`
 	ResourcesMaps             *[]ResourcesMap   `json:"resourcesMaps,omitempty"`
@@ -113,6 +118,10 @@ func (s *Client) AddSuspensionPolicy(suspensionPolicy *SuspensionPolicy) (*Suspe
 
 	var data SuspensionPolicy
 
+	if errs := validator.Validate(suspensionPolicy); errs != nil {
+		return nil, errs
+	}
+
 	url := fmt.Sprintf(s.BaseURL + "/v2/suspensionPolicies")
 
 	j, err := json.Marshal(suspensionPolicy)
@@ -146,6 +155,14 @@ func (s *Client) AddSuspensionPolicy(suspensionPolicy *SuspensionPolicy) (*Suspe
 func (s *Client) UpdateSuspensionPolicy(suspensionPolicy *SuspensionPolicy) (*SuspensionPolicy, error) {
 
 	var data SuspensionPolicy
+
+	if errs := validator.Validate(suspensionPolicy); errs != nil {
+		return nil, errs
+	}
+
+	if nonzero(suspensionPolicy.Id) {
+		return nil, errors.New("SuspensionPolicy.Id is missing")
+	}
 
 	suspensionPolicyId := *suspensionPolicy.Id
 	url := fmt.Sprintf(s.BaseURL + "/v2/suspensionPolicies/" + suspensionPolicyId)
