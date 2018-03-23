@@ -815,6 +815,12 @@ if err != nil {
 
 ### Bundles
 
+- [GetBundles](#getbundles)
+- [GetBundle](#getbundle)
+- [AddBundle](#addbundle)
+- [UpdateBundle](#updatebundle)
+- [DeleteBundle](#deletebundle)
+
 ```go
 type BundleAPIResponse struct {
 	Resource      *string  
@@ -861,7 +867,9 @@ if err != nil {
 	fmt.Println(err)
 } else {
 	for _, bundle := range bundles {
-		fmt.Println("Id: " + bundle.Id + ", Name: " + bundle.Name)
+		bundleId := *bundle.Id
+		bundleName := *bundle.Name
+		fmt.Println("Id: " + bundleId + ", Name: " + bundleName)
 	}
 }
 ```
@@ -880,7 +888,9 @@ bundle, err := client.GetBundle(1, 1)
 if err != nil {
 	fmt.Println(err)
 } else {
-	fmt.Println("Id: " + bundle.Id + ", Name: " + bundle.Name)
+	bundleId := *bundle.Id
+	bundleName := *bundle.Name
+	fmt.Println("Id: " + bundleId + ", Name: " + bundleName)
 }
 ```
 
@@ -898,7 +908,94 @@ bundle, err := client.GetBundleFromName(1, "myBundle")
 if err != nil {
 	fmt.Println(err)
 } else {
-	fmt.Println("Id: " + bundle.Id + ", Name: " + bundle.Name)
+	bundleId := *bundle.Id
+	bundleName := *bundle.Name
+	fmt.Println("Id: " + bundleId + ", Name: " + bundleName)
+}
+```
+
+
+#### AddBundle
+
+```go
+func (s *Client) AddBundle(bundle *Bundle) (*Bundle, error)
+```
+
+##### __Required Fields__
+* TenantId
+* Name
+* Type
+* ExpirationDate
+
+
+##### Example
+```go
+newBundle := cloudcenter.Bundle{
+	TenantId:       cloudcenter.String("1"),
+	Name:           cloudcenter.String("clientlibraryBundle"),
+	Type:           cloudcenter.String("BUDGET_BUNDLE"),
+	ExpirationDate: cloudcenter.Float64(1580679359000),
+}
+
+bundle, err := client.AddBundle(&newBundle)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	bundleId := *bundle.Id
+	bundleName := *bundle.Name
+	fmt.Println("Id: " + bundleId + ", Name: " + bundleName)
+}
+```
+
+#### UpdateBundle
+
+```go
+func (s *Client) UpdateBundle(bundle *Bundle) (*Bundle, error)
+```
+
+##### __Required Fields__
+* Id
+* TenantId
+* Name
+* Type
+* ExpirationDate
+
+##### Example
+```go
+newBundle := cloudcenter.Bundle{
+	Id:       cloudcenter.String("1"),
+	TenantId:       cloudcenter.String("1"),
+	Name:           cloudcenter.String("clientlibraryBundle"),
+	Type:           cloudcenter.String("BUDGET_BUNDLE"),
+	ExpirationDate: cloudcenter.Float64(1580679359000),
+}
+
+bundle, err := client.UpdateBundle(&newBundle)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	bundleId := *bundle.Id
+	bundleName := *bundle.Name
+	fmt.Println("Id: " + bundleId + ", Name: " + bundleName)
+}
+```
+
+#### DeleteBundle
+
+```go
+func (s *Client) DeleteBundle(tenantId int, bundleId int) error
+```
+
+##### Example
+```go
+err := client.DeleteBundle(1,1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Bundle deleted")
 }
 ```
 
