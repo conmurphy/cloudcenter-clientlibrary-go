@@ -4,7 +4,6 @@ import "fmt"
 import "net/http"
 import "strconv"
 import "encoding/json"
-import "bytes"
 
 //import "bytes"
 
@@ -224,89 +223,4 @@ func (s *Client) GetVirtualMachineCostSummary() (*CostSummary, error) {
 	virtualMachineAPIResponse := &data
 	costSummary := virtualMachineAPIResponse.CostSummary
 	return costSummary, nil
-}
-
-func (s *Client) AddVirtualMachine(virtualMachine *VirtualMachineDetails) (*VirtualMachineDetails, error) {
-
-	var data VirtualMachineDetails
-
-	url := fmt.Sprintf(s.BaseURL + "/v1/virtualMachines")
-
-	j, err := json.Marshal(virtualMachine)
-
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(j))
-	if err != nil {
-		return nil, err
-	}
-
-	bytes, err := s.doRequest(req)
-
-	if err != nil {
-		return nil, err
-	}
-
-	err = json.Unmarshal(bytes, &data)
-
-	if err != nil {
-		return nil, err
-	}
-
-	virtualMachine = &data
-
-	return virtualMachine, nil
-}
-
-func (s *Client) UpdateVirtualMachine(virtualMachine *VirtualMachineDetails) (*VirtualMachineDetails, error) {
-
-	var data VirtualMachineDetails
-
-	virtualMachineId := *virtualMachine.Id
-	url := fmt.Sprintf(s.BaseURL + "/v1/virtualMachines/" + virtualMachineId)
-
-	j, err := json.Marshal(virtualMachine)
-
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("PUT", url, bytes.NewBuffer(j))
-	if err != nil {
-		return nil, err
-	}
-
-	bytes, err := s.doRequest(req)
-
-	if err != nil {
-		return nil, err
-	}
-
-	err = json.Unmarshal(bytes, &data)
-
-	if err != nil {
-		return nil, err
-	}
-
-	virtualMachine = &data
-
-	return virtualMachine, nil
-}
-
-func (s *Client) DeleteVirtualMachine(virtualMachineId int) error {
-
-	url := fmt.Sprintf(s.BaseURL + "/v1/virtualMachines/" + strconv.Itoa(virtualMachineId))
-
-	req, err := http.NewRequest("DELETE", url, nil)
-	if err != nil {
-		return err
-	}
-	_, err = s.doRequest(req)
-	if err != nil {
-		return err
-	}
-
-	return nil
 }
