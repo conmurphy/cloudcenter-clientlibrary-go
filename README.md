@@ -4630,6 +4630,166 @@ if err != nil {
 ```
 
 ### SuspensionPolicies
+
+### ActivationProfiles
+
+- [GetActivationProfiles](#getactivationprofiles)
+- [GetActivationProfile](#getactivationprofile)
+- [AddActivationProfile](#addactivationprofile)
+- [UpdateActivationProfile](#updateactivationprofile)
+- [DeleteActivationProfile](#deleteactivationprofile)
+
+```go
+type SuspensionPolicyAPIResponse struct {
+	Resource           *string            
+	Size               *int64             
+	PageNumber         *int64             
+	TotalElements      *int64             
+	TotalPages         *int64             
+	SuspensionPolicies []SuspensionPolicy 
+}
+```
+
+```go
+type SuspensionPolicy struct {
+	Id                        *string           
+	Resource                  *string           
+	Perms                     *[]string         
+	Name                      *string           
+	Description               *string           
+	Enabled                   *bool             
+	Schedules                 *[]Schedule       
+	BlockoutPeriods           *[]BlockoutPeriod 
+	IsPolicyActiveOnResources *bool             
+	ResourcesMaps             *[]ResourcesMap   
+	Priority                  *float64          
+	Created                   *float64          
+	LastUpdated               *float64          
+	OwnerId                   *int64            
+}
+```
+
+```go
+type Schedule struct {
+	Type      *string   
+	Days      *[]string 
+	StartTime *string   
+	EndTime   *string   
+	Repeats   *string   
+}
+```
+
+```go
+type BlockoutPeriod struct {
+	StartDate *float64 
+	EndDate   *float64 
+}
+```
+
+```go
+type ResourcesMap struct {
+	ResourceId                  *string  
+	ResourceType                *string  
+	AppliedDate                 *float64 
+	ResourceStartTime           *float64 
+	EstimatedPolicyEndTime      *float64 
+	AllowedCost                 *float64 
+	AccruedCost                 *float64 
+	NumberOfExtensionsUsed      *int64   
+	IsApprovalPending           *bool    
+	IsPreviousExtensionDenied   *bool    
+	IsPolicyReachingExpiry      *bool    
+	IsPolicyReachingGraceExpiry *bool    
+}
+```
+
+#### GetSuspensionPolicies
+
+```go
+func (s *Client) GetSuspensionPolicy(suspensionPolicyId int) (*SuspensionPolicy, error)
+```
+
+##### Example
+
+```go
+suspensionPolicies, err := client.GetSuspensionPolicies()
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	for _, suspensionPolicy := range suspensionPolicies {
+		suspensionPolicyId := *suspensionPolicy.Id
+		suspensionPolicyName := *suspensionPolicy.Name
+		fmt.Println("Id: " + suspensionPolicyId + ", Name: " + suspensionPolicyName)
+	}
+}
+```
+
+#### GetSuspensionPolicy
+
+```go
+func (s *Client) GetSuspensionPolicies() ([]SuspensionPolicy, error)
+```
+
+##### Example
+
+```go
+suspensionPolicy, err := client.GetSuspensionPolicy(2)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	suspensionPolicyId := *suspensionPolicy.Id
+	suspensionPolicyName := *suspensionPolicy.Name
+	fmt.Println("Id: " + suspensionPolicyId + ", Name: " + suspensionPolicyName)
+}
+```
+
+#### AddSuspensionPolicy
+
+```go
+func (s *Client) AddSuspensionPolicy(suspensionPolicy *SuspensionPolicy) (*SuspensionPolicy, error)
+```
+
+##### __Required Fields__
+* 
+
+##### Example
+```go
+
+```
+
+#### UpdateSuspensionPolicy
+
+```go
+func (s *Client) UpdateSuspensionPolicy(suspensionPolicy *SuspensionPolicy) (*SuspensionPolicy, error)
+```
+
+##### __Required Fields__
+* Id
+
+##### Example
+```go
+
+```
+
+#### DeleteSuspensionPolicy
+
+```go
+func (s *Client) DeleteSuspensionPolicy(suspensionPolicyId int) error
+```
+
+##### Example
+```go
+err := client.DeleteSuspensionPolicy(1)
+
+if err != nil {
+	fmt.Println(err)
+} else {
+	fmt.Println("Suspension policy deleted")
+}
+```
+
 ### Tenants
 
 - [GetTenants](#gettenants)
