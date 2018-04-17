@@ -88,6 +88,7 @@ if err != nil {
 
 For some situations it may be easier to have the configuration represented as JSON rather than conifguring individually as per the  example above. In this scenario you can either build the JSON file yourself or monitor the API POST call for the JSON data sent to CloudCenter. This can be achieved using the browsers built in developer tools. See the following document for screenshots of how to find the POST call in the Chrome Developer Tools.
 
+[Screenshots](https://github.com/conmurphy/cloudcenter-clientlibrary-go/blob/master/README-DEVELOPER-TOOLS.md)
 
 
 Example JSON File - newUser.json
