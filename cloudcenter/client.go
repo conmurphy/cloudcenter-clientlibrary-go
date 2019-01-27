@@ -1,3 +1,20 @@
+/*Copyright (c) 2019 Cisco and/or its affiliates.
+
+This software is licensed to you under the terms of the Cisco Sample
+Code License, Version 1.0 (the "License"). You may obtain a copy of the
+License at
+
+               https://developer.cisco.com/docs/licenses
+
+All use of the material herein must be in accordance with the terms of
+the License. All rights not expressly granted by the License are
+reserved. Unless required by applicable law or agreed to separately in
+writing, software distributed under the License is distributed on an "AS
+IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+or implied.
+*/
+
+
 //
 // This client library provides Create, Read, Update, and Delete operations for Cisco Cloud Center.
 //
@@ -91,9 +108,11 @@ package cloudcenter
 
 import (
 	"crypto/tls"
+	"crypto/x509"
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 	"mime/multipart"
 	"net/http"
 	"os"
@@ -103,27 +122,62 @@ import (
 //import "encoding/json"
 
 type Client struct {
-	Username string
-	Password string
-	BaseURL  string
+	Username      string
+	Password      string
+	BaseURL       string
+	useSSH        bool
+	serverCRTPath string
+	clientCRTPath string
+	clientKeyPath string
 }
 
-func NewClient(username, password, baseURL string) *Client {
+func NewClient(username, password, baseURL string, useSSH bool, serverCRTPath string, clientCRTPath string, clientKeyPath string) *Client {
 	return &Client{
-		Username: username,
-		Password: password,
-		BaseURL:  baseURL,
+		Username:      username,
+		Password:      password,
+		BaseURL:       baseURL,
+		useSSH:        useSSH,
+		serverCRTPath: clientCRTPath,
+		clientCRTPath: clientCRTPath,
+		clientKeyPath: clientKeyPath,
 	}
 }
 
 func (s *Client) doRequest(req *http.Request) ([]byte, error) {
 
-	req.Header.Add("Content-Type", "application/json")
-	req.SetBasicAuth(s.Username, s.Password)
-	tr := &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	var client *http.Client
+
+	if s.useSSH {
+		caCert, err := ioutil.ReadFile(s.serverCRTPath)
+		if err != nil {
+			log.Fatal(err)
+		}
+		caCertPool := x509.NewCertPool()
+		caCertPool.AppendCertsFromPEM(caCert)
+
+		cert, err := tls.LoadX509KeyPair(s.clientCRTPath, s.clientKeyPath)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		tlsConfig := &tls.Config{
+			Certificates: []tls.Certificate{cert},
+			RootCAs:      caCertPool,
+		}
+
+		tlsConfig.BuildNameToCertificate()
+		transport := &http.Transport{TLSClientConfig: tlsConfig}
+		client = &http.Client{Transport: transport}
+
+	} else {
+		req.Header.Add("Content-Type", "application/json")
+		req.SetBasicAuth(s.Username, s.Password)
+		tr := &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		}
+		client = &http.Client{Transport: tr}
 	}
-	client := &http.Client{Transport: tr}
+
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
